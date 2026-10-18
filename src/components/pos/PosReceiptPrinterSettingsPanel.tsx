@@ -14,7 +14,7 @@ import {
 import { WindowsZywellSetupBanner } from './WindowsZywellSetupBanner';
 import { isPosLiteProfile } from '../../utils/tenantProductProfile';
 import { printTestSaleReceipt } from '../../utils/receiptPrint';
-import { fetchLimaBridgeHealth, isLimaRawPrintReadyForReceipt } from '../../utils/limaRawReceiptPrint';
+import { fetchReceiptBridgeHealth, isRawPrintReadyForReceipt } from '../../utils/rawReceiptPrint';
 import { getLastReceiptPrintError, getReceiptPrintLog } from '../../utils/receiptPrintLog';
 import { loadTenantId } from '../../storage/tenantSession';
 import { APP_BUILD_ID, APP_VERSION } from '../../version';
@@ -36,7 +36,7 @@ function ReceiptPrintDebugBlock({
       : `/var/www/market-pos/data/tenants/${tenant}/receipt-print.log`;
 
   const checkBridge = async (full = false) => {
-    const health = full ? await fetchLimaBridgeHealth(true) : await fetchLimaBridgeHealth(false);
+    const health = full ? await fetchReceiptBridgeHealth(true) : await fetchReceiptBridgeHealth(false);
     const workerHint =
       health?.platform === 'win32'
         ? health.fastPrintWorker !== true || !health.bridgeVersion
@@ -56,7 +56,7 @@ function ReceiptPrintDebugBlock({
                   health.bridgeVersion ? ` (${health.bridgeVersion})` : ''
                 }${workerHint}`,
         }
-      : await isLimaRawPrintReadyForReceipt();
+      : await isRawPrintReadyForReceipt();
     setBridgeOk(ready.bridgeUp);
     setStatus(ready.message);
     if (ready.bridgeUp && !ready.printerReady) {
@@ -137,7 +137,7 @@ export function PosReceiptPrinterSettingsPanel({ store }: PosReceiptPrinterSetti
       <section className="settings-panel settings-panel--receipt-printer">
         <h2>Fiş yazıcısı</h2>
         <p className="module-hint">
-          <strong>Lima Market</strong> — fiş <strong>doğrudan POS-80C</strong> (ESC/POS); tarayıcı yazdır penceresi{' '}
+          <strong>Yerel kasa</strong> — fiş <strong>doğrudan POS-80C</strong> (ESC/POS); tarayıcı yazdır penceresi{' '}
           <strong>açılmaz</strong>. Kasa PC’de fiş servisi <strong>bir kez</strong> kurulur, sonra otomatik çalışır.
         </p>
         <WindowsZywellSetupBanner

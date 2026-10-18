@@ -72,7 +72,7 @@ export async function assertTenantResolvable(dataDir, tenantId) {
   return {
     ok: false,
     status: 404,
-    error: 'Geçersiz mağaza kodu. Greenleaf için boş; Lima için main kullanın.',
+    error: 'Geçersiz mağaza kodu. Varsayılan mağaza için alanı boş bırakın kullanın.',
   };
 }
 

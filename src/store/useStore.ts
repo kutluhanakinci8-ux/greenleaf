@@ -251,7 +251,7 @@ import {
 } from '../utils/productPricing';
 import { patchProductPricingOnServer } from '../services/productPricingApi';
 import { isGreenleafPersistedImageUrl } from '../utils/greenleafProductImages';
-import { isLimaOwnedImageUrl, resolveLimaProductImagePath } from '../utils/limaProductImages';
+import { isBundledProductImageUrl, resolveBundledProductImagePath } from '../utils/tenantBundledProductImages';
 import { canPushTenantDataToServer } from '../config/tenantDataPolicy';
 import { resolveLoginTenantId } from '../config/loginTenant';
 import { PLATFORM_TENANT_ID } from '../config/platformOperators';
@@ -818,8 +818,8 @@ function serializeProductsForSnapshot(products: Product[], settings: AppSettings
       const { imageUrl: _, ...rest } = p;
       return rest as Product;
     }
-    const url = p.imageUrl ?? resolveLimaProductImagePath(p);
-    if (url && isLimaOwnedImageUrl(url)) {
+    const url = p.imageUrl ?? resolveBundledProductImagePath(p);
+    if (url && isBundledProductImageUrl(url)) {
       return { ...p, imageUrl: url };
     }
     const { imageUrl: _, ...rest } = p;

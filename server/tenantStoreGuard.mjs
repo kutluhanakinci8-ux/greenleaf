@@ -1,7 +1,7 @@
 /** POS Lite / ayrı tenant — main (Greenleaf) seed verisinin yazılmasını engelle */
 const MAIN_DEMO_USERNAMES = new Set(['yonetici', 'kasiyer']);
 const MAIN_GREENLEAF_CATALOG_MIN = 30;
-const ISOLATED_STORE_USERNAME_PATTERN = /^lima/i;
+const ISOLATED_STORE_USERNAME_PATTERN = /^demo/i;
 
 function isPosLiteStore(store) {
   return store?.settings?.productProfile === 'pos-lite';
@@ -11,7 +11,7 @@ function isIsolatedTenant(tenantId) {
   return Boolean(tenantId && tenantId !== 'main');
 }
 
-/** main demo kataloğu (id 1–200) — Lima vb. tenant’lara karışmamalı */
+/** main demo kataloğu (id 1–200) — diğer kodlar tenant’lara karışmamalı */
 function looksLikeGreenleafBulk(products) {
   if (!Array.isArray(products) || products.length < MAIN_GREENLEAF_CATALOG_MIN) return false;
   let seedish = 0;
@@ -41,7 +41,7 @@ export function filterProductSetsForCatalog(products, productSets) {
   });
 }
 
-/** main store — Lima hesapları istemciye ve yazmaya karışmasın */
+/** main store — Diğer kiracı hesapları istemciye ve yazmaya karışmasın */
 export function sanitizeMainTenantStoreRead(tenantId, store) {
   if (tenantId !== 'main' || !store || typeof store !== 'object') return store;
   if (!Array.isArray(store.users)) return store;

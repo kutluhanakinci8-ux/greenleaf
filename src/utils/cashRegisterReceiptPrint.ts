@@ -5,7 +5,7 @@ import {
   type CashRegisterSummary,
 } from './cashRegister';
 import { formatBusinessDateLabel } from './cashSession';
-import { getLastLimaRawPrintError, tryLimaRawReceiptPrint } from './limaRawReceiptPrint';
+import { getLastRawPrintError, tryRawReceiptPrint } from './rawReceiptPrint';
 import { printHtmlReceipt } from './receiptPrint';
 import { toThermalReceiptAscii } from './thermalReceiptAscii';
 import type { CashHandover } from '../types/business';
@@ -355,7 +355,7 @@ async function tryThermalCashRegisterPrint(
   printerName: string,
 ): Promise<PrintCashRegisterReceiptResult | null> {
   const plain = buildPlainTextCashRegisterReceipt(data);
-  const rawOk = await tryLimaRawReceiptPrint(plain, printerName);
+  const rawOk = await tryRawReceiptPrint(plain, printerName);
   if (rawOk) {
     return {
       printed: true,
@@ -364,7 +364,7 @@ async function tryThermalCashRegisterPrint(
       message: 'Gün sonu fişi yazdırıldı (Zywell)',
     };
   }
-  const rawErr = getLastLimaRawPrintError();
+  const rawErr = getLastRawPrintError();
   if (rawErr && typeof window !== 'undefined') {
     return {
       printed: false,

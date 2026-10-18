@@ -3,7 +3,7 @@ import { ensureReceiptBridgeRunning, receiptBridgeHealth } from './receiptBridge
 const DEFAULT_PORT = Number(process.env.RECEIPT_RAW_PRINT_PORT || 18765);
 
 /** VPS / kasa: Node köprüsüne (127.0.0.1) ham fiş iletir — tarayıcı diyaloğu yok */
-export async function forwardLimaThermalPrint(body, repoRoot) {
+export async function forwardThermalPrint(body, repoRoot) {
   const text = String(body?.text ?? '');
   if (!text.trim()) {
     return { ok: false, status: 400, error: 'empty text' };

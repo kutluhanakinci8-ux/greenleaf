@@ -5,7 +5,7 @@ import { TenantStoreCodeField } from './TenantStoreCodeField';
 interface LoginTenantStoreSectionProps {
   tenantId: string;
   onTenantIdChange: (tenantId: string) => void;
-  /** URL veya kayıtlı kod ile Lima vb. — alan baştan açık */
+  /** URL veya kayıtlı kod ile diğer kodlar — alan baştan açık */
   initialExpanded?: boolean;
   /** Greenleaf sahibi — mağaza kodu gösterilmez, her zaman main */
   hideForOwnerAccount?: boolean;
@@ -13,7 +13,7 @@ interface LoginTenantStoreSectionProps {
 
 /**
  * Varsayılan giriş: mağaza kodu gizli (Greenleaf / main).
- * Diğer tenant’lar: «Farklı mağaza kodu» ile açılır — kurumsal ekranda Lima adı geçmez.
+ * Diğer tenant’lar: «Farklı mağaza kodu» ile açılır — kurumsal ekranda mağaza kodu isteğe bağlı.
  */
 export function LoginTenantStoreSection({
   tenantId,

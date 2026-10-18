@@ -1,4 +1,4 @@
-# Greenleaf / Lima — Windows fiş köprüsü (127.0.0.1:18765, sessiz ESC/POS)
+# Greenleaf — Windows fiş köprüsü (127.0.0.1:18765, sessiz ESC/POS)
 # USB POS-80C bu kasa PC'de; site tarayıcıdan açılır.
 # Bir kez (normal PowerShell, yönetici gerekmez):
 #   cd C:\...\greenleaf-pos
@@ -14,7 +14,7 @@ $StandardZywellName = 'Greenleaf POS-80 (Zywell)'
 $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $DestDir = Join-Path $env:USERPROFILE '.greenleaf-pos'
-$TaskName = 'LimaMarketReceiptBridge'
+$TaskName = 'GreenleafReceiptBridge'
 $Node = (Get-Command node -ErrorAction SilentlyContinue).Source
 
 if (-not $Node) {

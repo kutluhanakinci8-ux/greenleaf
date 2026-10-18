@@ -23,24 +23,24 @@ const MAIN_DEMO_PRODUCT_IDS = new Set<number>([
 
 export const MAIN_GREENLEAF_CATALOG_MIN = 30;
 
-function isLimaBrandedSettings(settings?: AppSettings | null): boolean {
+function isPosLiteNamedSettings(settings?: AppSettings | null): boolean {
   const name = (settings?.businessName ?? '').trim().toLowerCase();
-  return name.includes('lima');
+  return !name || name.includes('greenleaf');
 }
 
 /** Perakende liste KDV hariç; fişte KDV dökümü ve kasada brüt tahsilat */
 export function usesNetRetailWithVatBreakdown(settings?: AppSettings | null): boolean {
-  return isPosLiteProfile(settings) || isLimaBrandedSettings(settings);
+  return isPosLiteProfile(settings) || isPosLiteNamedSettings(settings);
 }
 
-/** main tenant anahtarında yanlışlıkla Lima ayarı + Greenleaf kataloğu birleşmesini engelle */
+/** main tenant anahtarında yanlışlıkla POS Lite ayarı + katalog birleşmesini engelle */
 export function isTenantCatalogIsolated(
   tenantId: string = loadTenantId(),
   settings?: AppSettings | null,
 ): boolean {
   if (tenantId && tenantId !== DEFAULT_TENANT_ID) return true;
   if (isPosLiteProfile(settings)) return true;
-  if (isLimaBrandedSettings(settings)) return true;
+  if (isPosLiteNamedSettings(settings)) return true;
   return false;
 }
 

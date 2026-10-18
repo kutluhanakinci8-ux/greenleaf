@@ -12,7 +12,7 @@ while ($true) {
   if ($trim -eq '') { continue }
   try {
     $job = $trim | ConvertFrom-Json
-    Send-LimaRawEscPosFile -PrinterName $job.printer -FilePath $job.file
+    Send-PosRawEscPosFile -PrinterName $job.printer -FilePath $job.file
     [Console]::Out.WriteLine('OK')
   } catch {
     $msg = $_.Exception.Message -replace "[\r\n]+", ' '

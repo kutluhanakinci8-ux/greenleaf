@@ -16,7 +16,7 @@ function applyRetailVat(netPrice, vatRate = DEFAULT_VAT) {
 function usesNetRetailWithVatBreakdown(settings) {
   const profile = settings?.productProfile;
   const name = String(settings?.businessName ?? '').toLowerCase();
-  return profile === 'pos-lite' || name.includes('lima');
+  return profile === 'pos-lite' || name.includes('greenleaf');
 }
 
 /** Perakende sabit; partner ve kupon = perakendenin tam yarısı */

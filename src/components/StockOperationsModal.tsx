@@ -43,7 +43,7 @@ interface StockOperationsModalProps {
   onRemoveImage?: (productId: number) => void;
   onUpdatePricing?: (productId: number, input: ProductPricingInput) => void;
   onPricingSaveResult?: (saved: boolean) => void;
-  /** Lima / pos-lite: perakende KDV hariç */
+  /** POS Lite: perakende KDV hariç */
   perakendeKdvHaric?: boolean;
   settings?: AppSettings;
   onUpdateProductCategory?: (productId: number, categoryId: string) => void;

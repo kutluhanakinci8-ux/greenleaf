@@ -275,7 +275,7 @@ export interface AppSettings {
   billEmailIngestion: BillEmailIngestionSettings;
   soleProprietorshipTaxCalendar: SoleProprietorshipTaxCalendarSettings;
   customExpenseCategories?: CustomExpenseCategory[];
-  /** Boşsa varsayılan Greenleaf/Lima kategori listesi kullanılır */
+  /** Boşsa varsayılan Greenleaf kategori listesi kullanılır */
   productCategoryCatalog?: ProductCategoryDef[];
   crm?: CrmSettings;
   posCheckout?: PosCheckoutSettings;

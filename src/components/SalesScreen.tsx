@@ -246,7 +246,7 @@ export function SalesScreen({ store }: SalesScreenProps) {
     let fiscalPrinted = false;
     const fiscalMethod = method === 'split' ? 'split' : method;
 
-    /** Lima / Zywell: mali InPOS yok — her satışta 127.0.0.1:9191 beklemesi fişi geciktirmesin */
+    /** Zywell: mali InPOS yok — her satışta 127.0.0.1:9191 beklemesi fişi geciktirmesin */
     const runFiscal = !posLiteCheckout && !samplesOnly && method !== 'credit';
     if (runFiscal && posCheckout.fiscalTiming === 'before_sale') {
       const fiscal = await tryFiscalReceipt(

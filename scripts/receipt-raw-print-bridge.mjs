@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Lima — sessiz termal fiş (tarayıcı yazdır penceresi YOK)
+ * Sessiz sessiz termal fiş (tarayıcı yazdır penceresi YOK)
  * Mac: lp -o raw | Windows: win-raw-escpos.ps1 → POS-80C
  *
  *   node scripts/receipt-raw-print-bridge.mjs
@@ -141,7 +141,7 @@ function win32PrinterStatus(requested) {
 function lpRaw(buffer, queueName) {
   const q = queueName || QUEUE;
   return new Promise((resolve, reject) => {
-    const file = join(tmpdir(), `lima-raw-${Date.now()}.bin`);
+    const file = join(tmpdir(), `receipt-raw-${Date.now()}.bin`);
     writeFileSync(file, buffer);
     const child = spawn('lp', ['-d', q, '-o', 'raw', file], { stdio: ['ignore', 'pipe', 'pipe'] });
     let err = '';
@@ -264,7 +264,7 @@ async function winRawViaWorker(file, q) {
 
 function winRaw(buffer, queueName) {
   const q = queueName || QUEUE;
-  const file = join(tmpdir(), `lima-raw-${Date.now()}-${Math.random().toString(16).slice(2)}.bin`);
+  const file = join(tmpdir(), `receipt-raw-${Date.now()}-${Math.random().toString(16).slice(2)}.bin`);
   writeFileSync(file, buffer);
   const cleanup = () => {
     try {
@@ -383,7 +383,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`Lima sessiz fiş: http://127.0.0.1:${PORT}/print  yazıcı="${QUEUE}"  os=${platform()}`);
+  console.log(`Sessiz fiş: http://127.0.0.1:${PORT}/print  yazıcı="${QUEUE}"  os=${platform()}`);
   if (platform() === 'win32') {
     warmWinPrintWorker();
     void listWin32Printers();

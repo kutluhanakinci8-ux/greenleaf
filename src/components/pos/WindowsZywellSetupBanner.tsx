@@ -3,7 +3,7 @@ import {
   STANDARD_WINDOWS_ZYWELL_PRINTER_NAME,
   WINDOWS_ZYWELL_SETUP_PS1_PATH,
 } from '../../config/standardReceiptPrinter';
-import { isLimaRawPrintReadyForReceipt } from '../../utils/limaRawReceiptPrint';
+import { isRawPrintReadyForReceipt } from '../../utils/rawReceiptPrint';
 
 function isWindowsDesktop(): boolean {
   if (typeof navigator === 'undefined') return false;
@@ -27,7 +27,7 @@ export function WindowsZywellSetupBanner({ onApplyPrinterSettings }: WindowsZywe
 
   const recheck = useCallback(async () => {
     setChecking(true);
-    const ready = await isLimaRawPrintReadyForReceipt();
+    const ready = await isRawPrintReadyForReceipt();
     setBridgeMsg(ready.message);
     setVisible(!ready.bridgeUp);
     setChecking(false);

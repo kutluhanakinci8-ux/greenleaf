@@ -4737,7 +4737,7 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    if (pathname === '/api/pos/lima-thermal-print/health' && req.method === 'GET') {
+    if (pathname === '/api/pos/thermal-print/health' && req.method === 'GET') {
       const tenantId = resolveTenantId(url);
       if (!(await assertPosApiAuth(req, res, DATA_DIR, tenantId))) return;
       const port = Number(process.env.RECEIPT_RAW_PRINT_PORT || 18765);
@@ -4753,12 +4753,12 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    if (pathname === '/api/pos/lima-thermal-print' && req.method === 'POST') {
+    if (pathname === '/api/pos/thermal-print' && req.method === 'POST') {
       const tenantId = resolveTenantId(url);
       if (!(await assertPosApiAuth(req, res, DATA_DIR, tenantId))) return;
       const body = await readRequestBody(req);
-      const { forwardLimaThermalPrint } = await import('./server/limaThermalPrint.mjs');
-      const result = await forwardLimaThermalPrint(body, resolveReceiptBridgeRepoRoot());
+      const { forwardThermalPrint } = await import('./server/thermalPrintForward.mjs');
+      const result = await forwardThermalPrint(body, resolveReceiptBridgeRepoRoot());
       res.writeHead(result.ok ? 200 : result.status || 500, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify(result));
       return;

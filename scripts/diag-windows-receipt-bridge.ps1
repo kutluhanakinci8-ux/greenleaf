@@ -1,6 +1,6 @@
 # Fiş köprüsü teşhis — Windows kasa PC
 $ErrorActionPreference = 'Continue'
-Write-Host "=== Lima fiş köprüsü (Windows) ==="
+Write-Host "=== Fiş köprüsü (Windows) ==="
 
 $node = Get-Command node -ErrorAction SilentlyContinue
 if ($node) { Write-Host "Node: $($node.Source)" } else { Write-Host "HATA: node yok — https://nodejs.org" }

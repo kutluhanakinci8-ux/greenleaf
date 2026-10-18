@@ -27,7 +27,7 @@ bash scripts/install-macos-receipt-bridge-launchd.sh</pre>
         </li>
       </ul>
       <p className="module-hint muted">
-        Sunucu (VPS) deploy: <code>pm2</code> ile <code>lima-receipt-bridge</code> otomatik başlar — yalnızca yazıcı
+        Sunucu (VPS) deploy: <code>pm2</code> ile <code>receipt-bridge</code> otomatik başlar — yalnızca yazıcı
         sunucuya USB bağlıysa işe yarar.
       </p>
     </div>

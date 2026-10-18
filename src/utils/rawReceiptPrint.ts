@@ -2,16 +2,16 @@ import { DEFAULT_TENANT_ID, loadTenantId } from '../storage/tenantSession';
 import { posApiAuthHeaders, posApiFetch } from '../services/posApiAuth';
 
 const LOCAL_PRINT_URL =
-  typeof import.meta.env?.VITE_LIMA_RAW_PRINT_URL === 'string' &&
-  import.meta.env.VITE_LIMA_RAW_PRINT_URL
-    ? import.meta.env.VITE_LIMA_RAW_PRINT_URL
+  typeof import.meta.env?.VITE_RECEIPT_RAW_PRINT_URL === 'string' &&
+  import.meta.env.VITE_RECEIPT_RAW_PRINT_URL
+    ? import.meta.env.VITE_RECEIPT_RAW_PRINT_URL
     : 'http://127.0.0.1:18765/print';
 
 const LOCAL_HEALTH_URL = LOCAL_PRINT_URL.replace(/\/print\/?$/, '/health');
 
 const RAW_PRINT_TIMEOUT_MS = 8000;
 
-export interface LimaBridgeHealth {
+export interface ReceiptBridgeHealth {
   ok?: boolean;
   queue?: string;
   resolvedQueue?: string;
@@ -28,13 +28,13 @@ export interface LimaBridgeHealth {
 
 let lastRawPrintError: string | null = null;
 
-export function getLastLimaRawPrintError(): string | null {
+export function getLastRawPrintError(): string | null {
   return lastRawPrintError;
 }
 
 function serverThermalPrintPath(): string {
   const tenant = loadTenantId();
-  const base = '/api/pos/lima-thermal-print';
+  const base = '/api/pos/thermal-print';
   if (!tenant || tenant === DEFAULT_TENANT_ID) return base;
   return `${base}?tenant=${encodeURIComponent(tenant)}`;
 }
@@ -108,7 +108,7 @@ function isWindowsDesktop(): boolean {
   return /Win/i.test(navigator.userAgent) || /Windows/i.test(navigator.platform);
 }
 
-export async function tryLimaRawReceiptPrint(
+export async function tryRawReceiptPrint(
   text: string,
   printerName?: string,
 ): Promise<boolean> {
@@ -136,21 +136,21 @@ export async function tryLimaRawReceiptPrint(
   return false;
 }
 
-export async function fetchLimaBridgeHealth(full = false): Promise<LimaBridgeHealth | null> {
+export async function fetchReceiptBridgeHealth(full = false): Promise<ReceiptBridgeHealth | null> {
   try {
     const url = full ? `${LOCAL_HEALTH_URL}?full=1` : LOCAL_HEALTH_URL;
     const res = await fetch(url, {
       signal: AbortSignal.timeout(full ? 12000 : 6000),
     });
     if (!res.ok) return null;
-    return (await res.json()) as LimaBridgeHealth;
+    return (await res.json()) as ReceiptBridgeHealth;
   } catch {
     return null;
   }
 }
 
-export async function isLimaRawPrintAvailable(): Promise<boolean> {
-  const health = await fetchLimaBridgeHealth();
+export async function isRawPrintAvailable(): Promise<boolean> {
+  const health = await fetchReceiptBridgeHealth();
   if (health?.ok === true) return true;
   if (typeof window === 'undefined') return false;
   try {
@@ -166,13 +166,13 @@ export async function isLimaRawPrintAvailable(): Promise<boolean> {
 }
 
 /** Köprü ayakta ve (Windows’ta) yazıcı kuyruğu tanımlı */
-export async function isLimaRawPrintReadyForReceipt(): Promise<{
+export async function isRawPrintReadyForReceipt(): Promise<{
   bridgeUp: boolean;
   printerReady: boolean;
-  health: LimaBridgeHealth | null;
+  health: ReceiptBridgeHealth | null;
   message: string;
 }> {
-  const health = await fetchLimaBridgeHealth();
+  const health = await fetchReceiptBridgeHealth();
   if (!health?.ok) {
     return {
       bridgeUp: false,
@@ -197,12 +197,12 @@ export async function isLimaRawPrintReadyForReceipt(): Promise<{
   };
 }
 
-/** @deprecated use tryLimaRawReceiptPrint */
-export async function tryLimaMacRawReceiptPrint(text: string): Promise<boolean> {
-  return tryLimaRawReceiptPrint(text);
+/** @deprecated use tryRawReceiptPrint */
+export async function tryMacRawReceiptPrint(text: string): Promise<boolean> {
+  return tryRawReceiptPrint(text);
 }
 
-/** @deprecated use isLimaRawPrintAvailable */
-export async function isLimaMacRawPrintAvailable(): Promise<boolean> {
-  return isLimaRawPrintAvailable();
+/** @deprecated use isRawPrintAvailable */
+export async function isMacRawPrintAvailable(): Promise<boolean> {
+  return isRawPrintAvailable();
 }

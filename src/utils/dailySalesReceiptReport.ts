@@ -2,7 +2,7 @@ import type { Sale } from '../types/product';
 import type { SaleReturn } from '../types/saleReturn';
 import { getPaymentBreakdown } from './analytics';
 import { formatBusinessDateLabel } from './cashSession';
-import { getLastLimaRawPrintError, tryLimaRawReceiptPrint } from './limaRawReceiptPrint';
+import { getLastRawPrintError, tryRawReceiptPrint } from './rawReceiptPrint';
 import { printHtmlReceipt } from './receiptPrint';
 import { toThermalReceiptAscii } from './thermalReceiptAscii';
 import { STANDARD_WINDOWS_ZYWELL_PRINTER_NAME } from '../types/receiptPrinter';
@@ -250,11 +250,11 @@ export async function printDailySalesReceiptReport(
 ): Promise<PrintDailySalesReceiptResult> {
   const printerName = windowsPrinterName?.trim() || STANDARD_WINDOWS_ZYWELL_PRINTER_NAME;
   const plain = buildPlainTextDailySalesReceipt(data);
-  const rawOk = await tryLimaRawReceiptPrint(plain, printerName);
+  const rawOk = await tryRawReceiptPrint(plain, printerName);
   if (rawOk) {
     return { printed: true, thermal: true, message: 'Günlük satış listesi yazdırıldı (termal)' };
   }
-  const rawErr = getLastLimaRawPrintError();
+  const rawErr = getLastRawPrintError();
   if (rawErr) {
     await printHtmlReceipt(buildDailySalesReceiptHtml(data));
     return {

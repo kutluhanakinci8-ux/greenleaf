@@ -1,7 +1,7 @@
 import type { Product } from '../types/product';
 import { getCatalogImagePath } from '../data/productImages';
 import { isTenantCatalogIsolated } from './tenantCatalogIsolation';
-import { resolveLimaProductImagePath } from './limaProductImages';
+import { resolveBundledProductImagePath } from './tenantBundledProductImages';
 
 const BRAND_COLORS: Record<string, [number, number]> = {
   ilife: [200, 55],
@@ -67,11 +67,11 @@ export function getPlaceholderImage(product: Product): string {
 }
 
 export function getProductImageUrl(product: Product): string {
-  const limaPath = resolveLimaProductImagePath(product);
+  const bundledPath = resolveBundledProductImagePath(product);
   const isolated = isTenantCatalogIsolated();
   const catalogPath = isolated ? undefined : getCatalogImagePath(product.id);
-  // Lima ürünleri: sunucudaki lima-*.svg her zaman öncelikli (bozuk data: URL store’da kalabilir)
-  if (limaPath) return limaPath;
+  // Demo ürün görselleri: sunucudaki demo-*.svg öncelikli (bozuk data: URL store’da kalabilir)
+  if (bundledPath) return bundledPath;
   if (product.imageUrl && (!isolated || !product.imageUrl.includes('/product-images/p-'))) {
     return product.imageUrl;
   }

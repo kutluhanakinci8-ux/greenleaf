@@ -1,10 +1,10 @@
 # Bir kez yüklenir — ham ESC/POS (winspool RAW)
-if (-not ('LimaRawPrinter' -as [type])) {
+if (-not ('PosRawPrinter' -as [type])) {
   Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
 
-public class LimaRawPrinter {
+public class PosRawPrinter {
   [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
   public struct DOCINFOW {
     [MarshalAs(UnmanagedType.LPWStr)] public string pDocName;
@@ -39,7 +39,7 @@ public class LimaRawPrinter {
       throw new System.ComponentModel.Win32Exception();
     }
     try {
-      var di = new DOCINFOW { pDocName = "LimaReceipt", pDataType = "RAW" };
+      var di = new DOCINFOW { pDocName = "PosReceipt", pDataType = "RAW" };
       if (!StartDocPrinter(hPrinter, 1, ref di)) throw new System.ComponentModel.Win32Exception();
       try {
         if (!StartPagePrinter(hPrinter)) throw new System.ComponentModel.Win32Exception();
@@ -57,32 +57,32 @@ public class LimaRawPrinter {
 "@
 }
 
-$script:LimaCachedPrinter = $null
+$script:PosCachedPrinter = $null
 
-function Resolve-LimaPrinterName([string]$PrinterName) {
-  if ($script:LimaCachedPrinter) {
-    return $script:LimaCachedPrinter
+function Resolve-PosPrinterName([string]$PrinterName) {
+  if ($script:PosCachedPrinter) {
+    return $script:PosCachedPrinter
   }
   if (Get-Printer -Name $PrinterName -ErrorAction SilentlyContinue) {
-    $script:LimaCachedPrinter = $PrinterName
+    $script:PosCachedPrinter = $PrinterName
     return $PrinterName
   }
   $alt = Get-Printer -ErrorAction SilentlyContinue | Where-Object {
     $_.Name -match 'Greenleaf POS-80|POS-80|Zywell'
   } | Select-Object -First 1
   if ($alt) {
-    $script:LimaCachedPrinter = $alt.Name
+    $script:PosCachedPrinter = $alt.Name
     return $alt.Name
   }
-  $script:LimaCachedPrinter = $PrinterName
+  $script:PosCachedPrinter = $PrinterName
   return $PrinterName
 }
 
-function Send-LimaRawEscPosFile([string]$PrinterName, [string]$FilePath) {
+function Send-PosRawEscPosFile([string]$PrinterName, [string]$FilePath) {
   if (-not (Test-Path -LiteralPath $FilePath)) {
     throw "Dosya bulunamadi: $FilePath"
   }
-  $resolved = Resolve-LimaPrinterName $PrinterName
+  $resolved = Resolve-PosPrinterName $PrinterName
   $bytes = [System.IO.File]::ReadAllBytes($FilePath)
-  [LimaRawPrinter]::Send($resolved, $bytes)
+  [PosRawPrinter]::Send($resolved, $bytes)
 }

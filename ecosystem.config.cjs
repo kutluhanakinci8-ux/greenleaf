@@ -21,7 +21,7 @@ module.exports = {
       watch: false,
     },
     {
-      name: 'lima-receipt-bridge',
+      name: 'receipt-bridge',
       cwd: __dirname,
       script: 'scripts/receipt-raw-print-bridge.mjs',
       interpreter: 'node',

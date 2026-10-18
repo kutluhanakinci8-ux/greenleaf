@@ -43,7 +43,7 @@ export function getIrsaliyeWarehouseProducts(products: Product[]): Product[] {
   return products.filter(isIrsaliyeWarehouseProduct);
 }
 
-/** POS Lite / Lima — tüm tenant ürünleri; main — irsaliye depo listesi */
+/** POS Lite — tüm tenant ürünleri; main — irsaliye depo listesi */
 export function getStockCatalogProducts(
   products: Product[],
   settings?: AppSettings | null,

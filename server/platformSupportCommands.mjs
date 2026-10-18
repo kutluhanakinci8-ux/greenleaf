@@ -28,7 +28,7 @@ function normalizeCommand(raw) {
   return s;
 }
 
-/** "lima askıya al" → { tenantId: 'lima', command: 'suspend' } when tenantId omitted */
+/** "demo askıya al" → { tenantId: 'demo', command: 'suspend' } when tenantId omitted */
 export function parseSupportCommandLine(line, defaultTenantId) {
   const text = String(line ?? '').trim();
   if (!text) return { ok: false, error: 'Komut boş' };
@@ -47,7 +47,7 @@ export function parseSupportCommandLine(line, defaultTenantId) {
   }
 
   const command = normalizeCommand(cmdPart.replace(/\s+al$/i, '').replace(/\s+/g, '_'));
-  if (!tenantId) return { ok: false, error: 'Kiracı seçin veya komutta tenantId yazın (örn. lima askıya)' };
+  if (!tenantId) return { ok: false, error: 'Kiracı seçin veya komutta tenantId yazın (örn. demo askıya)' };
   return { ok: true, tenantId, command };
 }
 
@@ -89,7 +89,7 @@ export async function runPlatformSupportCommand(dataDir, { tenantId, command, li
 
 export function listPlatformSupportCommands() {
   return [
-    { id: 'suspend', label: 'Askıya al', example: '/suspend veya lima askıya' },
+    { id: 'suspend', label: 'Askıya al', example: '/suspend veya demo askıya' },
     { id: 'unsuspend', label: 'Askıdan çıkar', example: '/unsuspend' },
     { id: 'read_only_on', label: 'Salt okunur', example: '/read_only' },
     { id: 'read_only_off', label: 'Yazmaya aç', example: '/read_write' },

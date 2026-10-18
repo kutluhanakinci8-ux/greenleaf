@@ -45,7 +45,7 @@ export function inferLoginAuditKind(
   if (r.includes('hesap kilitli') || r.includes('yönetici')) return 'account_disabled';
   if (r.includes('pin')) return 'wrong_pin';
   if (r.includes('mağaza kodu') || r.includes('tanınmıyor')) return 'invalid_store_code';
-  if (r.includes('lima')) return 'tenant_affinity';
+  if (r.includes('tenant')) return 'tenant_affinity';
   if (r.includes('askıya')) return 'lifecycle_suspended';
   if (r.includes('deneme süresi')) return 'lifecycle_trial';
   if (r.includes('mağaza bulunamadı')) return 'store_missing';

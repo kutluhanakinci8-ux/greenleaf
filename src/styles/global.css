@@ -3014,7 +3014,7 @@ input {
   padding-bottom: 6px;
 }
 
-/* Tam kasa (Greenleaf): Lima’daki sıkı sepet/ödeme düzeni — müşteri alanı kalır */
+/* Tam kasa: sıkı sepet/ödeme düzeni — müşteri alanı kalır */
 .cart-panel--has-items:not(.cart-panel--compact-checkout) .cart-item {
   padding: 8px 10px;
   gap: 6px;

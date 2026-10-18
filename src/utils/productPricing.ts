@@ -13,7 +13,7 @@ export function applyRetailVat(netPrice: number, vatRate = DEFAULT_VAT_RATE): nu
 /**
  * Perakende kasa birim fiyatı.
  * Greenleaf: fullSalePrice = net liste, ourPriceWithVat = KDV dahil tahsilat.
- * Lima / brüt ayrı kayıtlı değilse (iki alan yakınsa): KDV hariç liste (fullSalePrice).
+ * Brüt ayrı kayıtlı değilse (iki alan yakınsa): KDV hariç liste (fullSalePrice).
  */
 export function resolveRetailSaleUnitPrice(
   product: Pick<Product, 'fullSalePrice' | 'ourPriceWithVat'>,

@@ -451,7 +451,7 @@ export function StockScreen({ store }: StockScreenProps) {
           <div className="stock-summary-strip-detail">
             {posLiteStock ? (
               <span className="stock-summary-meta stock-summary-meta--hint">
-                Lima stok listesi — giriş için tabloda <strong>İşlem</strong> veya üstte{' '}
+                Stok listesi — giriş için tabloda <strong>İşlem</strong> veya üstte{' '}
                 <strong>+ Stok İşlemleri</strong>. Hareket geçmişi altta listelenir.
               </span>
             ) : (

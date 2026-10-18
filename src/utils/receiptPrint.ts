@@ -5,7 +5,7 @@ import type { ThermalReceiptPrintOptions } from '../types/receiptPrinter';
 import { normalizeReceiptPrinterSettings } from '../types/receiptPrinter';
 import { logReceiptPrint } from './receiptPrintLog';
 import { remindSilentReceiptBridgeMissing } from './receiptPrintBridgeReminder';
-import { getLastLimaRawPrintError, tryLimaRawReceiptPrint } from './limaRawReceiptPrint';
+import { getLastRawPrintError, tryRawReceiptPrint } from './rawReceiptPrint';
 import { toThermalReceiptAscii } from './thermalReceiptAscii';
 import { applyRetailVat } from './productPricing';
 import { DEFAULT_VAT_RATE, roundMoney, splitGrossAmount } from './vatAnalytics';
@@ -68,10 +68,11 @@ const PAYMENT_LABELS: Record<SaleReceiptData['paymentMethod'], string> = {
 };
 
 /** Eski rastertopos yaması — artık fişte gösterilmez (Cû / çizgi kalıntısı) */
-const LIMA_RECEIPT_LOGO_URL = '/lima-receipt-logo.svg';
+const RECEIPT_LOGO_URL = '/receipt-logo.svg';
 
-function isLimaBrandedReceipt(businessName: string): boolean {
-  return sanitizeReceiptVisibleText(businessName).toLocaleLowerCase('tr-TR').includes('lima');
+/** POS Lite fiş düzeni: satır net, KDV ayrı gösterilir */
+function usesNetLineReceiptVat(_businessName: string): boolean {
+  return true;
 }
 
 export function buildSaleReceiptVatBreakdown(
@@ -90,7 +91,7 @@ export function resolveSaleReceiptVat(data: SaleReceiptData): SaleReceiptVatBrea
   const grossTotal = grossFromTotal > 0 ? grossFromTotal : itemsSum;
   if (grossTotal <= 0) return undefined;
 
-  if (isLimaBrandedReceipt(data.businessName)) {
+  if (usesNetLineReceiptVat(data.businessName)) {
     const netFromItems = itemsSum > 0 ? itemsSum : grossFromTotal;
     return buildSaleReceiptVatBreakdown(netFromItems);
   }
@@ -107,7 +108,7 @@ export function resolveSaleReceiptVat(data: SaleReceiptData): SaleReceiptVatBrea
 export function withSaleReceiptVatBreakdown(data: SaleReceiptData): SaleReceiptData {
   const vat = data.vat ?? resolveSaleReceiptVat(data);
   if (!vat) return data;
-  const total = isLimaBrandedReceipt(data.businessName)
+  const total = usesNetLineReceiptVat(data.businessName)
     ? vat.grossTotal
     : (roundMoney(data.total) > 0 ? roundMoney(data.total) : vat.grossTotal);
   return { ...data, vat, total };
@@ -179,8 +180,8 @@ function buildReceiptVatPremiumRows(data: SaleReceiptData): string {
 }
 
 function buildReceiptLogoHtml(businessName: string): string {
-  if (!isLimaBrandedReceipt(businessName)) return '';
-  const src = LIMA_RECEIPT_LOGO_URL;
+  if (!usesNetLineReceiptVat(businessName)) return '';
+  const src = RECEIPT_LOGO_URL;
   return `<img class="rp-logo" src="${src}" alt="" width="200" height="60" />`;
 }
 
@@ -914,7 +915,7 @@ function formatReceiptBrandName(name: string): string {
   return sanitizeReceiptVisibleText(name).toLocaleUpperCase('tr-TR');
 }
 
-/** Lima premium termal — hizalı tablo, tek ağırlık (ghost/çift basım yok) */
+/** Premium termal — hizalı tablo, tek ağırlık (ghost/çift basım yok) */
 export function buildGreenleafPremiumReceiptHtml(data: SaleReceiptData): string {
   const receiptRef = data.receiptNo || data.saleId || '—';
   const itemRows = data.items
@@ -964,7 +965,7 @@ export function buildGreenleafPremiumReceiptHtml(data: SaleReceiptData): string 
 </html>`;
 }
 
-/** Lima klasik: düz metin yedek */
+/** Klasik: düz metin yedek */
 export function buildGreenleafPlainReceiptHtml(data: SaleReceiptData): string {
   const plain = buildPlainTextSaleReceipt(data);
   return wrapPlainReceiptBody(plain, 80, 0)
@@ -1135,12 +1136,12 @@ export async function printThermalReceipt(
   if (options === undefined) {
     logReceiptPrint('thermal-classic-path', { saleId: receipt.saleId, items: receipt.items.length });
     const plainNoSacrifice = buildPlainTextSaleReceipt(receipt, classicPaperWidth);
-    const rawOk = await tryLimaRawReceiptPrint(plainNoSacrifice, printerName);
+    const rawOk = await tryRawReceiptPrint(plainNoSacrifice, printerName);
     if (rawOk) {
       logReceiptPrint('thermal-raw-escpos-ok', { saleId: receipt.saleId });
       return;
     }
-    const rawErr = getLastLimaRawPrintError();
+    const rawErr = getLastRawPrintError();
     logReceiptPrint('thermal-raw-escpos-error', {
       saleId: receipt.saleId,
       printerName,
