@@ -18,8 +18,9 @@ Veri klasörü (varsayılan): `./data/` (git’e girmez).
 
 ## Windows
 
+- Kurulum: [docs/WINDOWS-KURULUM.md](docs/WINDOWS-KURULUM.md) — `scripts/windows/Install-GreenleafPOS.ps1`
 - Fiş: `public/install/windows/ekolojik-zywell-setup.ps1` (Zywell köprüsü)
-- Detay: [docs/GREENLEAF-DESKTOP.md](docs/GREENLEAF-DESKTOP.md)
+- Mimari: [docs/GREENLEAF-DESKTOP.md](docs/GREENLEAF-DESKTOP.md)
 
 ## Repo’yu GitHub’a bağlama
 
