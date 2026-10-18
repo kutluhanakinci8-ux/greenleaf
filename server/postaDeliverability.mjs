@@ -1,18 +1,18 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { getEkolojikMailConfig } from './ekolojikMailConfig.mjs';
-import { verifyEkolojikSmtp } from './ekolojikSmtp.mjs';
+import { getMailConfig } from './mailConfig.mjs';
+import { verifySmtp } from './smtpTransport.mjs';
 import { getEffectiveMailPresentation } from './postaSettings.mjs';
 import { getTenantSmtpMailConfig, isTenantSmtpConfigured } from './tenantMailConfig.mjs';
 import { readTenantStore, writeTenantStore } from './tenantAuth.mjs';
-import { readOpenDkimTxtOneLine } from './ekolojikOpenDkimDns.mjs';
+import { readOpenDkimTxtOneLine } from './mailDkimDns.mjs';
 
 const execFileAsync = promisify(execFile);
 
 function dnsResolvers() {
-  const one = process.env.EKOLOJIK_DNS_RESOLVER?.trim();
+  const one = process.env.GREENLEAF_DNS_RESOLVER?.trim();
   if (one) return [one];
-  const many = process.env.EKOLOJIK_DNS_RESOLVERS?.trim();
+  const many = process.env.GREENLEAF_DNS_RESOLVERS?.trim();
   if (many) return many.split(/[,;\s]+/).filter(Boolean);
   return ['dns1.turhost.com', 'dns2.turhost.com', '1.1.1.1', '8.8.8.8'];
 }
@@ -45,7 +45,7 @@ async function digTxt(name) {
 }
 
 function parseAliasesFromEnv() {
-  const raw = String(process.env.EKOLOJIK_MAIL_ALIASES ?? '').trim();
+  const raw = String(process.env.GREENLEAF_MAIL_ALIASES ?? '').trim();
   if (!raw) return [];
   return raw
     .split(/[,;\s]+/)
@@ -62,8 +62,8 @@ export function defaultAliasesForDomain(domain) {
   const d = String(domain ?? '').trim().toLowerCase();
   if (!d) return [];
   const support =
-    process.env.EKOLOJIK_SUPPORT_INBOX?.trim().toLowerCase()
-    || process.env.EKOLOJIK_SUPPORT_MAIL_FROM?.trim().toLowerCase()
+    process.env.GREENLEAF_SUPPORT_INBOX?.trim().toLowerCase()
+    || process.env.GREENLEAF_SUPPORT_MAIL_FROM?.trim().toLowerCase()
     || `destek@${d}`;
   const aliases = [`siparis@${d}`, `fatura@${d}`];
   if (support.includes('@') && !aliases.includes(support)) aliases.push(support);
@@ -78,9 +78,9 @@ function domainFromEmail(email) {
 function resolveMailDomain(pres) {
   const fromDomain = domainFromEmail(pres.from);
   if (fromDomain) return fromDomain;
-  const envDomain = process.env.EKOLOJIK_MAIL_DOMAIN?.trim();
+  const envDomain = process.env.GREENLEAF_MAIL_DOMAIN?.trim();
   if (envDomain) return envDomain;
-  return getEkolojikMailConfig().from?.split('@')[1]?.trim().toLowerCase() || 'ekolojikmarket.com.tr';
+  return getMailConfig().from?.split('@')[1]?.trim().toLowerCase() || 'example.com';
 }
 
 function statusFromTxt(txt, pattern) {
@@ -130,7 +130,7 @@ function buildDnsChecklist(domain, pres, vpsIp, selector, dns, dkimSuggested) {
   const dkimName = `${selector}._domainkey.${domain}`;
   const dkimValue =
     dkimSuggested ||
-    `OpenDKIM: bash scripts/sunucu-ekolojik-opendkim-kur.sh (host: ${selector}._domainkey)`;
+    `OpenDKIM: bash scripts/ops-opendkim-kur.sh (host: ${selector}._domainkey)`;
   return [
     {
       id: 'spf',
@@ -168,8 +168,8 @@ function buildDnsChecklist(domain, pres, vpsIp, selector, dns, dkimSuggested) {
 export async function getPostaDeliverabilityHub(dataDir, tenantId = 'main') {
   const pres = await getEffectiveMailPresentation(dataDir, tenantId);
   const domain = resolveMailDomain(pres);
-  const selector = process.env.EKOLOJIK_DKIM_SELECTOR?.trim() || 'ekolojik';
-  const vpsIp = process.env.EKOLOJIK_VPS_PUBLIC_IP?.trim() || '168.231.109.27';
+  const selector = process.env.GREENLEAF_DKIM_SELECTOR?.trim() || 'greenleaf';
+  const vpsIp = process.env.GREENLEAF_VPS_PUBLIC_IP?.trim() || '168.231.109.27';
 
   const spfTxt = await digTxt(domain);
   const dmarcTxt = await digTxt(`_dmarc.${domain}`);
@@ -186,7 +186,7 @@ export async function getPostaDeliverabilityHub(dataDir, tenantId = 'main') {
 
   const smtpConfigured = await isTenantSmtpConfigured(dataDir, tenantId);
   const smtpVerify = smtpConfigured
-    ? await verifyEkolojikSmtp({ dataDir, tenantId })
+    ? await verifySmtp({ dataDir, tenantId })
     : { ok: false, error: 'SMTP yapılandırılmadı' };
   const mailCfg = await getTenantSmtpMailConfig(dataDir, tenantId);
   const localDkimTxt = await readOpenDkimTxtOneLine(domain, selector);
@@ -247,9 +247,9 @@ export async function getPostaDeliverabilityHub(dataDir, tenantId = 'main') {
     dnsPanelGuide: {
       provider: 'Turhost',
       ns: ['dns1.turhost.com', 'dns2.turhost.com'],
-      docPath: 'docs/EKOLOJIK-DNS-TURHOST-PANEL.md',
+      docPath: 'docs/DNS-TURHOST-PANEL.md',
       strictCommand:
-        'EKOLOJIK_DNS_STRICT=1 bash scripts/sunucu-ekolojik-dns-mail-dogrula.sh',
+        'GREENLEAF_DNS_STRICT=1 bash scripts/ops-dns-mail-dogrula.sh',
     },
     nbParity: 'PM-3/PM-7 deliverability hub (tenant From domain, Faz 43)',
   };

@@ -30,7 +30,7 @@ Manuel başlatma:
 ## Fiş yazıcısı (bir kez)
 
 ```powershell
-.\public\install\windows\ekolojik-zywell-setup.ps1
+.\public\install\windows\greenleaf-zywell-setup.ps1
 ```
 
 ## Uzaktan güncelleme (sizin taraf)
@@ -42,4 +42,4 @@ Manuel başlatma:
 
 ## VPS ile karıştırmayın
 
-Greenleaf **5190**, Ekolojik bulut POS **5180**. Aynı sunucuda ikisi birden test edilebilir; veri klasörleri ayrıdır.
+Greenleaf **5190**, Greenleaf bulut POS **5180**. Aynı sunucuda ikisi birden test edilebilir; veri klasörleri ayrıdır.

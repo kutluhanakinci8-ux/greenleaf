@@ -6,7 +6,7 @@ import { appendMessagingMessage, createMessagingThread, listMessagingMessages } 
 import { getPlatformCase, appendCaseActivity, updatePlatformCase } from './platformCaseStore.mjs';
 import { replyPlatformSupportInbox } from './platformSupportInbox.mjs';
 import { getPlatformSupportMailPresentation } from './platformSupportMailConfig.mjs';
-import { sendViaEkolojikSmtp } from './ekolojikSmtp.mjs';
+import { sendViaSmtp } from './smtpTransport.mjs';
 import { buildPlatformSupportOperatorReplyContent } from './platformSupportAutoreplyTemplate.mjs';
 import { clipEmailActivityText, clipEmailActivityHtml } from './platformSupportActivityContent.mjs';
 
@@ -17,19 +17,19 @@ const DEFAULT_MACROS = [
     id: 'first_reply',
     label: 'İlk yanıt',
     body:
-      'Merhaba {{requesterFirstName}},\n\n“{{subject}}” konulu talebiniz (#{{caseNumber}}) için teşekkürler. İnceliyoruz; en kısa sürede bilgi vereceğiz.\n\nSaygılarımızla,\nEkolojik Destek',
+      'Merhaba {{requesterFirstName}},\n\n“{{subject}}” konulu talebiniz (#{{caseNumber}}) için teşekkürler. İnceliyoruz; en kısa sürede bilgi vereceğiz.\n\nSaygılarımızla,\nGreenleaf Destek',
   },
   {
     id: 'sla_sorry',
     label: 'SLA özür',
     body:
-      'Merhaba {{requesterFirstName}},\n\nYanıtımızın geciktiği için özür dileriz. “{{subject}}” kaydını önceliklendirdik.\n\nSaygılarımızla,\nEkolojik Destek',
+      'Merhaba {{requesterFirstName}},\n\nYanıtımızın geciktiği için özür dileriz. “{{subject}}” kaydını önceliklendirdik.\n\nSaygılarımızla,\nGreenleaf Destek',
   },
   {
     id: 'resolved',
     label: 'Çözüldü',
     body:
-      'Merhaba {{requesterFirstName}},\n\n#{{caseNumber}} kaydınızı çözüldü olarak işaretledik. Başka bir sorunuz olursa yazabilirsiniz.\n\nSaygılarımızla,\nEkolojik Destek',
+      'Merhaba {{requesterFirstName}},\n\n#{{caseNumber}} kaydınızı çözüldü olarak işaretledik. Başka bir sorunuz olursa yazabilirsiniz.\n\nSaygılarımızla,\nGreenleaf Destek',
   },
 ];
 
@@ -187,7 +187,7 @@ async function sendCaseEmail(dataDir, caseRow, text, operatorUsername) {
     body: text,
     operatorUsername,
   });
-  const result = await sendViaEkolojikSmtp({
+  const result = await sendViaSmtp({
     dataDir,
     to,
     subject,

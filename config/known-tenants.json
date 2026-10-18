@@ -1,15 +1,10 @@
 {
-  "allowlist": ["main", "lima-market"],
+  "allowlist": ["main"],
   "stores": [
     {
       "id": "main",
-      "label": "Greenleaf Market",
-      "storeCodeHint": "Boş bırakın (varsayılan)"
-    },
-    {
-      "id": "lima-market",
-      "label": "Lima Market",
-      "storeCodeHint": "lima-market"
+      "label": "Varsayılan mağaza",
+      "storeCodeHint": "Boş bırakın (tek mağaza kurulumu)"
     }
   ]
 }

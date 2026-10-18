@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getEkolojikImapConfig, getEkolojikMailConfig, isEkolojikImapConfigured, isEkolojikSmtpConfigured } from './ekolojikMailConfig.mjs';
+import { getImapConfig, getMailConfig, isImapConfigured, isSmtpConfigured } from './mailConfig.mjs';
 import { decryptTenantMailSecret, encryptTenantMailSecret } from './tenantMailSecrets.mjs';
 
 function configPath(dataDir, tenantId = 'main') {
@@ -27,8 +27,8 @@ async function readRaw(dataDir, tenantId) {
 export async function getTenantMailConfigHub(dataDir, tenantId = 'main') {
   const raw = await readRaw(dataDir, tenantId);
   const usePlatformEnv = raw?.usePlatformEnv !== false;
-  const envMail = getEkolojikMailConfig();
-  const envImap = getEkolojikImapConfig();
+  const envMail = getMailConfig();
+  const envImap = getImapConfig();
   const smtp = raw?.smtp ?? {};
   const imap = raw?.imap ?? {};
   return {
@@ -111,7 +111,7 @@ export async function saveTenantMailConfig(dataDir, tenantId, patch = {}) {
 }
 
 export async function getTenantImapConfig(dataDir, tenantId = 'main') {
-  const env = getEkolojikImapConfig();
+  const env = getImapConfig();
   const raw = await readRaw(dataDir, tenantId);
   if (!raw || raw.usePlatformEnv !== false || raw.enabled === false) {
     return env;
@@ -138,7 +138,7 @@ export async function isTenantSmtpConfigured(dataDir, tenantId = 'main') {
 }
 
 export async function getTenantSmtpMailConfig(dataDir, tenantId = 'main') {
-  const env = getEkolojikMailConfig();
+  const env = getMailConfig();
   const raw = await readRaw(dataDir, tenantId);
   if (!raw || raw.usePlatformEnv !== false || raw.enabled === false) {
     return env;

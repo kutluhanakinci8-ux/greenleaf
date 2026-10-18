@@ -99,7 +99,7 @@ export async function downloadPostaOutboxCsv(from?: string, to?: string) {
     throw new Error((err as { error?: string }).error ?? 'Outbox export başarısız');
   }
   const blob = await res.blob();
-  downloadBlob(blob, 'ekolojik-outbox.csv');
+  downloadBlob(blob, 'greenleaf-outbox.csv');
 }
 
 export async function downloadPostaContactCsv(from?: string, to?: string) {
@@ -113,7 +113,7 @@ export async function downloadPostaContactCsv(from?: string, to?: string) {
     throw new Error((err as { error?: string }).error ?? 'İletişim export başarısız');
   }
   const blob = await res.blob();
-  downloadBlob(blob, 'ekolojik-contact.csv');
+  downloadBlob(blob, 'greenleaf-contact.csv');
 }
 
 export type PostaRuleMatchGroup = {
@@ -344,7 +344,7 @@ export async function downloadMessagingExportZip() {
   }
   const disposition = res.headers.get('Content-Disposition') ?? '';
   const match = disposition.match(/filename="([^"]+)"/);
-  const filename = match?.[1] ?? 'ekolojik-messaging-export.zip';
+  const filename = match?.[1] ?? 'greenleaf-messaging-export.zip';
   const blob = await res.blob();
   downloadBlob(blob, filename);
 }

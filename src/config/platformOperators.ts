@@ -1,18 +1,16 @@
 import { DEFAULT_TENANT_ID } from '../storage/tenantSession';
 
-/** Platform konsolu — kiracı store.json kullanıcısı değil */
+/** Platform konsolu — kiracı store.json kullanıcısı değil (masaüstü sürümde kapalı olabilir) */
 export const PLATFORM_TENANT_ID = '__platform__';
 
 const PLATFORM_OPERATOR_USERNAMES = new Set([
-  'kutluhan08',
-  'kutluhan',
-  'kutluhanakinci8',
-  'yonetici',
+  'sysop',
+  'platform',
 ]);
 
-const PLATFORM_OPERATOR_ALIASES = new Map([
-  ['kutluhan', 'kutluhan08'],
-  ['kutluhanakinci8', 'kutluhan08'],
+const PLATFORM_OPERATOR_ALIASES = new Map<string, string>([
+  ['platform-admin', 'sysop'],
+  ['admin', 'sysop'],
 ]);
 
 export function normalizePlatformOperatorUsername(username: string): string {
@@ -33,7 +31,7 @@ export function isPlatformApiRole(role: string | undefined): boolean {
   return role === 'platform';
 }
 
-const DEDICATED_PLATFORM_ONLY = new Set(['kutluhan08']);
+const DEDICATED_PLATFORM_ONLY = new Set(['sysop']);
 
 export function isDedicatedPlatformOnlyUsername(username: string): boolean {
   return DEDICATED_PLATFORM_ONLY.has(normalizePlatformOperatorUsername(username));

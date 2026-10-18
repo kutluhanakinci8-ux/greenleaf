@@ -19,7 +19,7 @@ export function loadTenantId(): string {
 
 /**
  * /giris — URL'de ?tenant= yoksa her zaman Greenleaf (main).
- * Eski localStorage (ör. lima-market) kutluhan08 girişini bozmasın.
+ * Eski localStorage (ör. main) platform operator girişini bozmasın.
  */
 export function resolveTenantIdForLoginPage(): string {
   if (typeof window === 'undefined') return DEFAULT_TENANT_ID;

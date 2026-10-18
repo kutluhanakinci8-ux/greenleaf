@@ -39,7 +39,7 @@ export async function resolveEffectiveMessagingPublicKey(dataDir, tenantId = 'ma
   if (file.enabled && file.publicKey) {
     return { key: file.publicKey, source: 'tenant', rotatedAt: file.rotatedAt };
   }
-  const envKey = process.env.EKOLOJIK_MESSAGING_PUBLIC_KEY?.trim() || '';
+  const envKey = process.env.GREENLEAF_MESSAGING_PUBLIC_KEY?.trim() || '';
   if (envKey) {
     return { key: envKey, source: 'env', rotatedAt: null };
   }
@@ -66,7 +66,7 @@ export async function getMessagingPublicConfigHub(dataDir, tenantId = 'main') {
     configured: Boolean(effective.key),
     rotatedAt: file.rotatedAt,
     apiPrefix: '/api/public/messaging/v1',
-    authHeader: 'x-ekolojik-messaging-key',
+    authHeader: 'x-greenleaf-messaging-key',
     allowedOrigins: file.allowedOrigins ?? [],
     widgetScriptUrl: '/widget/messaging.js',
   };

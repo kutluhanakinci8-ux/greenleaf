@@ -292,7 +292,7 @@ export function SalesScreen({ store }: SalesScreenProps) {
         )
       : null;
     const printerName =
-      store.settings.receiptPrinter?.windowsPrinterName?.trim() || 'Ekolojik POS-80 (Zywell)';
+      store.settings.receiptPrinter?.windowsPrinterName?.trim() || 'Greenleaf POS-80 (Zywell)';
 
     if (runFiscal && posCheckout.fiscalTiming === 'after_sale') {
       const fiscalPromise = tryFiscalReceipt(

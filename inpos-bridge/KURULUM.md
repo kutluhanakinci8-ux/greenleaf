@@ -8,7 +8,7 @@ POS web uygulaması tarayıcıdan `http://127.0.0.1:9191` adresine istek atar; k
 
 | Ortam | Yol | Açıklama |
 |-------|-----|----------|
-| VPS (Linux) | `/var/www/ekolojik-market-pos/inpos-bridge` | Sadece kaynak kod — **burada çalıştırmayın** |
+| VPS (Linux) | `/var/www/greenleaf-pos/inpos-bridge` | Sadece kaynak kod — **burada çalıştırmayın** |
 | Kasa PC (Windows) | Repo kopyası veya `inpos-bridge` klasörü | **Burada çalıştırın** |
 
 ## Windows kasa PC kurulumu
@@ -50,7 +50,7 @@ Sunucuda `cd market-pos/inpos-bridge` çalışmaz çünkü home dizininde repo y
 Doğru repo yolu:
 
 ```bash
-cd /var/www/ekolojik-market-pos/inpos-bridge   # kaynak var, ama Linux'ta fiş kesilmez
+cd /var/www/greenleaf-pos/inpos-bridge   # kaynak var, ama Linux'ta fiş kesilmez
 ```
 
 Mali yazıcı kasadaki Windows PC'ye bağlıdır.

@@ -90,7 +90,7 @@ function formatCaseRefLabel(caseNumber) {
 }
 
 export function formatPlatformSupportAutoreplyText({ brandName, messageId, supportEmail, caseNumber }) {
-  const brand = brandName || 'Ekolojik Destek';
+  const brand = brandName || 'Greenleaf Destek';
   const mail = supportEmail || getPlatformSupportMailAddress();
   const siteBrand = getPlatformSupportMailBrand();
   const caseRef = formatCaseRefLabel(caseNumber);
@@ -112,7 +112,7 @@ export function formatPlatformSupportAutoreplyText({ brandName, messageId, suppo
     '',
     `Destek formu: ${siteBrand.contactFormUrl}`,
     '',
-    '— Ekolojik Destek',
+    '— Greenleaf Destek',
     mail,
     siteBrand.site,
   ];
@@ -127,7 +127,7 @@ export function formatPlatformSupportAutoreplyText({ brandName, messageId, suppo
 
 export function formatPlatformSupportAutoreplyHtml({ brandName, messageId, supportEmail, caseNumber }) {
   const pres = getPlatformSupportMailPresentation();
-  const brand = brandName || pres.fromName || 'Ekolojik Destek';
+  const brand = brandName || pres.fromName || 'Greenleaf Destek';
   const mail = supportEmail || pres.from || getPlatformSupportMailAddress();
   const siteBrand = getPlatformSupportMailBrand();
   const ref = escapeHtml(messageId);
@@ -162,7 +162,7 @@ export function formatPlatformSupportAutoreplyHtml({ brandName, messageId, suppo
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:6px;">Ekolojik Platform</div>
+                    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:6px;">Greenleaf Platform</div>
                     <div style="font-size:22px;font-weight:700;color:#ffffff;line-height:1.25;">${escapeHtml(brand)}</div>
                     <div style="font-size:13px;color:rgba(255,255,255,0.9);margin-top:8px;">Yardım merkezi · Talep alındı bildirimi</div>
                   </td>
@@ -237,7 +237,7 @@ export function formatPlatformSupportSpawnCaseText({
   closedNumber,
   subject,
 }) {
-  const brand = brandName || 'Ekolojik Destek';
+  const brand = brandName || 'Greenleaf Destek';
   const mail = supportEmail || getPlatformSupportMailAddress();
   const siteBrand = getPlatformSupportMailBrand();
   const plus = supportPlusAddressForCase(caseNumber);
@@ -257,7 +257,7 @@ export function formatPlatformSupportSpawnCaseText({
     '',
     `Destek formu: ${siteBrand.contactFormUrl}`,
     '',
-    '— Ekolojik Destek',
+    '— Greenleaf Destek',
     mail,
     siteBrand.site,
   ];
@@ -272,7 +272,7 @@ export function formatPlatformSupportSpawnCaseHtml({
   closedNumber,
 }) {
   const pres = getPlatformSupportMailPresentation();
-  const brand = brandName || pres.fromName || 'Ekolojik Destek';
+  const brand = brandName || pres.fromName || 'Greenleaf Destek';
   const mail = supportEmail || pres.from || getPlatformSupportMailAddress();
   const siteBrand = getPlatformSupportMailBrand();
   const ref = escapeHtml(messageId);
@@ -307,7 +307,7 @@ export function formatPlatformSupportSpawnCaseHtml({
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:6px;">Ekolojik Platform</div>
+                    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:6px;">Greenleaf Platform</div>
                     <div style="font-size:22px;font-weight:700;color:#ffffff;line-height:1.25;">${escapeHtml(brand)}</div>
                     <div style="font-size:13px;color:rgba(255,255,255,0.9);margin-top:8px;">Yardım merkezi · Yeni kayıt bildirimi</div>
                   </td>
@@ -432,7 +432,7 @@ function platformSupportMailShell({ title, headerTitle, headerSubtitle, mainRows
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:6px;">Ekolojik Platform</div>
+                    <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:6px;">Greenleaf Platform</div>
                     <div style="font-size:22px;font-weight:700;color:#ffffff;line-height:1.25;">${brandTitle}</div>
                     <div style="font-size:13px;color:rgba(255,255,255,0.9);margin-top:8px;">${subtitle}</div>
                   </td>
@@ -454,15 +454,15 @@ function platformSupportMailShell({ title, headerTitle, headerSubtitle, mainRows
 }
 
 export function formatPlatformSupportOperatorReplyText({ body, operatorUsername }) {
-  const signedBy = operatorUsername || 'Ekolojik Platform';
+  const signedBy = operatorUsername || 'Greenleaf Platform';
   const lines = [String(body ?? '').trim(), '', `— ${signedBy}`];
   return appendSupportMailPlainFooter(lines).join('\n');
 }
 
 export function formatPlatformSupportOperatorReplyHtml({ body, operatorUsername }) {
   const pres = getPlatformSupportMailPresentation();
-  const brand = pres.fromName || 'Ekolojik Destek';
-  const signedBy = escapeHtml(operatorUsername || 'Ekolojik Platform');
+  const brand = pres.fromName || 'Greenleaf Destek';
+  const signedBy = escapeHtml(operatorUsername || 'Greenleaf Platform');
   const bodyHtml = plainTextToHtmlBlocks(body);
   const mainRowsHtml = `
           <tr>

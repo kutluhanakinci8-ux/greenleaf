@@ -230,7 +230,7 @@ export async function buildPlatformTenantsLifecycle(dataDir) {
       strictAllowlist,
       allowlist,
       publicRegistrationEnabled:
-        String(process.env.EKOLOJIK_PUBLIC_REGISTER ?? '').trim() === '1'
+        String(process.env.GREENLEAF_PUBLIC_REGISTER ?? '').trim() === '1'
         || process.env.NODE_ENV !== 'production',
     },
     totals,

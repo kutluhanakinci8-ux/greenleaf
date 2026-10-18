@@ -1,11 +1,11 @@
 /**
- * Ekolojik müşteri mesaj widget (Faz 40)
+ * Müşteri mesaj widget (Faz 40)
  * Snippet:
  *   <script src="https://HOST/widget/messaging.js" defer></script>
- *   <script>EkolojikMessaging.init({ tenantId, apiKey, apiBase })</script>
+ *   <script>GreenleafMessaging.init({ tenantId, apiKey, apiBase })</script>
  */
 (function (global) {
-  const STYLE_ID = 'ekolojik-messaging-widget-style';
+  const STYLE_ID = 'greenleaf-messaging-widget-style';
 
   function injectStyles() {
     if (document.getElementById(STYLE_ID)) return;
@@ -65,7 +65,7 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-ekolojik-messaging-key': cfg.apiKey,
+        'x-greenleaf-messaging-key': cfg.apiKey,
       },
       body: JSON.stringify({
         customerId,
@@ -218,7 +218,7 @@
       pollMs: userCfg?.pollMs,
     };
     if (!cfg.apiKey) {
-      console.warn('[EkolojikMessaging] apiKey gerekli');
+      console.warn('[GreenleafMessaging] apiKey gerekli');
       return { ok: false, error: 'apiKey gerekli' };
     }
     const session = await ensureThread(cfg);
@@ -226,5 +226,5 @@
     return { ok: true, session, ui };
   }
 
-  global.EkolojikMessaging = { init, version: 1 };
+  global.GreenleafMessaging = { init, version: 1 };
 })(typeof globalThis !== 'undefined' ? globalThis : window);

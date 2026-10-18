@@ -308,7 +308,7 @@ export function LandingLogin() {
                   required
                 />
                 <small className="login-field-hint">
-                  Bağlantı <strong>bildirim@ekolojikmarket.com.tr</strong> adresinden gönderilir (Ayarlar’da kayıtlı e-postanız).
+                  Bağlantı <strong>bildirim@example.com</strong> adresinden gönderilir (Ayarlar’da kayıtlı e-postanız).
                 </small>
               </label>
             )}

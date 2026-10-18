@@ -113,8 +113,8 @@ export function PostaOnboardingWizard({ store, onFinished }: Props) {
     script.async = true;
     script.onload = () => {
       widgetScriptLoaded.current = true;
-      const api = (window as unknown as { EkolojikMessaging?: { init: (c: Record<string, string>) => void } })
-        .EkolojikMessaging;
+      const api = (window as unknown as { GreenleafMessaging?: { init: (c: Record<string, string>) => void } })
+        .GreenleafMessaging;
       api?.init({
         mount: mountId,
         tenantId: tenant || 'main',
@@ -217,7 +217,7 @@ export function PostaOnboardingWizard({ store, onFinished }: Props) {
       return;
     }
     setBusy(true);
-    const result = await sendEmailTest({ to, subject: 'Ekolojik Posta test', body: 'Kurulum test mesajı.' });
+    const result = await sendEmailTest({ to, subject: 'Posta test', body: 'Kurulum test mesajı.' });
     setBusy(false);
     if (!result.ok) {
       setFlash(result.error ?? 'Test gönderilemedi.');
@@ -240,7 +240,7 @@ export function PostaOnboardingWizard({ store, onFinished }: Props) {
   const tenantId = loadTenantId();
   const apiKeyForEmbed =
     messagingConfig?.publicKey ||
-    (messagingConfig?.effectiveSource === 'env' ? '(sunucu .env EKOLOJIK_MESSAGING_PUBLIC_KEY)' : '');
+    (messagingConfig?.effectiveSource === 'env' ? '(sunucu .env GREENLEAF_MESSAGING_PUBLIC_KEY)' : '');
   const embedSnippet = buildMessagingEmbedSnippet(tenantId, messagingConfig?.publicKey ?? '');
 
   const handleWidgetTest = async () => {
@@ -321,7 +321,7 @@ export function PostaOnboardingWizard({ store, onFinished }: Props) {
                 </li>
               </ul>
               <p className="posta-onboarding-lead" style={{ fontSize: '0.9rem' }}>
-                Önerilen alias’lar (mağaza ayarı, <code>EKOLOJIK_MAIL_ALIASES</code> veya domain):{' '}
+                Önerilen alias’lar (mağaza ayarı, <code>GREENLEAF_MAIL_ALIASES</code> veya domain):{' '}
                 {mailAliases.length ? mailAliases.join(', ') : 'siparis@, fatura@, destek@ → aynı IMAP / platform kutusu'}
               </p>
               <div className="posta-onboarding-actions">
@@ -454,7 +454,7 @@ export function PostaOnboardingWizard({ store, onFinished }: Props) {
               )}
               {messagingConfig?.effectiveSource === 'env' && !messagingConfig.hasTenantKey && (
                 <p className="posta-onboarding-lead">
-                  Bu sunucu <code>EKOLOJIK_MESSAGING_PUBLIC_KEY</code> kullanıyor; embed’de o değeri yazın veya mağazaya özel anahtar oluşturun.
+                  Bu sunucu <code>GREENLEAF_MESSAGING_PUBLIC_KEY</code> kullanıyor; embed’de o değeri yazın veya mağazaya özel anahtar oluşturun.
                 </p>
               )}
               <label className="posta-onboarding-field">

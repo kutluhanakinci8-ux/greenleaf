@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { listPostaContacts } from './postaContacts.mjs';
-import { enqueueEkolojikMail } from './emailOutbox.mjs';
+import { enqueueTransactionalMail } from './emailOutbox.mjs';
 
 function campaignsPath(dataDir, tenantId) {
   return join(dataDir, 'posta-marketing', tenantId, 'campaigns.json');
@@ -81,7 +81,7 @@ export async function runPostaMarketingCampaign(dataDir, tenantId, campaignId, {
   for (let i = 0; i < recipients.length; i += 1) {
     const c = recipients[i];
     const variant = pickAbVariant(campaign, i);
-    await enqueueEkolojikMail(dataDir, {
+    await enqueueTransactionalMail(dataDir, {
       to: c.email,
       subject: variant.subject,
       text: variant.bodyText,

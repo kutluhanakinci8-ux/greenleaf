@@ -90,7 +90,7 @@ export async function getPostaOutboxAnalytics(dataDir, { days = 14, tenantId } =
     byDay: Object.values(byDay).sort((a, b) => a.date.localeCompare(b.date)),
     recentErrors,
     failureBreakdown,
-    mailTrackEnabled: String(process.env.EKOLOJIK_MAIL_TRACK ?? '').trim() === '1',
-    failedAlertThreshold: Number(process.env.EKOLOJIK_OUTBOX_FAILED_ALERT_THRESHOLD || 50),
+    mailTrackEnabled: String(process.env.GREENLEAF_MAIL_TRACK ?? '').trim() === '1',
+    failedAlertThreshold: Number(process.env.GREENLEAF_OUTBOX_FAILED_ALERT_THRESHOLD || 50),
   };
 }

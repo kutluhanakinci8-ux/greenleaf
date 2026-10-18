@@ -217,7 +217,7 @@ export function UsersManagement({ store }: UsersManagementProps) {
                 value={form.recoveryEmail}
                 onChange={(e) => setForm((prev) => ({ ...prev, recoveryEmail: e.target.value }))}
                 autoComplete="email"
-                placeholder="bildirim@ekolojikmarket.com.tr üzerinden gönderilir"
+                placeholder="bildirim@example.com üzerinden gönderilir"
                 required={form.isActive}
               />
             </label>

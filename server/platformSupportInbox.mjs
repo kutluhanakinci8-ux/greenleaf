@@ -14,7 +14,7 @@ import {
   getPlatformSupportMailPresentation,
   getPlatformSupportMailAddress,
 } from './platformSupportMailConfig.mjs';
-import { sendViaEkolojikSmtp } from './ekolojikSmtp.mjs';
+import { sendViaSmtp } from './smtpTransport.mjs';
 import {
   buildPlatformSupportAutoreplyContent,
   buildPlatformSupportOperatorReplyContent,
@@ -63,7 +63,7 @@ function dedupeKey(entry) {
 function targetsSupportAddress(...parts) {
   const blob = parts.filter(Boolean).join(' ').toLowerCase();
   const needle = SUPPORT_LOCAL();
-  return blob.includes(needle) || blob.includes('destek@ekolojikmarket');
+  return blob.includes(needle) || blob.includes('support@example.com');
 }
 
 async function senderLabelForOutbox(dataDir, message) {
@@ -72,7 +72,7 @@ async function senderLabelForOutbox(dataDir, message) {
   const business = String(store?.settings?.businessName ?? '').trim() || tenantId;
   const { getEffectiveMailPresentation } = await import('./postaSettings.mjs');
   const pres = await getEffectiveMailPresentation(dataDir, tenantId);
-  const email = String(pres.replyTo || pres.from || '').trim() || 'posta@ekolojikmarket.com.tr';
+  const email = String(pres.replyTo || pres.from || '').trim() || 'posta@example.com';
   const name = String(message.fromName || pres.fromName || business).trim();
   return `${name} (${business}) <${email}>`;
 }
@@ -161,7 +161,7 @@ export async function maybeIngestOutboxForSupport(dataDir, outboxMessage) {
 
 async function sendSupportMail(dataDir, { to, subject, text, html, inReplyTo, references }) {
   const pres = getPlatformSupportMailPresentation();
-  return sendViaEkolojikSmtp({
+  return sendViaSmtp({
     dataDir,
     tenantId: PLATFORM_TENANT_ID,
     to,

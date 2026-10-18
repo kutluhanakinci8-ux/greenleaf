@@ -61,7 +61,7 @@ export async function buildPlatformSettingsOverview(dataDir) {
     registrationCount(dataDir),
   ]);
 
-  const allowlistSource = process.env.EKOLOJIK_TENANT_ALLOWLIST?.trim() ? 'env' : 'config';
+  const allowlistSource = process.env.GREENLEAF_TENANT_ALLOWLIST?.trim() ? 'env' : 'config';
 
   return {
     generatedAt: new Date().toISOString(),
@@ -79,9 +79,9 @@ export async function buildPlatformSettingsOverview(dataDir) {
       clickTrackEnabled: isClickTrackEnabled(),
       engagementWebhookConfigured: engagementWebhookConfigured(),
       messagingPublicApiConfigured: isMessagingPublicApiConfigured(),
-      smtpHost: envFlag('EKOLOJIK_SMTP_HOST') ?? envFlag('SMTP_HOST'),
-      publicRegisterEnv: envFlag('EKOLOJIK_PUBLIC_REGISTER'),
-      tenantStrictEnv: envFlag('EKOLOJIK_TENANT_STRICT'),
+      smtpHost: envFlag('GREENLEAF_SMTP_HOST') ?? envFlag('SMTP_HOST'),
+      publicRegisterEnv: envFlag('GREENLEAF_PUBLIC_REGISTER'),
+      tenantStrictEnv: envFlag('GREENLEAF_TENANT_STRICT'),
     },
     operators: (operatorsMeta.operators ?? []).map((o) => ({
       username: o.username,

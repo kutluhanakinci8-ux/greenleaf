@@ -2,12 +2,12 @@
 
 import { readTenantStore, listTenantIds } from './tenantAuth.mjs';
 import {
-  isEkolojikImapConfigured,
-  isEkolojikSmtpConfigured,
-  getEkolojikMailConfig,
-  getEkolojikImapConfig,
-  getEkolojikOpsEmail,
-} from './ekolojikMailConfig.mjs';
+  isImapConfigured,
+  isSmtpConfigured,
+  getMailConfig,
+  getImapConfig,
+  getOpsEmail,
+} from './mailConfig.mjs';
 import { isLertaPlatformConfigured } from './lertaPlatformBridge.mjs';
 import { isMailTrackEnabled } from './postaMailTrack.mjs';
 import { isClickTrackEnabled, engagementWebhookConfigured, fireEngagementWebhook } from './postaEngagement.mjs';
@@ -60,22 +60,22 @@ function computeScore(connectors) {
 }
 
 export async function buildPlatformIntegrationsOverview(dataDir) {
-  const mailCfg = getEkolojikMailConfig();
-  const imapCfg = getEkolojikImapConfig();
+  const mailCfg = getMailConfig();
+  const imapCfg = getImapConfig();
   const securityPolicy = await readSecurityAlertPolicy(dataDir);
   const outbox = await getOutboxCounts(dataDir);
   const ws = getPostaWsGatewayMetrics();
-  const engagementUrl = process.env.EKOLOJIK_POSTA_ENGAGEMENT_WEBHOOK?.trim() || '';
+  const engagementUrl = process.env.GREENLEAF_POSTA_ENGAGEMENT_WEBHOOK?.trim() || '';
 
   const connectors = [
     {
       id: 'smtp',
       category: 'mail',
-      label: 'Ekolojik SMTP',
+      label: 'SMTP',
       priority: 'critical',
-      status: connectorStatus(isEkolojikSmtpConfigured(), true),
-      detail: isEkolojikSmtpConfigured()
-        ? `${mailCfg.smtpHost || '—'} · ops ${getEkolojikOpsEmail() || '—'}`
+      status: connectorStatus(isSmtpConfigured(), true),
+      detail: isSmtpConfigured()
+        ? `${mailCfg.smtpHost || '—'} · ops ${getOpsEmail() || '—'}`
         : 'Sunucu SMTP yapılandırması eksik',
     },
     {
@@ -83,8 +83,8 @@ export async function buildPlatformIntegrationsOverview(dataDir) {
       category: 'mail',
       label: 'Gelen posta (IMAP)',
       priority: 'critical',
-      status: connectorStatus(isEkolojikImapConfigured(), true),
-      detail: isEkolojikImapConfigured()
+      status: connectorStatus(isImapConfigured(), true),
+      detail: isImapConfigured()
         ? `${imapCfg.imapHost || '—'} · ${imapCfg.imapUser || '—'}`
         : 'IMAP yapılandırılmadı',
     },
@@ -104,7 +104,7 @@ export async function buildPlatformIntegrationsOverview(dataDir) {
       label: 'Mail açılma takibi',
       priority: 'optional',
       status: isMailTrackEnabled() ? 'ok' : 'off',
-      detail: isMailTrackEnabled() ? 'Açık izleme aktif' : 'EKOLOJIK_MAIL_TRACK kapalı',
+      detail: isMailTrackEnabled() ? 'Açık izleme aktif' : 'GREENLEAF_MAIL_TRACK kapalı',
     },
     {
       id: 'click_track',
@@ -149,7 +149,7 @@ export async function buildPlatformIntegrationsOverview(dataDir) {
       configured: engagementWebhookConfigured(),
       enabled: engagementWebhookConfigured(),
       urlMasked: maskWebhookUrl(engagementUrl),
-      source: 'EKOLOJIK_POSTA_ENGAGEMENT_WEBHOOK',
+      source: 'GREENLEAF_POSTA_ENGAGEMENT_WEBHOOK',
     },
   ];
 
@@ -205,7 +205,7 @@ async function probeSecurityWebhook(url) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        source: 'ekolojik-platform',
+        source: 'greenleaf-platform',
         event: 'integration_probe',
         at: new Date().toISOString(),
         test: true,

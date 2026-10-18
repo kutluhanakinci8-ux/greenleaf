@@ -27,7 +27,7 @@ export async function resolveMessagingPublicCors(req, dataDir, tenantId = 'main'
   const origin = String(req.headers.origin ?? '').trim();
   const baseHeaders = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, x-ekolojik-messaging-key, Authorization',
+    'Access-Control-Allow-Headers': 'Content-Type, x-greenleaf-messaging-key, Authorization',
     'Access-Control-Max-Age': '86400',
   };
 

@@ -1,7 +1,7 @@
 /** Kapalı kayıt politikası new_case — müşteriye yeni kayıt bildirimi */
 
 import { getPlatformSupportMailPresentation } from './platformSupportMailConfig.mjs';
-import { sendViaEkolojikSmtp } from './ekolojikSmtp.mjs';
+import { sendViaSmtp } from './smtpTransport.mjs';
 import { PLATFORM_TENANT_ID } from './platformOperators.mjs';
 import { buildPlatformSupportSpawnCaseNoticeContent } from './platformSupportAutoreplyTemplate.mjs';
 
@@ -38,7 +38,7 @@ export async function notifyCustomerSpawnedCase(dataDir, { closedCase, newCase, 
     subject: baseSubject,
   });
 
-  const result = await sendViaEkolojikSmtp({
+  const result = await sendViaSmtp({
     dataDir,
     tenantId: PLATFORM_TENANT_ID,
     to,

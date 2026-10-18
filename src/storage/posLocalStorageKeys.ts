@@ -48,7 +48,7 @@ function buildKeys(tenantId: string): PosLocalStorageKeys {
 
 let activeKeys = buildKeys(readTenantId());
 
-/** Tarayıcı localStorage anahtarlarını aktif mağaza koduna göre ayır (main vs lima-market). */
+/** Tarayıcı localStorage anahtarlarını aktif mağaza koduna göre ayır (main vs main). */
 export function syncPosLocalStorageKeys(tenantId?: string): void {
   activeKeys = buildKeys(tenantId ?? readTenantId());
 }
@@ -57,7 +57,7 @@ export function posLocalStorageKeys(): PosLocalStorageKeys {
   return activeKeys;
 }
 
-/** Muhasebe, CRM, bekleyen satış vb. — tenant suffix (main boş, lima-market ::lima-market) */
+/** Muhasebe, CRM, bekleyen satış vb. — tenant suffix (main boş, main ::main) */
 export function tenantLocalStorageSuffix(tenantId?: string): string {
   const tid = tenantId ?? readTenantId();
   return tid === DEFAULT_TENANT_ID ? '' : `::${tid}`;

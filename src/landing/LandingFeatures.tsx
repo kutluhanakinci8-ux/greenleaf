@@ -5,7 +5,7 @@ export function LandingFeatures() {
     <section className="landing-section">
       <div className="landing-section-head">
         <h2>Özellikler</h2>
-        <p>Ekolojik market işletmeniz için ihtiyacınız olan tüm araçlar tek platformda.</p>
+        <p>Greenleaf market işletmeniz için ihtiyacınız olan tüm araçlar tek platformda.</p>
       </div>
       <div className="landing-features-grid">
         {FEATURES.map((feature) => (

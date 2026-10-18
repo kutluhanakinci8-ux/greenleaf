@@ -140,7 +140,7 @@ export function CustomerMessagesPortal() {
     <div className="portal-mesajlar-page">
       <header className="portal-mesajlar-header">
         <div>
-          <p className="portal-mesajlar-kicker">Ekolojik Market</p>
+          <p className="portal-mesajlar-kicker">Greenleaf POS</p>
           <h1>{portalTitle}</h1>
           {thread && (
             <p className="portal-mesajlar-meta">

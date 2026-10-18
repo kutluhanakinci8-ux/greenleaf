@@ -331,7 +331,7 @@ export function PostaEnterpriseSettingsPanel({ onFlash }: Props) {
       <h4 style={{ marginTop: 24 }}>Uyumluluk (eDiscovery-lite)</h4>
       <p className="settings-hint">
         Legal hold için gelen kutusu mesaj ID’leri. DLP: outbox gönderiminde{' '}
-        <code>EKOLOJIK_POSTA_DLP_PATTERNS</code>.
+        <code>GREENLEAF_POSTA_DLP_PATTERNS</code>.
       </p>
       <label className="settings-field settings-field--full">
         <span>Mesaj ID listesi</span>

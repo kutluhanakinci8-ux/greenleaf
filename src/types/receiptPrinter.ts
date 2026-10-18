@@ -18,7 +18,7 @@ export interface ReceiptPrinterSettings {
 }
 
 /** Standart Windows kuyruk adı — Zywell POS-80 */
-export const STANDARD_WINDOWS_ZYWELL_PRINTER_NAME = 'Ekolojik POS-80 (Zywell)';
+export const STANDARD_WINDOWS_ZYWELL_PRINTER_NAME = 'Greenleaf POS-80 (Zywell)';
 
 /** Eski ayarlardaki boş ad → standart kurulum adı (POS-80C Windows’ta geçerli kuyruk adıdır) */
 export function normalizeWindowsPrinterName(raw: string): string {

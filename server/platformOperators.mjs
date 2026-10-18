@@ -1,16 +1,14 @@
-/** Ekolojik platform — tüm kiracıları yöneten operatör hesapları (mağaza store.json içinde değil) */
+/** Platform operatör hesapları (mağaza store.json içinde değil) */
 export const PLATFORM_TENANT_ID = '__platform__';
 
 const PLATFORM_OPERATOR_USERNAMES = new Set([
-  'kutluhan08',
-  'kutluhan',
-  'kutluhanakinci8',
-  'yonetici',
+  'sysop',
+  'platform',
 ]);
 
 const PLATFORM_OPERATOR_ALIASES = new Map([
-  ['kutluhan', 'kutluhan08'],
-  ['kutluhanakinci8', 'kutluhan08'],
+  ['platform-admin', 'sysop'],
+  ['admin', 'sysop'],
 ]);
 
 export function normalizePlatformOperatorUsername(username) {
@@ -26,8 +24,7 @@ export function isPlatformApiRole(role) {
   return role === 'platform';
 }
 
-/** Greenleaf store.json içinde artık bulunmaz — yalnızca platform kasası */
-const DEDICATED_PLATFORM_ONLY = new Set(['kutluhan08']);
+const DEDICATED_PLATFORM_ONLY = new Set(['sysop']);
 
 export function isDedicatedPlatformOnlyUsername(username) {
   return DEDICATED_PLATFORM_ONLY.has(normalizePlatformOperatorUsername(username));

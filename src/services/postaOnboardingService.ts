@@ -160,15 +160,15 @@ export async function rotateMessagingPublicKey(): Promise<MessagingPublicConfigH
 
 export function buildMessagingEmbedSnippet(tenantId: string, apiKey: string): string {
   const origin =
-    typeof window !== 'undefined' ? window.location.origin : 'https://www.ekolojikmarket.com.tr';
+    typeof window !== 'undefined' ? window.location.origin : 'https://127.0.0.1:5190';
   const key = apiKey || 'API_ANAHTARI';
   const tenantLine =
     tenantId && tenantId !== 'main' ? `\n    tenantId: '${tenantId}',` : `\n    tenantId: 'main',`;
-  return `<!-- Ekolojik müşteri mesajlaşma (Faz 40) -->
+  return `<!-- Müşteri mesajlaşma (Faz 40) -->
 <script src="${origin}/widget/messaging.js" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    EkolojikMessaging.init({${tenantLine}
+    GreenleafMessaging.init({${tenantLine}
       apiKey: '${key}',
       apiBase: '${origin}/api/public/messaging/v1'
     });

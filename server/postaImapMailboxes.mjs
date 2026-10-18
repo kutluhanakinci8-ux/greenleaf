@@ -8,8 +8,8 @@ export const MAILBOX_CANDIDATES = {
   drafts: ['Drafts', 'INBOX.Drafts', 'INBOX/Drafts', '[Gmail]/Drafts'],
 };
 
-export function isEkolojikImapWriteEnabled() {
-  return process.env.EKOLOJIK_IMAP_WRITE === '1';
+export function isImapWriteEnabled() {
+  return process.env.GREENLEAF_IMAP_WRITE === '1';
 }
 
 export async function resolvePostaImapMailboxes(client) {

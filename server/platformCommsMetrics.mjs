@@ -120,7 +120,7 @@ export async function buildPlatformCommsOverview(dataDir, { days = 14 } = {}) {
   const { getPostaOutboxAnalytics } = await import('./postaOutboxAnalytics.mjs');
   const { getOutboxCounts, getOutboxCountsByTenant, listMergedRecentOutbox } = await import('./emailOutbox.mjs');
   const { getMessagingSlaMetrics } = await import('./messaging/sla.mjs');
-  const { isEkolojikSmtpConfigured } = await import('./emailOutboxProcessor.mjs');
+  const { isSmtpConfigured } = await import('./emailOutboxProcessor.mjs');
 
   const [counts, analytics, recentOutbox, countsByTenant, engagement] = await Promise.all([
     getOutboxCounts(dataDir),
@@ -188,7 +188,7 @@ export async function buildPlatformCommsOverview(dataDir, { days = 14 } = {}) {
     messagingTotals,
     tenants: tenantRows,
     capabilities: {
-      smtpConfigured: isEkolojikSmtpConfigured(),
+      smtpConfigured: isSmtpConfigured(),
       mailTrackEnabled: analytics.mailTrackEnabled,
       failedAlertThreshold: analytics.failedAlertThreshold,
     },

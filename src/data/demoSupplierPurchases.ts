@@ -3,7 +3,7 @@ import type { PurchaseInvoice } from '../types/business';
 import type { Product, StockMovement } from '../types/product';
 import { splitGrossAmount } from '../utils/vatAnalytics';
 
-export const DEMO_SUPPLIER_ID = 'SUP-DEMO-EKOLOJIK';
+export const DEMO_SUPPLIER_ID = 'SUP-DEMO-RETAIL';
 
 const VAT_RATE = 20;
 
@@ -59,11 +59,11 @@ export function createDemoSupplier(): Supplier {
   const now = new Date().toISOString();
   return {
     id: DEMO_SUPPLIER_ID,
-    name: 'Ekolojik Tedarik Ltd.',
+    name: 'Greenleaf Tedarik Ltd.',
     taxNumber: '1234567890',
     taxOffice: 'Muratpaşa',
     phone: '+90 242 123 45 67',
-    email: 'siparis@ekolojiktedarik.example',
+    email: 'siparis@greenleaftedarik.example',
     paymentTermDays: 30,
     notes: 'Örnek tedarikçi — tedarikçi ödeme ve cari testleri için',
     createdAt: now,

@@ -28,7 +28,7 @@ function secretPath(dataDir) {
 let cachedSecret = null;
 
 export async function getPosApiSecret(dataDir) {
-  const env = process.env.EKOLOJIK_POS_API_SECRET?.trim();
+  const env = process.env.GREENLEAF_POS_API_SECRET?.trim();
   if (env) return env;
   if (cachedSecret) return cachedSecret;
   const path = secretPath(dataDir);
@@ -150,7 +150,7 @@ export function extractBearerToken(req) {
   if (typeof auth === 'string' && auth.toLowerCase().startsWith('bearer ')) {
     return auth.slice(7).trim();
   }
-  const header = req.headers['x-ekolojik-pos-token'];
+  const header = req.headers['x-greenleaf-pos-token'];
   if (typeof header === 'string' && header.trim()) return header.trim();
   return '';
 }
@@ -171,25 +171,12 @@ export async function assertPosAdminApiAuth(req, res, dataDir, tenantId) {
   return payload || false;
 }
 
-const ISOLATED_STORE_USERNAME_PATTERN = /^lima/i;
-
-function assertUserBelongsToTenant(username, tenantId) {
-  const name = String(username ?? '').trim().toLowerCase();
-  const tenant = String(tenantId ?? 'main').trim() || 'main';
-  if (tenant === 'main' && ISOLATED_STORE_USERNAME_PATTERN.test(name)) {
-    return {
-      ok: false,
-      status: 403,
-      message: 'Bu hesap Lima Market (lima-market) mağaza kodu ile giriş yapmalıdır.',
-    };
-  }
+function assertUserBelongsToTenant(_username, _tenantId) {
   return { ok: true };
 }
 
-const GREENLEAF_LOGIN_ALIASES = new Map([
-  ['kutluhan', 'kutluhan08'],
-  ['kutluhanakinci8', 'kutluhan08'],
-]);
+/** İsteğe bağlı giriş takma adları (mağaza kaydı sırasında tanımlanır) */
+const TENANT_LOGIN_ALIASES = new Map();
 
 async function auditPosLoginAttempt(dataDir, tenantId, partial) {
   try {
@@ -266,8 +253,8 @@ export async function issuePosApiTokenFromCredentials(
       );
     }
   }
-  if (tenant === 'main' && GREENLEAF_LOGIN_ALIASES.has(normalized)) {
-    normalized = GREENLEAF_LOGIN_ALIASES.get(normalized);
+  if (TENANT_LOGIN_ALIASES.has(normalized)) {
+    normalized = TENANT_LOGIN_ALIASES.get(normalized);
   }
   normalized = normalizePlatformOperatorUsername(normalized);
   if (isDedicatedPlatformOnlyUsername(normalized)) {

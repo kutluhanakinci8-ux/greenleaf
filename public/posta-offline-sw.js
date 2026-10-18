@@ -1,5 +1,5 @@
 /* Faz 21–30 — Posta PWA: offline inbox + web push (NB PM-4) */
-const CACHE = 'ekolojik-posta-inbox-v1';
+const CACHE = 'greenleaf-posta-inbox-v1';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -30,7 +30,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  let payload = { title: 'Ekolojik Posta', body: 'Yeni bildirim', url: '/', tag: 'ekolojik-posta' };
+  let payload = { title: 'Posta', body: 'Yeni bildirim', url: '/', tag: 'greenleaf-posta' };
   try {
     if (event.data) payload = { ...payload, ...event.data.json() };
   } catch {

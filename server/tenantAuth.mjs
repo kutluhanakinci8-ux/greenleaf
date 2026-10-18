@@ -5,7 +5,7 @@ import { createDefaultPostaOnboarding } from './postaOnboarding.mjs';
 import { defaultAliasesForDomain } from './postaDeliverability.mjs';
 
 const DEFAULT_SETTINGS = {
-  businessName: 'Ekolojik Market',
+  businessName: 'Greenleaf POS',
   lowStockThreshold: 10,
   defaultPriceType: 'partner',
   posNotes: { displayDurationSec: 8, repeatIntervalMin: 1, items: [] },

@@ -1,4 +1,4 @@
-/** Destek D6 — case özet ve yanıt taslağı (TR); EKOLOJIK_POSTA_AI ile harici model */
+/** Destek D6 — case özet ve yanıt taslağı (TR); GREENLEAF_POSTA_AI ile harici model */
 
 import { isPostaAiEnabled, getPostaAiRuntimeConfig } from './messaging/aiConfig.mjs';
 import { getPlatformSupportCaseDetail, listPlatformSupportMacros } from './platformSupportCaseOmni.mjs';
@@ -79,14 +79,14 @@ function localDraftReply(detail) {
     'Herhangi bir ek bilgi paylaşmak isterseniz bu yazışmaya yanıt verebilirsiniz.',
     '',
     'Saygılarımızla,',
-    'Ekolojik Destek',
+    'Greenleaf Destek',
   ].join('\n');
   return { ok: true, provider: 'local-template', kind: 'draft_reply', text };
 }
 
 async function callExternalAi(prompt) {
-  const apiUrl = String(process.env.EKOLOJIK_POSTA_AI_URL ?? '').trim();
-  const apiKey = String(process.env.EKOLOJIK_POSTA_AI_KEY ?? '').trim();
+  const apiUrl = String(process.env.GREENLEAF_POSTA_AI_URL ?? '').trim();
+  const apiKey = String(process.env.GREENLEAF_POSTA_AI_KEY ?? '').trim();
   if (!apiUrl || !apiKey) return null;
 
   const res = await fetch(apiUrl, {
@@ -96,7 +96,7 @@ async function callExternalAi(prompt) {
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: process.env.EKOLOJIK_POSTA_AI_MODEL || 'gpt-4o-mini',
+      model: process.env.GREENLEAF_POSTA_AI_MODEL || 'gpt-4o-mini',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 900,
     }),
@@ -141,7 +141,7 @@ export async function suggestPlatformSupportCaseAi(dataDir, caseId, { kind = 'su
     if (!macro) return { ok: false, error: 'Makro bulunamadı' };
     const filled = applySupportMacroTemplate(macro.body, detailRes.case);
     if (useExternal) {
-      const prompt = `Türkçe destek yanıtı: aşağıdaki şablonu bağlama uygun şekilde kişiselleştir; imza "Ekolojik Destek" kalsın; gereksiz tekrar etme.\n\nŞablon:\n${filled}\n\nBağlam:\n${context}`;
+      const prompt = `Türkçe destek yanıtı: aşağıdaki şablonu bağlama uygun şekilde kişiselleştir; imza "Greenleaf Destek" kalsın; gereksiz tekrar etme.\n\nŞablon:\n${filled}\n\nBağlam:\n${context}`;
       try {
         const text = await callExternalAi(prompt);
         if (text) {
@@ -158,7 +158,7 @@ export async function suggestPlatformSupportCaseAi(dataDir, caseId, { kind = 'su
     const base = String(draft ?? '').trim();
     if (!base) return { ok: false, error: 'Taslak metni gerekli' };
     if (useExternal) {
-      const prompt = `Türkçe destek yanıtını düzenle: net, profesyonel, kibar; imza Ekolojik Destek.\n\nBağlam:\n${context}\n\nTaslak:\n${base}`;
+      const prompt = `Türkçe destek yanıtını düzenle: net, profesyonel, kibar; imza Greenleaf Destek.\n\nBağlam:\n${context}\n\nTaslak:\n${base}`;
       try {
         const text = await callExternalAi(prompt);
         if (text) {
@@ -175,7 +175,7 @@ export async function suggestPlatformSupportCaseAi(dataDir, caseId, { kind = 'su
     const prompt =
       mode === 'summary'
         ? `Türkçe, destek operatörü için 5-8 maddelik kısa özet yaz. Bağlam:\n${context}`
-        : `Türkçe, profesyonel destek yanıtı taslağı yaz (imza: Ekolojik Destek). Bağlam:\n${context}`;
+        : `Türkçe, profesyonel destek yanıtı taslağı yaz (imza: Greenleaf Destek). Bağlam:\n${context}`;
     try {
       const text = await callExternalAi(prompt);
       if (text) {

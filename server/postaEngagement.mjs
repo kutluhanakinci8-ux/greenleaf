@@ -24,22 +24,22 @@ async function appendRow(dataDir, filename, row) {
 }
 
 export function isClickTrackEnabled() {
-  return isMailTrackEnabled() || String(process.env.EKOLOJIK_MAIL_CLICK_TRACK ?? '').trim() === '1';
+  return isMailTrackEnabled() || String(process.env.GREENLEAF_MAIL_CLICK_TRACK ?? '').trim() === '1';
 }
 
 export function engagementWebhookConfigured() {
-  return Boolean(process.env.EKOLOJIK_POSTA_ENGAGEMENT_WEBHOOK?.trim());
+  return Boolean(process.env.GREENLEAF_POSTA_ENGAGEMENT_WEBHOOK?.trim());
 }
 
 export async function fireEngagementWebhook(event, payload) {
-  const url = process.env.EKOLOJIK_POSTA_ENGAGEMENT_WEBHOOK?.trim();
+  const url = process.env.GREENLEAF_POSTA_ENGAGEMENT_WEBHOOK?.trim();
   if (!url) return { skipped: true };
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        source: 'ekolojik-posta',
+        source: 'greenleaf-posta',
         event,
         at: new Date().toISOString(),
         ...payload,

@@ -32,10 +32,10 @@ export async function probeTenantMailHealthAfterRegister(dataDir, tenantId) {
 
   if (email?.includes('@')) {
     try {
-      const { enqueueEkolojikMail } = await import('./emailOutbox.mjs');
-      await enqueueEkolojikMail(dataDir, {
+      const { enqueueTransactionalMail } = await import('./emailOutbox.mjs');
+      await enqueueTransactionalMail(dataDir, {
         to: email,
-        subject: 'Ekolojik — hesabınız oluşturuldu',
+        subject: 'Greenleaf POS — hesabınız oluşturuldu',
         text: [
           'Hesabınız başarıyla oluşturuldu.',
           '',

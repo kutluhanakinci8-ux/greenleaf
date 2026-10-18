@@ -474,7 +474,7 @@ export async function listUnifiedPostaSent(dataDir, tenantId, { limit = 80 } = {
     sourceId: String(row.id ?? ''),
     at: String(row.sentAt || row.createdAt || new Date().toISOString()),
     from: row.from ?? '',
-    fromName: row.fromName ?? 'Ekolojik Market',
+    fromName: row.fromName ?? 'Greenleaf POS',
     to: row.to ?? '',
     subject: String(row.subject ?? '(konu yok)'),
     preview: String(row.text ?? row.subject ?? '').slice(0, 240),

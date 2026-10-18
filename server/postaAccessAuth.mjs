@@ -33,7 +33,7 @@ function userHasPostaAccess(user) {
 }
 
 export async function enforcePostaApiAccess(req, res, url, dataDir, tenantId) {
-  if (process.env.EKOLOJIK_POS_POSTA_AUTH === '0') {
+  if (process.env.GREENLEAF_POS_POSTA_AUTH === '0') {
     return { userId: null, role: 'admin', tenantId, bypass: true };
   }
 

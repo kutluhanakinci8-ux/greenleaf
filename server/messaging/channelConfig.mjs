@@ -15,8 +15,8 @@ async function readRaw(dataDir, tenantId) {
 }
 
 export function isWhatsAppEnvConfigured() {
-  const token = process.env.EKOLOJIK_WHATSAPP_ACCESS_TOKEN?.trim();
-  const phoneId = process.env.EKOLOJIK_WHATSAPP_PHONE_NUMBER_ID?.trim();
+  const token = process.env.GREENLEAF_WHATSAPP_ACCESS_TOKEN?.trim();
+  const phoneId = process.env.GREENLEAF_WHATSAPP_PHONE_NUMBER_ID?.trim();
   return Boolean(token && phoneId);
 }
 
@@ -25,14 +25,14 @@ export async function getMessagingChannelsHub(dataDir, tenantId = 'main') {
   const wa = raw.whatsapp ?? {};
   const envOk = isWhatsAppEnvConfigured();
   const verifyToken =
-    String(wa.verifyToken ?? '').trim() || process.env.EKOLOJIK_WHATSAPP_VERIFY_TOKEN?.trim() || '';
+    String(wa.verifyToken ?? '').trim() || process.env.GREENLEAF_WHATSAPP_VERIFY_TOKEN?.trim() || '';
   return {
     ok: true,
     tenantId,
     whatsapp: {
       enabled: Boolean(wa.enabled) && envOk,
       configured: envOk,
-      phoneNumberId: process.env.EKOLOJIK_WHATSAPP_PHONE_NUMBER_ID?.trim() || null,
+      phoneNumberId: process.env.GREENLEAF_WHATSAPP_PHONE_NUMBER_ID?.trim() || null,
       displayPhone: String(wa.displayPhone ?? '').trim() || null,
       verifyTokenSet: Boolean(verifyToken),
       webhookPath: '/api/webhooks/messaging/whatsapp',
@@ -43,14 +43,14 @@ export async function getMessagingChannelsHub(dataDir, tenantId = 'main') {
       configured: isCrmSmsConfigured(),
       webhookPath: '/api/webhooks/messaging/sms',
       webhookUrlHint: `?tenant=${encodeURIComponent(tenantId)}`,
-      inboundSecretSet: Boolean(process.env.EKOLOJIK_SMS_INBOUND_SECRET?.trim()),
+      inboundSecretSet: Boolean(process.env.GREENLEAF_SMS_INBOUND_SECRET?.trim()),
     },
     instagram: {
       enabled: Boolean(raw.instagram?.enabled),
-      configured: Boolean(process.env.EKOLOJIK_INSTAGRAM_INBOUND_SECRET?.trim()),
+      configured: Boolean(process.env.GREENLEAF_INSTAGRAM_INBOUND_SECRET?.trim()),
       webhookPath: '/api/webhooks/messaging/instagram',
       webhookUrlHint: `?tenant=${encodeURIComponent(tenantId)}`,
-      inboundSecretSet: Boolean(process.env.EKOLOJIK_INSTAGRAM_INBOUND_SECRET?.trim()),
+      inboundSecretSet: Boolean(process.env.GREENLEAF_INSTAGRAM_INBOUND_SECRET?.trim()),
     },
     channels: [
       { id: 'web', label: 'Web widget', status: 'active' },
@@ -104,7 +104,7 @@ export async function resolveWhatsAppVerifyToken(dataDir, tenantId) {
   const raw = await readRaw(dataDir, tenantId);
   return (
     String(raw.whatsapp?.verifyToken ?? '').trim() ||
-    process.env.EKOLOJIK_WHATSAPP_VERIFY_TOKEN?.trim() ||
+    process.env.GREENLEAF_WHATSAPP_VERIFY_TOKEN?.trim() ||
     ''
   );
 }

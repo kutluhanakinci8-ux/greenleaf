@@ -1,5 +1,5 @@
-import { getEkolojikMailConfig } from './ekolojikMailConfig.mjs';
-import { sendEkolojikMail } from './emailOutboxProcessor.mjs';
+import { getMailConfig } from './mailConfig.mjs';
+import { sendTransactionalMail } from './emailOutboxProcessor.mjs';
 import { appendCustomerTrackingNotice } from './postaCustomerEmailCompliance.mjs';
 import { getEffectiveMailPresentation, shouldSendPostaNotification } from './postaSettings.mjs';
 
@@ -18,7 +18,7 @@ function subjectLabel(code) {
 
 function formatOpsBody(record) {
   const lines = [
-    'Yeni iletişim formu mesajı (Ekolojik Market POS)',
+    'Yeni iletişim formu mesajı (Greenleaf POS)',
     '',
     `Kayıt: ${record.id}`,
     `Tarih: ${record.createdAt}`,
@@ -29,12 +29,12 @@ function formatOpsBody(record) {
   if (record.phone?.trim()) {
     lines.push(`Telefon: ${record.phone.trim()}`);
   }
-  lines.push('', 'Mesaj:', record.message, '', '— Ekolojik outbox (Faz 2)');
+  lines.push('', 'Mesaj:', record.message, '', '— Outbox (Faz 2)');
   return lines.join('\n');
 }
 
 function formatAutoreplyBody(record, portalUrl) {
-  const brand = getEkolojikMailConfig().fromName || 'Ekolojik Market';
+  const brand = getMailConfig().fromName || 'Greenleaf POS';
   const lines = [
     `Sayın ${record.name},`,
     '',
@@ -53,7 +53,7 @@ function formatAutoreplyBody(record, portalUrl) {
 }
 
 export function isContactAutoreplyEnabled() {
-  return process.env.EKOLOJIK_CONTACT_AUTOREPLY === '1';
+  return process.env.GREENLEAF_CONTACT_AUTOREPLY === '1';
 }
 
 /** İletişim kaydı sonrası operatör bildirimi + isteğe bağlı müşteri otomatik yanıt */
@@ -67,7 +67,7 @@ export async function sendContactNotifications(dataDir, record, tenantId = 'main
   const summary = { ops: null, autoreply: null, opsSkipped: false, autoreplySkipped: false };
 
   if (opsEmail?.includes('@') && (await shouldSendPostaNotification(dataDir, 'contact', 'opsEmail', tenantId))) {
-    summary.ops = await sendEkolojikMail(dataDir, {
+    summary.ops = await sendTransactionalMail(dataDir, {
       to: opsEmail,
       subject: `[İletişim] ${subjectLabel(record.subject)} — ${record.name}`,
       body: formatOpsBody(record),
@@ -84,9 +84,9 @@ export async function sendContactNotifications(dataDir, record, tenantId = 'main
   if ((isContactAutoreplyEnabled() || autoreplyMatrix) && record.email?.includes('@')) {
     const baseBody = formatAutoreplyBody(record, portalUrl);
     const withNotice = await appendCustomerTrackingNotice(dataDir, tenantId, { text: baseBody, html: null });
-    summary.autoreply = await sendEkolojikMail(dataDir, {
+    summary.autoreply = await sendTransactionalMail(dataDir, {
       to: record.email,
-      subject: 'Ekolojik Market — talebiniz alındı',
+      subject: 'Greenleaf POS — talebiniz alındı',
       body: withNotice.text,
       html: withNotice.html ?? undefined,
       idempotencyKey: `contact:reply:${record.id}`,

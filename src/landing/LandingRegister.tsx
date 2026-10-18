@@ -81,7 +81,7 @@ export function LandingRegister() {
             <input
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
-              placeholder="Örn. Ekolojik Market Antalya"
+              placeholder="Örn. Greenleaf POS Antalya"
               required
             />
           </label>

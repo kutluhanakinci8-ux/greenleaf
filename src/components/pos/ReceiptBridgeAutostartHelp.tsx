@@ -7,19 +7,19 @@ export function ReceiptBridgeAutostartHelp() {
         Site buluttan açılır; yazıcı USB ile <strong>bu kasa bilgisayarına</strong> bağlıdır. Kurulum dosyası
         fiş servisini <strong>arka planda</strong> kaydeder (pencere açılmaz); her oturum açılışında otomatik
         çalışır — tarayıcı <code>127.0.0.1:18765</code> adresine bağlanır.
-        Mağaza adresi: <strong>https://www.ekolojikmarket.com.tr/app</strong> (tek site; eski adres otomatik yönlenir).
+        Mağaza adresi: <strong>https://127.0.0.1:5190/app</strong> (tek site; eski adres otomatik yönlenir).
       </p>
       <ul className="module-hint receipt-bridge-steps">
         <li>
           <strong>Mac (Printer_POS_80C):</strong> projeyi bir kez indirin, Terminal’de:
-          <pre className="receipt-bridge-cmd">cd ekolojik-market
+          <pre className="receipt-bridge-cmd">cd greenleaf-pos
 export POS80_QUEUE_NAME=&quot;Printer_POS_80C&quot;
 bash scripts/install-macos-receipt-bridge-launchd.sh</pre>
         </li>
         <li>
           <strong>Windows — Zywell POS-80 (standart):</strong> Ayarlar → Fiş yazıcısı →{' '}
           <strong>«Windows — Zywell otomatik kurulum (.ps1)»</strong> indirin; PowerShell ile bir kez çalıştırın
-          (Node.js LTS). Yazıcı adı: <code>Ekolojik POS-80 (Zywell)</code>. Repo varsa:{' '}
+          (Node.js LTS). Yazıcı adı: <code>Greenleaf POS-80 (Zywell)</code>. Repo varsa:{' '}
           <code>.\scripts\install-windows-receipt-bridge.ps1</code>
         </li>
         <li>

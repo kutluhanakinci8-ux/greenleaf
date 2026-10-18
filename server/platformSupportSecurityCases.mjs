@@ -3,7 +3,7 @@
 import { createPlatformCase, findCaseByLink } from './platformCaseStore.mjs';
 
 export function isSecurityAlertCaseSpawnEnabled() {
-  const flag = process.env.EKOLOJIK_SUPPORT_ALERT_CASE?.trim();
+  const flag = process.env.GREENLEAF_SUPPORT_ALERT_CASE?.trim();
   return flag === '1' || flag === 'true';
 }
 

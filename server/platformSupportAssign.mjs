@@ -7,7 +7,7 @@ import { readPlatformOperatorsMeta } from './platformAuth.mjs';
 const STATE_PATH = (dataDir) => join(dataDir, 'platform', 'support-assign-state.json');
 
 export function isSupportAutoAssignEnabled() {
-  const flag = process.env.EKOLOJIK_SUPPORT_AUTO_ASSIGN?.trim();
+  const flag = process.env.GREENLEAF_SUPPORT_AUTO_ASSIGN?.trim();
   if (flag === '0' || flag === 'false') return false;
   return true;
 }

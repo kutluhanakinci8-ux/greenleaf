@@ -8,7 +8,7 @@ export function LandingHome() {
     <>
       <section className="landing-hero">
         <div>
-          <span className="landing-hero-badge">🌱 Ekolojik ürün mağazaları için</span>
+          <span className="landing-hero-badge">🌱 Perakende mağazaları için</span>
           <h1>
             Mağazanızı <span>tek panelden</span> yönetin
           </h1>
@@ -52,7 +52,7 @@ export function LandingHome() {
 
       <section className="landing-section">
         <div className="landing-section-head">
-          <h2>Neden Ekolojik Market POS?</h2>
+          <h2>Neden Greenleaf POS?</h2>
           <p>Doğal ürün satışına özel modüller ile kasadan raporlara her şey elinizin altında.</p>
         </div>
         <div className="landing-features-grid">

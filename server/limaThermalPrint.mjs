@@ -1,6 +1,6 @@
 import { ensureReceiptBridgeRunning, receiptBridgeHealth } from './receiptBridgeAutostart.mjs';
 
-const DEFAULT_PORT = Number(process.env.LIMA_RAW_PRINT_PORT || 18765);
+const DEFAULT_PORT = Number(process.env.RECEIPT_RAW_PRINT_PORT || 18765);
 
 /** VPS / kasa: Node köprüsüne (127.0.0.1) ham fiş iletir — tarayıcı diyaloğu yok */
 export async function forwardLimaThermalPrint(body, repoRoot) {

@@ -7,7 +7,7 @@ import { listUnifiedPostaInbox, listUnifiedPostaSent } from './postaInbox.mjs';
 const HOLD_PATH = (dataDir, tenantId) => join(dataDir, 'posta-compliance', tenantId, 'legal-hold.json');
 
 function dlpPatterns() {
-  const raw = process.env.EKOLOJIK_POSTA_DLP_PATTERNS?.trim() || '';
+  const raw = process.env.GREENLEAF_POSTA_DLP_PATTERNS?.trim() || '';
   if (!raw) {
     return [
       /\b\d{16}\b/,
@@ -55,7 +55,7 @@ export function scanOutboundDlp({ subject = '', body = '', html = '' }) {
   for (const re of dlpPatterns()) {
     if (re.test(text)) hits.push(re.source);
   }
-  if (process.env.EKOLOJIK_POSTA_DLP_BLOCK === '1' && hits.length) {
+  if (process.env.GREENLEAF_POSTA_DLP_BLOCK === '1' && hits.length) {
     return { ok: false, blocked: true, hits, error: 'DLP: hassas veri deseni tespit edildi' };
   }
   return { ok: true, blocked: false, hits };

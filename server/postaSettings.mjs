@@ -1,6 +1,6 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getEkolojikMailConfig, getEkolojikOpsEmail } from './ekolojikMailConfig.mjs';
+import { getMailConfig, getOpsEmail } from './mailConfig.mjs';
 import { getTenantSmtpMailConfig } from './tenantMailConfig.mjs';
 import { readTenantStore, writeTenantStore } from './tenantAuth.mjs';
 import {
@@ -172,10 +172,10 @@ export function getPostaNotificationsMatrixHub(settings) {
 }
 
 export async function getEffectiveMailPresentation(dataDir, tenantId = 'main') {
-  const env = getEkolojikMailConfig();
+  const env = getMailConfig();
   const tenantMail = await getTenantSmtpMailConfig(dataDir, tenantId);
   const saved = await getPostaMailSettings(dataDir, tenantId);
-  const envOps = getEkolojikOpsEmail();
+  const envOps = getOpsEmail();
   const from = tenantMail.from?.includes('@') ? tenantMail.from : env.from;
   return {
     smtpHost: tenantMail.smtpHost || env.smtpHost,

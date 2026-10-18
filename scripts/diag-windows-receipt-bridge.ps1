@@ -8,15 +8,15 @@ if ($node) { Write-Host "Node: $($node.Source)" } else { Write-Host "HATA: node 
 Write-Host "`nYazicilar (Ayarlar'daki ad bunlardan biri olmali):"
 Get-Printer -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  - $($_.Name)" }
 
-$dest = Join-Path $env:USERPROFILE '.greenleaf-market-pos'
+$dest = Join-Path $env:USERPROFILE '.greenleaf-pos'
 Write-Host "`nKurulum klasoru: $dest"
-@('lima-raw-print-bridge.mjs', 'escposTurkish.mjs', 'win-raw-escpos.ps1', 'start-receipt-bridge.cmd') | ForEach-Object {
+@('receipt-raw-print-bridge.mjs', 'escposTurkish.mjs', 'win-raw-escpos.ps1', 'start-receipt-bridge.cmd') | ForEach-Object {
   $p = Join-Path $dest $_
   Write-Host "  $(if (Test-Path $p) { 'OK' } else { '--' }) $_"
 }
 
-Write-Host "`nGorev: EkolojikMarketReceiptBridge"
-Get-ScheduledTask -TaskName 'EkolojikMarketReceiptBridge' -ErrorAction SilentlyContinue | Format-List TaskName, State
+Write-Host "`nGorev: GreenleafReceiptBridge"
+Get-ScheduledTask -TaskName 'GreenleafReceiptBridge' -ErrorAction SilentlyContinue | Format-List TaskName, State
 Write-Host "POS80_QUEUE_NAME (kullanici): $([Environment]::GetEnvironmentVariable('POS80_QUEUE_NAME','User'))"
 
 Write-Host "Health:"

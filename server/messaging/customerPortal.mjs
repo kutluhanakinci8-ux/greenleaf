@@ -8,10 +8,10 @@ import {
   listMessagingThreads,
 } from './store.mjs';
 import { mintCustomerThreadToken, parseCustomerThreadToken } from './publicApi.mjs';
-import { sendEkolojikMail } from '../emailOutboxProcessor.mjs';
+import { sendTransactionalMail } from '../emailOutboxProcessor.mjs';
 import { appendCustomerTrackingNotice } from '../postaCustomerEmailCompliance.mjs';
 function isMessagingCustomerEmailEnabled() {
-  return process.env.EKOLOJIK_MESSAGING_CUSTOMER_EMAIL === '1';
+  return process.env.GREENLEAF_MESSAGING_CUSTOMER_EMAIL === '1';
 }
 
 const SUBJECT_LABELS = {
@@ -35,7 +35,7 @@ export function contactMessagingCustomerId(contactId) {
 }
 
 export function resolvePublicPortalOrigin(req) {
-  const env = String(process.env.EKOLOJIK_PUBLIC_ORIGIN ?? '').trim();
+  const env = String(process.env.GREENLEAF_PUBLIC_ORIGIN ?? '').trim();
   if (env) return env.replace(/\/$/, '');
   const host = String(req?.headers?.['x-forwarded-host'] ?? req?.headers?.host ?? '').trim();
   const proto = String(req?.headers?.['x-forwarded-proto'] ?? 'http').split(',')[0].trim();
@@ -189,7 +189,7 @@ export async function notifyCustomerThreadStatusEmail(
   const token = await mintCustomerThreadToken(dataDir, tenantId, thread.id, thread.customerId);
   const portalUrl = buildCustomerPortalUrl(origin, tenantId, token);
   const label = STATUS_LABELS[status] ?? status;
-  const subject = `Ekolojik Market — talep durumu: ${label}`;
+  const subject = `Greenleaf POS — talep durumu: ${label}`;
   const text = [
     `Sayın ${thread.customerName},`,
     '',
@@ -199,7 +199,7 @@ export async function notifyCustomerThreadStatusEmail(
     `Durumu görüntülemek ve mesajlaşmaya devam etmek için:`,
     portalUrl,
     '',
-    '— Ekolojik Market',
+    '— Greenleaf POS',
   ].join('\n');
   const html = `<div style="font-family:sans-serif;font-size:14px">
 <p>Sayın ${thread.customerName},</p>
@@ -212,7 +212,7 @@ export async function notifyCustomerThreadStatusEmail(
     .update(`${previousStatus}->${status}`)
     .digest('hex')
     .slice(0, 12)}`;
-  const mail = await sendEkolojikMail(dataDir, {
+  const mail = await sendTransactionalMail(dataDir, {
     to,
     subject,
     body: withNotice.text,

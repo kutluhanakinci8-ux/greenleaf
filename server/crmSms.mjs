@@ -9,13 +9,13 @@ function normalizeTrPhone(raw) {
 }
 
 export function getCrmSmsConfig() {
-  const provider = (process.env.EKOLOJIK_SMS_PROVIDER ?? 'http').trim().toLowerCase();
+  const provider = (process.env.GREENLEAF_SMS_PROVIDER ?? 'http').trim().toLowerCase();
   return {
     provider,
-    user: process.env.EKOLOJIK_SMS_USER?.trim() ?? '',
-    pass: process.env.EKOLOJIK_SMS_PASS?.trim() ?? '',
-    header: process.env.EKOLOJIK_SMS_HEADER?.trim() ?? process.env.EKOLOJIK_SMS_FROM?.trim() ?? '',
-    httpUrl: process.env.EKOLOJIK_SMS_HTTP_URL?.trim() ?? '',
+    user: process.env.GREENLEAF_SMS_USER?.trim() ?? '',
+    pass: process.env.GREENLEAF_SMS_PASS?.trim() ?? '',
+    header: process.env.GREENLEAF_SMS_HEADER?.trim() ?? process.env.GREENLEAF_SMS_FROM?.trim() ?? '',
+    httpUrl: process.env.GREENLEAF_SMS_HTTP_URL?.trim() ?? '',
   };
 }
 
@@ -69,7 +69,7 @@ export async function sendCrmSms({ to, body, dataDir, tenantId = 'main' }) {
     cfg = await getEffectiveCrmSmsConfig(dataDir, tenantId);
   }
   if (!isCrmSmsConfigured(cfg)) {
-    return { ok: false, error: 'SMS operatör API yapılandırılmadı (EKOLOJIK_SMS_*)' };
+    return { ok: false, error: 'SMS operatör API yapılandırılmadı (GREENLEAF_SMS_*)' };
   }
   let result;
   if (cfg.provider === 'mock') {

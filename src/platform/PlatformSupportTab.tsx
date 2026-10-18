@@ -1171,7 +1171,7 @@ export function PlatformSupportTab() {
               </span>
             ) : null}
             <span className="platform-support-compact-hero-mail" title="Destek posta kutusu">
-              {mailboxAddress ?? 'destek@ekolojikmarket.com.tr'}
+              {mailboxAddress ?? 'destek@example.com'}
             </span>
           </div>
           <p className="platform-support-compact-hero-meta">
@@ -1661,7 +1661,7 @@ export function PlatformSupportTab() {
                       title={
                         caseDetail?.aiCapabilities?.externalEnabled
                           ? 'Harici AI ile düzenle'
-                          : 'EKOLOJIK_POSTA_AI=1 gerekir'
+                          : 'GREENLEAF_POSTA_AI=1 gerekir'
                       }
                       onClick={() => void runCaseAi('refine_draft')}
                     >
@@ -2106,10 +2106,10 @@ export function PlatformSupportTab() {
             </div>
             {inboxMailbox === 'inbound' && !mailboxConfigured ? (
               <p className="platform-support-hint">
-                Mağaza <strong>Posta</strong> üzerinden <code>destek@ekolojikmarket.com.tr</code> adresine yazılanlar burada listelenir
+                Mağaza <strong>Posta</strong> üzerinden <code>destek@example.com</code> adresine yazılanlar burada listelenir
                 (outbox köprüsü). Gönderim <strong>PENDING</strong> ise SMTP henüz çıkmamış olabilir; yine de gelen kutusunda görünür.
-                Harici posta ve IMAP için VPS’te <code>EKOLOJIK_SUPPORT_IMAP_*</code> —{' '}
-                <code>scripts/sunucu-ekolojik-destek-mailbox.sh</code>
+                Harici posta ve IMAP için VPS’te <code>GREENLEAF_SUPPORT_IMAP_*</code> —{' '}
+                <code>scripts/ops-destek-mailbox.sh</code>
               </p>
             ) : inboxMailbox === 'inbound' ? (
               <p className="platform-support-hint platform-table-muted">

@@ -9,10 +9,10 @@ import {
 } from './platformCaseStore.mjs';
 
 export function getZendeskBridgeConfig() {
-  const subdomain = process.env.EKOLOJIK_ZENDESK_SUBDOMAIN?.trim() || '';
-  const webhookSecret = process.env.EKOLOJIK_ZENDESK_WEBHOOK_SECRET?.trim() || '';
-  const apiEmail = process.env.EKOLOJIK_ZENDESK_API_EMAIL?.trim() || '';
-  const apiToken = process.env.EKOLOJIK_ZENDESK_API_TOKEN?.trim() || '';
+  const subdomain = process.env.GREENLEAF_ZENDESK_SUBDOMAIN?.trim() || '';
+  const webhookSecret = process.env.GREENLEAF_ZENDESK_WEBHOOK_SECRET?.trim() || '';
+  const apiEmail = process.env.GREENLEAF_ZENDESK_API_EMAIL?.trim() || '';
+  const apiToken = process.env.GREENLEAF_ZENDESK_API_TOKEN?.trim() || '';
   return {
     subdomain,
     webhookSecret,
@@ -92,7 +92,7 @@ export function inferCaseNumberFromZendeskWebhook(body) {
     const m = String(ext).match(/^platform-?case-?(\d+)$/i);
     if (m) return Number(m[1]);
   }
-  const fieldId = process.env.EKOLOJIK_ZENDESK_CASE_NUMBER_FIELD_ID?.trim();
+  const fieldId = process.env.GREENLEAF_ZENDESK_CASE_NUMBER_FIELD_ID?.trim();
   const customFields = ticket?.custom_fields ?? detail?.custom_fields;
   if (fieldId && Array.isArray(customFields)) {
     const hit = customFields.find((f) => String(f.id) === fieldId);
@@ -158,7 +158,7 @@ function extractWebhookPayload(body) {
 export function verifyZendeskWebhookSecret(req) {
   const cfg = getZendeskBridgeConfig();
   if (!cfg.webhookSecret) {
-    return { ok: false, status: 503, error: 'Zendesk webhook yapılandırılmadı (EKOLOJIK_ZENDESK_WEBHOOK_SECRET)' };
+    return { ok: false, status: 503, error: 'Zendesk webhook yapılandırılmadı (GREENLEAF_ZENDESK_WEBHOOK_SECRET)' };
   }
   const header =
     req.headers['x-zendesk-webhook-secret']
@@ -379,7 +379,7 @@ export async function createZendeskTicketFromPlatformCase(dataDir, caseId, opera
         subject,
         comment: { body: buildCaseSummaryForZendesk(caseRow) },
         requester: { name: String(caseRow.requesterName ?? email).trim() || email, email },
-        tags: ['platform_case', 'ekolojik_platform', ...(tag ? [tag] : [])],
+        tags: ['platform_case', 'greenleaf_platform', ...(tag ? [tag] : [])],
         external_id: `platform-case-${caseRow.number}`,
         status: zStatus,
       },

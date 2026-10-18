@@ -3,14 +3,14 @@
 ## Kural
 
 - **Marka/model:** Zywell 80 mm termal (POS-80 serisi) — program için standart fiş yazıcısı.
-- **Windows kuyruk adı (sabit):** `Ekolojik POS-80 (Zywell)`
+- **Windows kuyruk adı (sabit):** `Greenleaf POS-80 (Zywell)`
 - **Fiş yolu:** Tarayıcı → `127.0.0.1:18765` (ham ESC/POS, diyalog yok)
 
 ## Kullanıcı ne yapar? (bir kez)
 
 1. USB Zywell takılı, Windows’ta gerekirse üretici sürücüsü kurulu.
-2. `https://www.ekolojikmarket.com.tr/app` → **Ayarlar → Fiş yazıcısı** → **Zywell otomatik kurulum (.ps1)** indir.
-3. İndirilen `ekolojik-zywell-setup.ps1` → sağ tık → **PowerShell ile Çalıştır**.
+2. `https://127.0.0.1:5190/app` → **Ayarlar → Fiş yazıcısı** → **Zywell otomatik kurulum (.ps1)** indir.
+3. İndirilen `greenleaf-zywell-setup.ps1` → sağ tık → **PowerShell ile Çalıştır**.
 4. Oturum açılışında görev zamanlayıcı fiş servisini başlatır.
 
 Program açıldığında köprü kapalıysa üstte sarı kurulum bandı görünür.

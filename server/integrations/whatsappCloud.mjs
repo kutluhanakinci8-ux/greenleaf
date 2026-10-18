@@ -2,10 +2,10 @@ import { resolveWhatsAppVerifyToken, isWhatsAppChannelEnabled } from '../messagi
 import { ingestInboundChannelMessage } from '../messaging/omnichannel.mjs';
 
 function graphConfig() {
-  const token = process.env.EKOLOJIK_WHATSAPP_ACCESS_TOKEN?.trim();
-  const phoneNumberId = process.env.EKOLOJIK_WHATSAPP_PHONE_NUMBER_ID?.trim();
+  const token = process.env.GREENLEAF_WHATSAPP_ACCESS_TOKEN?.trim();
+  const phoneNumberId = process.env.GREENLEAF_WHATSAPP_PHONE_NUMBER_ID?.trim();
   if (!token || !phoneNumberId) return null;
-  return { token, phoneNumberId, version: process.env.EKOLOJIK_WHATSAPP_GRAPH_VERSION?.trim() || 'v19.0' };
+  return { token, phoneNumberId, version: process.env.GREENLEAF_WHATSAPP_GRAPH_VERSION?.trim() || 'v19.0' };
 }
 
 export async function verifyWhatsAppWebhook(dataDir, tenantId, query) {
@@ -68,7 +68,7 @@ export async function handleWhatsAppWebhook(dataDir, tenantId, { method, query, 
 
 export async function sendWhatsAppText(toWaId, text) {
   const cfg = graphConfig();
-  if (!cfg) return { ok: false, error: 'WhatsApp env eksik (EKOLOJIK_WHATSAPP_*)' };
+  if (!cfg) return { ok: false, error: 'WhatsApp env eksik (GREENLEAF_WHATSAPP_*)' };
   const to = String(toWaId).replace(/\D/g, '');
   const url = `https://graph.facebook.com/${cfg.version}/${cfg.phoneNumberId}/messages`;
   const res = await fetch(url, {

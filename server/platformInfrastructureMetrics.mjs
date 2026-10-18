@@ -4,16 +4,16 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { getEkolojikIsolationReport } from './ekolojikIsolationCheck.mjs';
+import { getTenantIsolationReport } from './tenantIsolationCheck.mjs';
 import { getOutboxCounts, getOutboxCountsByTenant } from './emailOutbox.mjs';
 import {
-  getEkolojikMailConfig,
-  getEkolojikImapConfig,
-  isEkolojikImapConfigured,
-  isEkolojikSmtpConfigured,
-  getEkolojikOpsEmail,
-  getEkolojikSmtpHostHint,
-} from './ekolojikMailConfig.mjs';
+  getMailConfig,
+  getImapConfig,
+  isImapConfigured,
+  isSmtpConfigured,
+  getOpsEmail,
+  getSmtpHostHint,
+} from './mailConfig.mjs';
 import { isLertaPlatformConfigured } from './lertaPlatformBridge.mjs';
 
 const execFileAsync = promisify(execFile);
@@ -44,7 +44,7 @@ async function readPackageVersion() {
 
 async function latestBackupInfo() {
   const root =
-    process.env.EKOLOJIK_BACKUP_DIR?.trim() || '/var/backups/ekolojik-market';
+    process.env.GREENLEAF_BACKUP_DIR?.trim() || '/var/backups/greenleaf-pos';
   try {
     const names = await readdir(root);
     const archives = [];
@@ -75,9 +75,9 @@ async function latestBackupInfo() {
 
 async function readCronSnippets() {
   const paths = [
-    '/etc/cron.d/ekolojik-outbox-failed-archive',
-    '/etc/cron.d/ekolojik-data-yedek',
-    '/etc/cron.d/ekolojik-support-inbox-sync',
+    '/etc/cron.d/greenleaf-outbox-failed-archive',
+    '/etc/cron.d/greenleaf-data-yedek',
+    '/etc/cron.d/greenleaf-support-inbox-sync',
   ];
   const jobs = [];
   for (const path of paths) {
@@ -105,10 +105,10 @@ function computeInfraScore(checks, outboxFailed) {
 
 export async function runInfrastructureProbes(dataDir, { smtp = true, imap = true } = {}) {
   const probes = { smtp: null, imap: null };
-  if (smtp && isEkolojikSmtpConfigured()) {
+  if (smtp && isSmtpConfigured()) {
     try {
-      const { verifyEkolojikSmtp } = await import('./ekolojikSmtp.mjs');
-      const result = await verifyEkolojikSmtp({ dataDir, tenantId: 'main' });
+      const { verifySmtp } = await import('./smtpTransport.mjs');
+      const result = await verifySmtp({ dataDir, tenantId: 'main' });
       probes.smtp = { ok: result.ok, error: result.error ?? null };
     } catch (error) {
       probes.smtp = { ok: false, error: error instanceof Error ? error.message : String(error) };
@@ -116,10 +116,10 @@ export async function runInfrastructureProbes(dataDir, { smtp = true, imap = tru
   } else if (smtp) {
     probes.smtp = { ok: false, error: 'SMTP yapılandırılmadı' };
   }
-  if (imap && isEkolojikImapConfigured()) {
+  if (imap && isImapConfigured()) {
     try {
       const { verifyImapMailbox } = await import('./billEmailImap.mjs');
-      const cfg = getEkolojikImapConfig();
+      const cfg = getImapConfig();
       const result = await verifyImapMailbox({
         imapHost: cfg.imapHost,
         imapPort: cfg.imapPort,
@@ -144,7 +144,7 @@ export async function runInfrastructureProbes(dataDir, { smtp = true, imap = tru
 }
 
 export async function buildPlatformInfrastructureOverview(dataDir) {
-  const isolation = await getEkolojikIsolationReport(dataDir);
+  const isolation = await getTenantIsolationReport(dataDir);
   const [counts, countsByTenant, appVersion, backup, cronJobs] = await Promise.all([
     getOutboxCounts(dataDir),
     getOutboxCountsByTenant(dataDir),
@@ -168,8 +168,8 @@ export async function buildPlatformInfrastructureOverview(dataDir) {
     storage.push({ name, path: `data/${name}`, sizeBytes: bytes });
   }
 
-  const mailCfg = getEkolojikMailConfig();
-  const imapCfg = getEkolojikImapConfig();
+  const mailCfg = getMailConfig();
+  const imapCfg = getImapConfig();
   const score = computeInfraScore(isolation.checks, counts.failed ?? 0);
 
   const { readPlatformSessionEpoch } = await import('./platformSessionRevoke.mjs');
@@ -188,13 +188,13 @@ export async function buildPlatformInfrastructureOverview(dataDir) {
       platformSessionEpoch: await readPlatformSessionEpoch(dataDir),
     },
     mail: {
-      smtpConfigured: isEkolojikSmtpConfigured(),
+      smtpConfigured: isSmtpConfigured(),
       smtpHost: mailCfg.smtpHost || null,
       smtpPort: mailCfg.smtpPort,
       from: mailCfg.from || null,
-      opsEmail: getEkolojikOpsEmail() || null,
-      smtpHostHint: getEkolojikSmtpHostHint(),
-      imapConfigured: isEkolojikImapConfigured(),
+      opsEmail: getOpsEmail() || null,
+      smtpHostHint: getSmtpHostHint(),
+      imapConfigured: isImapConfigured(),
       imapHost: imapCfg.imapHost || null,
       imapUser: imapCfg.imapUser || null,
       lertaBridge: isLertaPlatformConfigured(),
@@ -202,7 +202,7 @@ export async function buildPlatformInfrastructureOverview(dataDir) {
     outbox: {
       counts,
       byTenant: countsByTenant.sort((a, b) => b.failed * 10 + b.pending - (a.failed * 10 + a.pending)),
-      failedAlertThreshold: Number(process.env.EKOLOJIK_OUTBOX_FAILED_ALERT_THRESHOLD || 50),
+      failedAlertThreshold: Number(process.env.GREENLEAF_OUTBOX_FAILED_ALERT_THRESHOLD || 50),
     },
     isolation: {
       ok: isolation.ok,
@@ -214,9 +214,9 @@ export async function buildPlatformInfrastructureOverview(dataDir) {
     backup,
     cronJobs,
     retention: {
-      outboxDays: retentionDays('EKOLOJIK_OUTBOX_RETENTION_DAYS', 90),
-      messagingDays: retentionDays('EKOLOJIK_MESSAGING_RETENTION_DAYS', 365),
-      contactDays: retentionDays('EKOLOJIK_CONTACT_RETENTION_DAYS', 730),
+      outboxDays: retentionDays('GREENLEAF_OUTBOX_RETENTION_DAYS', 90),
+      messagingDays: retentionDays('GREENLEAF_MESSAGING_RETENTION_DAYS', 365),
+      contactDays: retentionDays('GREENLEAF_CONTACT_RETENTION_DAYS', 730),
     },
   };
 }

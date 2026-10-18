@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { POSTA_COMPOSE_MAX_ATTACH_BYTES } from './postaComposeActions.mjs';
 
 export const POSTA_STORAGE_QUOTA_BYTES =
-  Number(process.env.EKOLOJIK_POSTA_STORAGE_QUOTA_MB || 512) * 1024 * 1024;
+  Number(process.env.GREENLEAF_POSTA_STORAGE_QUOTA_MB || 512) * 1024 * 1024;
 
 async function dirSizeBytes(root) {
   let total = 0;

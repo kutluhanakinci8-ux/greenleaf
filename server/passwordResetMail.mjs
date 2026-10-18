@@ -1,4 +1,4 @@
-import { sendEkolojikMail } from './emailOutboxProcessor.mjs';
+import { sendTransactionalMail } from './emailOutboxProcessor.mjs';
 import { getEffectiveMailPresentation } from './postaSettings.mjs';
 
 export function normalizeRecoveryEmail(raw) {
@@ -7,7 +7,7 @@ export function normalizeRecoveryEmail(raw) {
   return email;
 }
 
-/** Transactional şifre sıfırlama — From: bildirim@ (EKOLOJIK_MAIL_FROM), Reply-To: info@ */
+/** Transactional şifre sıfırlama — From: bildirim@ (GREENLEAF_MAIL_FROM), Reply-To: info@ */
 export async function sendPasswordResetEmail(dataDir, tenantId, {
   to,
   displayName,
@@ -28,7 +28,7 @@ export async function sendPasswordResetEmail(dataDir, tenantId, {
     '',
     'Bu talebi siz yapmadıysanız bu e-postayı yok sayın; şifreniz değişmez.',
     '',
-    `Yardım: ${pres.replyTo || pres.opsEmail || 'info@ekolojikmarket.com.tr'}`,
+    `Yardım: ${pres.replyTo || pres.opsEmail || 'info@example.com'}`,
   ].join('\n');
 
   const html = `
@@ -43,11 +43,11 @@ export async function sendPasswordResetEmail(dataDir, tenantId, {
       <p style="font-size:13px;color:#555">Bağlantı <strong>${expiresMinutes} dakika</strong> geçerlidir.</p>
       <p style="font-size:13px;color:#555">Talebi siz yapmadıysanız bu e-postayı yok sayın.</p>
       <hr style="border:none;border-top:1px solid #e0e0e0;margin:24px 0"/>
-      <p style="font-size:12px;color:#888">Bu mesaj ${escapeHtml(pres.from || 'bildirim@ekolojikmarket.com.tr')} adresinden otomatik gönderilmiştir.</p>
+      <p style="font-size:12px;color:#888">Bu mesaj ${escapeHtml(pres.from || 'bildirim@example.com')} adresinden otomatik gönderilmiştir.</p>
     </div>
   `.trim();
 
-  return sendEkolojikMail(dataDir, {
+  return sendTransactionalMail(dataDir, {
     to,
     subject,
     body: text,

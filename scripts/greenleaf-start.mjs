@@ -27,7 +27,7 @@ const env = {
   PORT: port,
   HOST: host,
   GREENLEAF_DESKTOP: process.env.GREENLEAF_DESKTOP || '1',
-  EKOLOJIK_PUBLIC_ORIGIN: process.env.EKOLOJIK_PUBLIC_ORIGIN || `http://${host}:${port}`,
+  GREENLEAF_PUBLIC_ORIGIN: process.env.GREENLEAF_PUBLIC_ORIGIN || `http://${host}:${port}`,
 };
 
 console.log('Greenleaf POS');

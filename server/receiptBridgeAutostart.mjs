@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { join } from 'node:path';
 
-const PORT = Number(process.env.LIMA_RAW_PRINT_PORT || 18765);
+const PORT = Number(process.env.RECEIPT_RAW_PRINT_PORT || 18765);
 const HEALTH_URL = `http://127.0.0.1:${PORT}/health`;
 
 let bridgeChild = null;
@@ -38,7 +38,7 @@ export async function ensureReceiptBridgeRunning(repoRoot) {
     return waitForBridgeHealth(5000);
   }
 
-  const script = join(repoRoot, 'scripts', 'lima-raw-print-bridge.mjs');
+  const script = join(repoRoot, 'scripts', 'receipt-raw-print-bridge.mjs');
   bridgeChild = spawn(process.execPath, [script], {
     cwd: repoRoot,
     env: { ...process.env },

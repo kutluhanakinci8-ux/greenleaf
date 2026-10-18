@@ -7,25 +7,25 @@ function trimUrl(value) {
 
 export function publicSiteUrl() {
   return (
-    process.env.EKOLOJIK_PUBLIC_BASE_URL?.trim()
-    || process.env.EKOLOJIK_PUBLIC_URL?.trim()
-    || 'https://www.ekolojikmarket.com.tr'
+    process.env.GREENLEAF_PUBLIC_BASE_URL?.trim()
+    || process.env.GREENLEAF_PUBLIC_URL?.trim()
+    || 'https://127.0.0.1:5190'
   ).replace(/\/$/, '');
 }
 
 export function getPlatformSupportMailBrand() {
   const site = publicSiteUrl();
   const logoUrl =
-    trimUrl(process.env.EKOLOJIK_MAIL_LOGO_URL) || `${site}/brand/ekolojik-email-logo.svg`;
+    trimUrl(process.env.GREENLEAF_MAIL_LOGO_URL) || `${site}/brand/greenleaf-email-logo.svg`;
   const contactFormUrl =
-    trimUrl(process.env.EKOLOJIK_CONTACT_FORM_URL) || `${site}/iletisim`;
+    trimUrl(process.env.GREENLEAF_CONTACT_FORM_URL) || `${site}/iletisim`;
 
   const socialDefs = [
-    { key: 'instagram', label: 'Instagram', env: 'EKOLOJIK_SOCIAL_INSTAGRAM' },
-    { key: 'facebook', label: 'Facebook', env: 'EKOLOJIK_SOCIAL_FACEBOOK' },
-    { key: 'youtube', label: 'YouTube', env: 'EKOLOJIK_SOCIAL_YOUTUBE' },
-    { key: 'linkedin', label: 'LinkedIn', env: 'EKOLOJIK_SOCIAL_LINKEDIN' },
-    { key: 'x', label: 'X', env: 'EKOLOJIK_SOCIAL_X' },
+    { key: 'instagram', label: 'Instagram', env: 'GREENLEAF_SOCIAL_INSTAGRAM' },
+    { key: 'facebook', label: 'Facebook', env: 'GREENLEAF_SOCIAL_FACEBOOK' },
+    { key: 'youtube', label: 'YouTube', env: 'GREENLEAF_SOCIAL_YOUTUBE' },
+    { key: 'linkedin', label: 'LinkedIn', env: 'GREENLEAF_SOCIAL_LINKEDIN' },
+    { key: 'x', label: 'X', env: 'GREENLEAF_SOCIAL_X' },
   ];
 
   const social = socialDefs.map(({ key, label, env }) => {
@@ -35,7 +35,7 @@ export function getPlatformSupportMailBrand() {
 
   return {
     site,
-    siteName: process.env.EKOLOJIK_MAIL_BRAND_NAME?.trim() || 'Ekolojik Market',
+    siteName: process.env.GREENLEAF_MAIL_BRAND_NAME?.trim() || 'Greenleaf POS',
     logoUrl,
     contactFormUrl,
     social,

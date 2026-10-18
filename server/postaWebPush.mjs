@@ -8,10 +8,10 @@ function subsPath(dataDir) {
 }
 
 function getVapidEnv() {
-  const publicKey = process.env.EKOLOJIK_PUSH_VAPID_PUBLIC_KEY?.trim() ?? '';
-  const privateKey = process.env.EKOLOJIK_PUSH_VAPID_PRIVATE_KEY?.trim() ?? '';
+  const publicKey = process.env.GREENLEAF_PUSH_VAPID_PUBLIC_KEY?.trim() ?? '';
+  const privateKey = process.env.GREENLEAF_PUSH_VAPID_PRIVATE_KEY?.trim() ?? '';
   const subject =
-    process.env.EKOLOJIK_PUSH_VAPID_SUBJECT?.trim() || 'mailto:info@ekolojikmarket.com.tr';
+    process.env.GREENLEAF_PUSH_VAPID_SUBJECT?.trim() || 'mailto:info@example.com';
   if (!publicKey || !privateKey) return null;
   return { publicKey, privateKey, subject };
 }
@@ -29,7 +29,7 @@ export function getPostaPushConfig() {
     subject: vapid?.subject ?? null,
     hint: vapid
       ? null
-      : 'EKOLOJIK_PUSH_VAPID_PUBLIC_KEY / EKOLOJIK_PUSH_VAPID_PRIVATE_KEY tanımlayın (web-push generate-vapid-keys)',
+      : 'GREENLEAF_PUSH_VAPID_PUBLIC_KEY / GREENLEAF_PUSH_VAPID_PRIVATE_KEY tanımlayın (web-push generate-vapid-keys)',
   };
 }
 
@@ -97,10 +97,10 @@ export async function sendPostaWebPush(dataDir, payload) {
   if (!vapid) return { ok: false, skipped: true, error: 'VAPID yapılandırılmadı' };
 
   const body = JSON.stringify({
-    title: payload.title ?? 'Ekolojik Posta',
+    title: payload.title ?? 'Posta',
     body: payload.body ?? '',
     url: payload.url ?? '/',
-    tag: payload.tag ?? 'ekolojik-posta',
+    tag: payload.tag ?? 'greenleaf-posta',
   });
 
   const rows = await readSubscriptions(dataDir);

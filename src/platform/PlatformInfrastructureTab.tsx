@@ -129,7 +129,7 @@ export function PlatformInfrastructureTab() {
           <span className="platform-users-hero-badge">Infrastructure</span>
           <h2>Altyapı & sağlık</h2>
           <p>
-            Posta relay, IMAP, outbox kuyruğu, veri hacmi, yedekler ve Ekolojik izolasyon kontrolleri.
+            Posta relay, IMAP, outbox kuyruğu, veri hacmi, yedekler ve kiracı izolasyon kontrolleri.
           </p>
           <time className="platform-users-hero-time" dateTime={data.generatedAt}>
             Son güncelleme: {formatDateTime(data.generatedAt)}
@@ -199,7 +199,7 @@ export function PlatformInfrastructureTab() {
 
       <section className="platform-users-panel" aria-label="İzolasyon kontrolleri">
         <div className="platform-users-panel-head">
-          <h3>Ekolojik izolasyon</h3>
+          <h3>Kiracı izolasyonu</h3>
           <span className="platform-muted">{failedChecks.length} açık kontrol</span>
         </div>
         <ul className="platform-infra-check-list">
@@ -301,7 +301,7 @@ export function PlatformInfrastructureTab() {
             <p className="platform-muted platform-overview-empty">
               {data.backup.unreadable
                 ? 'Yedek dizinine erişilemedi (VPS yolu farklı olabilir).'
-                : 'Henüz arşiv bulunamadı — cron: sunucu-ekolojik-data-yedek.sh'}
+                : 'Henüz arşiv bulunamadı — cron: ops-data-yedek.sh'}
             </p>
           )}
         </section>

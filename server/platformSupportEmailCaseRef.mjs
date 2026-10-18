@@ -1,6 +1,8 @@
 /** destek@ plus-alias ve gövde/konu case token ayrıştırma */
 
-const DOMAIN_PATTERN = 'ekolojikmarket\\.com\\.tr';
+const DOMAIN_PATTERN = process.env.GREENLEAF_MAIL_DOMAIN?.trim()
+  ? process.env.GREENLEAF_MAIL_DOMAIN.trim().replace(/\./g, '\\.')
+  : 'example\\.com';
 
 export function parseCaseNumberFromAddressField(value) {
   const text = String(value ?? '');
@@ -31,7 +33,7 @@ export function resolveInboundCaseNumber({ to, deliveredTo, subject } = {}) {
   return parseCaseNumberFromSubject(subject);
 }
 
-export function supportPlusAddressForCase(caseNumber, domain = 'ekolojikmarket.com.tr') {
+export function supportPlusAddressForCase(caseNumber, domain = 'example.com') {
   const n = Number(caseNumber);
   if (!Number.isFinite(n) || n <= 0) return null;
   return `destek+case${n}@${domain}`;

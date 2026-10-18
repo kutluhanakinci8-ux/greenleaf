@@ -1,7 +1,7 @@
 # Greenleaf / Lima — Windows fiş köprüsü (127.0.0.1:18765, sessiz ESC/POS)
 # USB POS-80C bu kasa PC'de; site tarayıcıdan açılır.
 # Bir kez (normal PowerShell, yönetici gerekmez):
-#   cd C:\...\ekolojik-market
+#   cd C:\...\greenleaf-pos
 #   .\scripts\install-windows-receipt-bridge.ps1
 #   .\scripts\install-windows-receipt-bridge.ps1 -PrinterName "POS-80C"
 param(
@@ -9,11 +9,11 @@ param(
   [switch]$SkipZywellPrinterInstall
 )
 
-$StandardZywellName = 'Ekolojik POS-80 (Zywell)'
+$StandardZywellName = 'Greenleaf POS-80 (Zywell)'
 
 $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
-$DestDir = Join-Path $env:USERPROFILE '.greenleaf-market-pos'
+$DestDir = Join-Path $env:USERPROFILE '.greenleaf-pos'
 $TaskName = 'LimaMarketReceiptBridge'
 $Node = (Get-Command node -ErrorAction SilentlyContinue).Source
 
@@ -22,7 +22,7 @@ if (-not $Node) {
 }
 
 $files = @(
-  'lima-raw-print-bridge.mjs',
+  'receipt-raw-print-bridge.mjs',
   'escposTurkish.mjs',
   'win-raw-escpos.ps1'
 )
@@ -30,7 +30,7 @@ New-Item -ItemType Directory -Force -Path $DestDir | Out-Null
 foreach ($f in $files) {
   $src = Join-Path $RepoRoot "scripts\$f"
   if (-not (Test-Path -LiteralPath $src)) {
-    Write-Error "Dosya eksik: $src — ekolojik-market repo klasorunden calistirin."
+    Write-Error "Dosya eksik: $src — greenleaf-pos repo klasorunden calistirin."
   }
   Copy-Item -LiteralPath $src -Destination (Join-Path $DestDir $f) -Force
 }
@@ -48,7 +48,7 @@ if (-not $PrinterName) {
   if ($printers -contains $StandardZywellName) {
     $PrinterName = $StandardZywellName
   }
-  $pos80 = @($printers | Where-Object { $_ -match 'pos.?80|zywell|ekolojik' })
+  $pos80 = @($printers | Where-Object { $_ -match 'pos.?80|zywell|greenleaf' })
   if ($pos80.Count -eq 1) {
     $PrinterName = $pos80[0]
   } elseif ($pos80.Count -gt 1) {
@@ -67,9 +67,9 @@ $startCmd = @"
 set POS80_QUEUE_NAME=$PrinterName
 set ESCPOS_CHARSET=ascii
 set ESCPOS_FEED_LINES=10
-set LIMA_RAW_PRINT_PORT=18765
+set RECEIPT_RAW_PRINT_PORT=18765
 cd /d "$DestDir"
-"$Node" lima-raw-print-bridge.mjs
+"$Node" receipt-raw-print-bridge.mjs
 "@
 
 $launcher = Join-Path $DestDir 'start-receipt-bridge.cmd'

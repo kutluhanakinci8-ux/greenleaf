@@ -2,9 +2,9 @@
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getEkolojikOpsEmail } from './ekolojikMailConfig.mjs';
+import { getOpsEmail } from './mailConfig.mjs';
 import { getPlatformSupportMailPresentation } from './platformSupportMailConfig.mjs';
-import { sendViaEkolojikSmtp } from './ekolojikSmtp.mjs';
+import { sendViaSmtp } from './smtpTransport.mjs';
 import { PLATFORM_TENANT_ID } from './platformOperators.mjs';
 import { publicSiteUrl } from './platformSupportMailBrand.mjs';
 
@@ -12,7 +12,7 @@ const IMAP_ALERT_STATE = (dataDir) => join(dataDir, 'platform', 'support-imap-sy
 const IMAP_ALERT_MIN_INTERVAL_MS = 60 * 60 * 1000;
 
 export function isSupportOpsNotifyEnabled() {
-  const flag = process.env.EKOLOJIK_SUPPORT_OPS_NOTIFY?.trim();
+  const flag = process.env.GREENLEAF_SUPPORT_OPS_NOTIFY?.trim();
   if (flag === '0' || flag === 'false') return false;
   return true;
 }
@@ -24,7 +24,7 @@ function platformConsoleUrl() {
 
 export async function notifyOpsSpawnedSupportCase(dataDir, { closedCase, newCase, inboxRow }) {
   if (!isSupportOpsNotifyEnabled()) return { skipped: true, reason: 'disabled' };
-  const to = getEkolojikOpsEmail();
+  const to = getOpsEmail();
   if (!to?.includes('@')) return { skipped: true, reason: 'no_ops_email' };
 
   const pres = getPlatformSupportMailPresentation();
@@ -53,7 +53,7 @@ export async function notifyOpsSpawnedSupportCase(dataDir, { closedCase, newCase
 <p><a href="${platformConsoleUrl()}">Platform konsolunu aç</a> → Destek → Kayıtlar</p>
 </body></html>`;
 
-  const result = await sendViaEkolojikSmtp({
+  const result = await sendViaSmtp({
     dataDir,
     tenantId: PLATFORM_TENANT_ID,
     to,
@@ -61,7 +61,7 @@ export async function notifyOpsSpawnedSupportCase(dataDir, { closedCase, newCase
     text,
     html,
     fromEmail: pres.from,
-    fromName: pres.fromName || 'Ekolojik Destek',
+    fromName: pres.fromName || 'Greenleaf Destek',
     replyTo: pres.replyTo,
   });
 
@@ -69,7 +69,7 @@ export async function notifyOpsSpawnedSupportCase(dataDir, { closedCase, newCase
 }
 
 export function isSupportImapSyncAlertEnabled() {
-  const flag = process.env.EKOLOJIK_SUPPORT_IMAP_SYNC_ALERT?.trim();
+  const flag = process.env.GREENLEAF_SUPPORT_IMAP_SYNC_ALERT?.trim();
   if (flag === '0' || flag === 'false') return false;
   return isSupportOpsNotifyEnabled();
 }
@@ -101,7 +101,7 @@ export async function notifyOpsSupportImapSyncFailure(dataDir, { error }) {
   if (!(await shouldSendImapSyncAlert(dataDir))) {
     return { skipped: true, reason: 'rate_limited' };
   }
-  const to = getEkolojikOpsEmail();
+  const to = getOpsEmail();
   if (!to?.includes('@')) return { skipped: true, reason: 'no_ops_email' };
 
   const pres = getPlatformSupportMailPresentation();
@@ -112,10 +112,10 @@ export async function notifyOpsSupportImapSyncFailure(dataDir, { error }) {
     '',
     detail,
     '',
-    `Log: /var/log/ekolojik-support-inbox-sync.log`,
+    `Log: /var/log/greenleaf-support-inbox-sync.log`,
     `Konsol: ${platformConsoleUrl()} → Destek → Gelen kutusu`,
     '',
-    'Kapatma: EKOLOJIK_SUPPORT_IMAP_SYNC_ALERT=0',
+    'Kapatma: GREENLEAF_SUPPORT_IMAP_SYNC_ALERT=0',
   ].join('\n');
 
   const html = `<!DOCTYPE html><html lang="tr"><body style="font-family:system-ui,sans-serif;line-height:1.5;color:#1a2e1a;">
@@ -124,7 +124,7 @@ export async function notifyOpsSupportImapSyncFailure(dataDir, { error }) {
 <p><a href="${platformConsoleUrl()}">Platform konsolu</a> → Destek</p>
 </body></html>`;
 
-  const result = await sendViaEkolojikSmtp({
+  const result = await sendViaSmtp({
     dataDir,
     tenantId: PLATFORM_TENANT_ID,
     to,
@@ -132,7 +132,7 @@ export async function notifyOpsSupportImapSyncFailure(dataDir, { error }) {
     text,
     html,
     fromEmail: pres.from,
-    fromName: pres.fromName || 'Ekolojik Destek',
+    fromName: pres.fromName || 'Greenleaf Destek',
     replyTo: pres.replyTo,
   });
 

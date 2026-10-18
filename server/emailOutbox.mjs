@@ -146,7 +146,7 @@ export async function findOutboxByIdempotency(dataDir, idempotencyKey) {
   return null;
 }
 
-export async function enqueueEkolojikMail(
+export async function enqueueTransactionalMail(
   dataDir,
   {
     to,
@@ -168,7 +168,7 @@ export async function enqueueEkolojikMail(
   await ensureDirs(dataDir, tenantId);
   const key = idempotencyKeyForTenant(
     tenantId,
-    idempotencyKey?.trim() || `ekolojik:${source}:${to}:${subject}:${Date.now()}`,
+    idempotencyKey?.trim() || `greenleaf:${source}:${to}:${subject}:${Date.now()}`,
   );
   const existing = await findOutboxByIdempotency(dataDir, key);
   if (existing) {

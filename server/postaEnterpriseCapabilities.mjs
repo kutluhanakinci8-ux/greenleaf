@@ -38,7 +38,7 @@ export async function buildPostaEnterpriseCapabilities(dataDir, tenantId) {
       webmailUi: '/app?page=posta-webmail',
       delegates: '/api/posta/delegates',
       compliance: '/api/posta/compliance/archive',
-      dlp: 'EKOLOJIK_POSTA_DLP_PATTERNS',
+      dlp: 'GREENLEAF_POSTA_DLP_PATTERNS',
       campaigns: '/api/posta/marketing/campaigns',
       pwa: '/manifest.webmanifest',
     },

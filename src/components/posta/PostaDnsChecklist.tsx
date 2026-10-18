@@ -27,7 +27,7 @@ function buildTurhostPasteBlock(hub: PostaDeliverabilityHub): string {
     lines.push(row.suggested ?? '');
     lines.push('');
   }
-  lines.push(hub.dnsPanelGuide?.strictCommand ?? 'EKOLOJIK_DNS_STRICT=1 bash scripts/sunucu-ekolojik-dns-mail-dogrula.sh');
+  lines.push(hub.dnsPanelGuide?.strictCommand ?? 'GREENLEAF_DNS_STRICT=1 bash scripts/ops-dns-mail-dogrula.sh');
   return lines.join('\n').trim();
 }
 

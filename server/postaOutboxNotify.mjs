@@ -39,13 +39,13 @@ export async function maybeNotifyOutboxFailure(dataDir, message) {
     opsEmail?.includes('@') &&
     (await shouldSendPostaNotification(dataDir, 'outbox_failed', 'opsEmail', tenantId))
   ) {
-    const { sendEkolojikMail } = await import('./emailOutboxProcessor.mjs');
-    summary.ops = await sendEkolojikMail(dataDir, {
+    const { sendTransactionalMail } = await import('./emailOutboxProcessor.mjs');
+    summary.ops = await sendTransactionalMail(dataDir, {
       to: opsEmail,
       subject: opsNotifySubject(message),
       tenantId,
       body: [
-        'E-posta gönderimi kalıcı olarak başarısız (Ekolojik outbox)',
+        'E-posta gönderimi kalıcı olarak başarısız (Outbox)',
         '',
         `Kayıt: ${message.id}`,
         `Alıcı: ${message.to}`,
@@ -69,7 +69,7 @@ function thresholdStatePath(dataDir) {
 
 /** failed sayısı eşiği aşıldığında ops e-posta (günde en fazla bir kez). */
 export async function maybeAlertOutboxFailedThreshold(dataDir, tenantId = 'main') {
-  const threshold = Number(process.env.EKOLOJIK_OUTBOX_FAILED_ALERT_THRESHOLD || 50);
+  const threshold = Number(process.env.GREENLEAF_OUTBOX_FAILED_ALERT_THRESHOLD || 50);
   const counts = await getOutboxCounts(dataDir);
   const failedTotal = counts.failed ?? 0;
   if (failedTotal < threshold) return { skipped: true, reason: 'below_threshold', failedTotal };
@@ -98,9 +98,9 @@ export async function maybeAlertOutboxFailedThreshold(dataDir, tenantId = 'main'
     breakdown[c] = (breakdown[c] ?? 0) + 1;
   }
 
-  const { sendEkolojikMail } = await import('./emailOutboxProcessor.mjs');
+  const { sendTransactionalMail } = await import('./emailOutboxProcessor.mjs');
   const lines = [
-    `Ekolojik outbox: başarısız kayıt sayısı ${failedTotal} (eşik ${threshold})`,
+    `Outbox: başarısız kayıt sayısı ${failedTotal} (eşik ${threshold})`,
     '',
     'Hata sınıfları (örnek 200 kayıt):',
     ...Object.entries(breakdown).map(([k, n]) => `  ${k}: ${n}`),
@@ -111,7 +111,7 @@ export async function maybeAlertOutboxFailedThreshold(dataDir, tenantId = 'main'
     'Hub: Ayarlar → E-posta → Başarısız gönderimler',
   ];
 
-  const mail = await sendEkolojikMail(dataDir, {
+  const mail = await sendTransactionalMail(dataDir, {
     to: opsEmail,
     subject: `[Outbox uyarı] ${failedTotal} başarısız kayıt`,
     tenantId,

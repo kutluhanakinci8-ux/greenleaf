@@ -37,10 +37,10 @@ async function pruneOutboxFolder(dir, cutoffMs) {
   return removed;
 }
 
-export async function runEkolojikDataRetention(dataDir, tenantId = 'main') {
-  const outboxDays = retentionDays('EKOLOJIK_OUTBOX_RETENTION_DAYS', 90);
-  const messagingDays = retentionDays('EKOLOJIK_MESSAGING_RETENTION_DAYS', 365);
-  const contactDays = retentionDays('EKOLOJIK_CONTACT_RETENTION_DAYS', 730);
+export async function runDataRetention(dataDir, tenantId = 'main') {
+  const outboxDays = retentionDays('GREENLEAF_OUTBOX_RETENTION_DAYS', 90);
+  const messagingDays = retentionDays('GREENLEAF_MESSAGING_RETENTION_DAYS', 365);
+  const contactDays = retentionDays('GREENLEAF_CONTACT_RETENTION_DAYS', 730);
 
   const outboxCutoff = Date.parse(cutoffDate(outboxDays));
   const root = join(dataDir, 'email-outbox');
@@ -92,8 +92,8 @@ export async function runEkolojikDataRetention(dataDir, tenantId = 'main') {
 
 export function getRetentionPolicySummary() {
   return {
-    outboxDays: retentionDays('EKOLOJIK_OUTBOX_RETENTION_DAYS', 90),
-    messagingDays: retentionDays('EKOLOJIK_MESSAGING_RETENTION_DAYS', 365),
-    contactDays: retentionDays('EKOLOJIK_CONTACT_RETENTION_DAYS', 730),
+    outboxDays: retentionDays('GREENLEAF_OUTBOX_RETENTION_DAYS', 90),
+    messagingDays: retentionDays('GREENLEAF_MESSAGING_RETENTION_DAYS', 365),
+    contactDays: retentionDays('GREENLEAF_CONTACT_RETENTION_DAYS', 730),
   };
 }

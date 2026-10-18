@@ -49,7 +49,7 @@ PORT=$Port
 HOST=127.0.0.1
 NODE_ENV=production
 MARKET_POS_DATA_DIR=$DataDir
-EKOLOJIK_PUBLIC_ORIGIN=http://127.0.0.1:$Port
+GREENLEAF_PUBLIC_ORIGIN=http://127.0.0.1:$Port
 GREENLEAF_DESKTOP=1
 LERTA_PLATFORM_BRIDGE=0
 "@
@@ -77,5 +77,5 @@ Write-Host "  Uygulama: http://127.0.0.1:$Port/app"
 Write-Host "  Veri     : $DataDir"
 Write-Host "  Oturum açılışında servis: görev '$taskName'"
 Write-Host ""
-Write-Host "Zywell fiş (bir kez): $InstallDir\public\install\windows\ekolojik-zywell-setup.ps1"
+Write-Host "Zywell fiş (bir kez): $InstallDir\public\install\windows\greenleaf-zywell-setup.ps1"
 Write-Host "Şimdi başlatmak için: powershell -File `"$startScript`""

@@ -7,7 +7,7 @@ export const DEFAULT_PRODUCT_SETS: ProductSet[] = [
   {
     id: 'SET-001',
     stockCode: 'STK-SET-001',
-    name: 'Ekolojik Günlük Bakım Seti',
+    name: 'Greenleaf Günlük Bakım Seti',
     description: 'Ev sabunu + diş fırçası + el kremi',
     items: [
       { productId: 1, quantity: 1 },

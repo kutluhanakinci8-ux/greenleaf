@@ -1,7 +1,7 @@
 import { createDeliverMessage } from './emailOutboxProcessor.mjs';
 
 function resolvePublicMailKey() {
-  return process.env.EKOLOJIK_PUBLIC_MAIL_API_KEY?.trim() || '';
+  return process.env.GREENLEAF_PUBLIC_MAIL_API_KEY?.trim() || '';
 }
 
 export function getPostaPublicMailCapabilities() {
@@ -17,10 +17,10 @@ export function getPostaPublicMailCapabilities() {
 export function assertPostaPublicMailAuth(req) {
   const expected = resolvePublicMailKey();
   if (!expected) {
-    return { ok: false, status: 503, error: 'Public mail API kapalı (EKOLOJIK_PUBLIC_MAIL_API_KEY)' };
+    return { ok: false, status: 503, error: 'Public mail API kapalı (GREENLEAF_PUBLIC_MAIL_API_KEY)' };
   }
   const header =
-    req.headers['x-ekolojik-mail-api-key'] ||
+    req.headers['x-greenleaf-mail-api-key'] ||
     req.headers.authorization?.replace(/^Bearer\s+/i, '').trim();
   if (!header || header !== expected) {
     return { ok: false, status: 401, error: 'Geçersiz mail API anahtarı' };

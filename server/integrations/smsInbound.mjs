@@ -4,9 +4,9 @@ import { ingestInboundChannelMessage } from '../messaging/omnichannel.mjs';
 import { isCrmSmsConfigured } from '../crmSms.mjs';
 
 function webhookSecretOk(req) {
-  const expected = process.env.EKOLOJIK_SMS_INBOUND_SECRET?.trim() || '';
+  const expected = process.env.GREENLEAF_SMS_INBOUND_SECRET?.trim() || '';
   if (!expected) return false;
-  const header = String(req.headers['x-ekolojik-sms-secret'] ?? req.headers.authorization ?? '').trim();
+  const header = String(req.headers['x-greenleaf-sms-secret'] ?? req.headers.authorization ?? '').trim();
   const bearer = header.toLowerCase().startsWith('bearer ') ? header.slice(7).trim() : header;
   return bearer === expected;
 }

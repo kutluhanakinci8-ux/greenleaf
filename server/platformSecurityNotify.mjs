@@ -1,5 +1,5 @@
-import { getEkolojikOpsEmail } from './ekolojikMailConfig.mjs';
-import { enqueueEkolojikMail } from './emailOutbox.mjs';
+import { getOpsEmail } from './mailConfig.mjs';
+import { enqueueTransactionalMail } from './emailOutbox.mjs';
 import { readSecurityAlertPolicy, writeSecurityAlertPolicy, DEFAULT_SECURITY_ALERT_POLICY } from './platformSecurityPolicy.mjs';
 
 const MS_MIN = 60 * 1000;
@@ -111,15 +111,15 @@ export async function runSecurityNotifyCheck(dataDir, overview, storesByTenant, 
   }
 
   const lines = toSend.map((a) => `• [${a.severity}] ${a.title}: ${a.detail}`).join('\n');
-  const subject = `Ekolojik Platform güvenlik uyarısı (${toSend.length})`;
+  const subject = `Greenleaf Platform güvenlik uyarısı (${toSend.length})`;
   const text = `Platform güvenlik eşikleri aşıldı.\n\n${lines}\n\nSkor: ${overview.score}\nZaman: ${new Date().toISOString()}`;
 
   const results = { email: null, webhook: null };
 
   if (policy.emailOps) {
-    const ops = getEkolojikOpsEmail();
+    const ops = getOpsEmail();
     if (ops) {
-      results.email = await enqueueEkolojikMail(dataDir, {
+      results.email = await enqueueTransactionalMail(dataDir, {
         to: ops,
         subject,
         text,
@@ -128,7 +128,7 @@ export async function runSecurityNotifyCheck(dataDir, overview, storesByTenant, 
         idempotencyKey: `platform-sec:${toSend.map((a) => a.id).join(',')}:${new Date().toISOString().slice(0, 13)}`,
       });
     } else {
-      results.email = { ok: false, error: 'EKOLOJIK_OPS_EMAIL tanımlı değil' };
+      results.email = { ok: false, error: 'GREENLEAF_OPS_EMAIL tanımlı değil' };
     }
   }
 

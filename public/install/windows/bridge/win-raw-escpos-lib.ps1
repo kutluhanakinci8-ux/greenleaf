@@ -68,7 +68,7 @@ function Resolve-LimaPrinterName([string]$PrinterName) {
     return $PrinterName
   }
   $alt = Get-Printer -ErrorAction SilentlyContinue | Where-Object {
-    $_.Name -match 'Ekolojik POS-80|POS-80|Zywell'
+    $_.Name -match 'Greenleaf POS-80|POS-80|Zywell'
   } | Select-Object -First 1
   if ($alt) {
     $script:LimaCachedPrinter = $alt.Name

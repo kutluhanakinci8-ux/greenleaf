@@ -1,5 +1,5 @@
-export const SITE_NAME = 'Ekolojik Market POS';
-export const SITE_TAGLINE = 'Doğal ürün mağazanız için akıllı satış ve stok yönetimi';
+export const SITE_NAME = 'Greenleaf POS';
+export const SITE_TAGLINE = 'Perakende mağazanız için satış, stok ve kasa yönetimi';
 
 export const NAV_LINKS = [
   { to: '/', label: 'Ana Sayfa' },
@@ -110,9 +110,9 @@ export const PRICING_PLANS = [
 export const BLOG_POSTS = [
   {
     id: '1',
-    slug: 'ekolojik-market-pos-nedir',
-    title: 'Ekolojik Market POS Nedir?',
-    excerpt: 'Doğal ve organik ürün satan mağazalar için özel olarak tasarlanmış bulut tabanlı satış noktası sistemi.',
+    slug: 'greenleaf-pos-nedir',
+    title: 'Greenleaf POS Nedir?',
+    excerpt: 'Yerel veya ağ üzerinden çalışan, satış ve stok odaklı modern kasa yazılımı.',
     date: '2026-09-01',
     category: 'Genel',
     readMin: 4,
@@ -120,7 +120,7 @@ export const BLOG_POSTS = [
   {
     id: '2',
     slug: 'stok-yonetimi-ipuclari',
-    title: 'Ekolojik Ürün Mağazasında Stok Yönetimi İpuçları',
+    title: 'Perakende Mağazada Stok Yönetimi İpuçları',
     excerpt: 'Son kullanma tarihi, numune stokları ve düşük stok uyarıları ile fireyi azaltmanın yolları.',
     date: '2026-09-05',
     category: 'Stok',
@@ -155,7 +155,7 @@ export const STATS = [
 
 /** Ana sayfa hero görseli — gerçek satış/kasa verisi göstermez */
 export const HERO_PREVIEW = {
-  title: 'Ekolojik Market POS — Modül Önizleme',
+  title: 'Greenleaf POS — Modül Önizleme',
   items: [
     { icon: '🛒', label: 'Hızlı satış ve barkod okuma' },
     { icon: '📦', label: 'Stok ve numune takibi' },

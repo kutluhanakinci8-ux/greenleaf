@@ -4,7 +4,7 @@ export const DEFAULT_TENANT_ID = 'main';
 
 export const KNOWN_TENANT_ALLOWLIST: string[] = Array.isArray(knownTenants.allowlist)
   ? knownTenants.allowlist.map((s) => String(s).trim().toLowerCase())
-  : ['main', 'lima-market'];
+  : ['main'];
 
 export const KNOWN_STORES = knownTenants.stores ?? [];
 

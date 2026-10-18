@@ -92,12 +92,12 @@ export async function buildMessagingExportZip(dataDir, tenantId = 'main') {
     );
   }
 
-  const zipPath = join(tmpRoot, 'ekolojik-messaging-export.zip');
+  const zipPath = join(tmpRoot, 'greenleaf-messaging-export.zip');
   try {
     await execFileAsync('zip', ['-qr', zipPath, '.'], { cwd: tmpRoot });
     const zip = await readFile(zipPath);
     await rm(tmpRoot, { recursive: true, force: true });
-    return { ok: true, buffer: zip, filename: 'ekolojik-messaging-export.zip' };
+    return { ok: true, buffer: zip, filename: 'greenleaf-messaging-export.zip' };
   } catch {
     const bundle = {
       exportedAt: new Date().toISOString(),
@@ -110,6 +110,6 @@ export async function buildMessagingExportZip(dataDir, tenantId = 'main') {
     }
     await rm(tmpRoot, { recursive: true, force: true });
     const json = Buffer.from(JSON.stringify(bundle, null, 2), 'utf8');
-    return { ok: true, buffer: json, filename: 'ekolojik-messaging-export.json', fallback: true };
+    return { ok: true, buffer: json, filename: 'greenleaf-messaging-export.json', fallback: true };
   }
 }

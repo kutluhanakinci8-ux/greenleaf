@@ -8,7 +8,7 @@ const PIXEL_GIF = Buffer.from(
 );
 
 export function isMailTrackEnabled() {
-  return String(process.env.EKOLOJIK_MAIL_TRACK ?? '').trim() === '1';
+  return String(process.env.GREENLEAF_MAIL_TRACK ?? '').trim() === '1';
 }
 
 function trackLogPath(dataDir) {

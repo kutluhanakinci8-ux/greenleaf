@@ -1,7 +1,7 @@
 # Zywell / POS-80 — standart Windows yazıcı kuyruğu (ESC/POS ham yazdırma)
 # install-windows-receipt-bridge.ps1 içinden çağrılır veya tek başına.
 param(
-  [string]$PrinterName = 'Ekolojik POS-80 (Zywell)'
+  [string]$PrinterName = 'Greenleaf POS-80 (Zywell)'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -14,7 +14,7 @@ if (Get-Printer -Name $PrinterName -ErrorAction SilentlyContinue) {
 }
 
 $existingPos = @(Get-Printer -ErrorAction SilentlyContinue | Where-Object {
-    $_.Name -match 'zywell|pos.?80|80mm|ekolojik' -and $_.Name -ne $PrinterName
+    $_.Name -match 'zywell|pos.?80|80mm|greenleaf' -and $_.Name -ne $PrinterName
   })
 if ($existingPos.Count -eq 1) {
   Write-Info "Mevcut termal yazici bulundu: $($existingPos[0].Name) — standart ad kullanilacak: $PrinterName"

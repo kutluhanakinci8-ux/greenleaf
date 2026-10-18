@@ -65,7 +65,7 @@ export function PlatformApp() {
     <div className="platform-shell platform-shell--premium">
       <header className="platform-header platform-header--premium">
         <div>
-          <h1>Ekolojik Platform</h1>
+          <h1>Greenleaf Platform</h1>
           <p className="platform-subtitle">
             Operasyon merkezi — cari, güvenlik, iletişim ve kiracı portföyü
           </p>

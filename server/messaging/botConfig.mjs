@@ -15,7 +15,7 @@ async function readRaw(dataDir, tenantId) {
 }
 
 export function isMessagingBotEnvEnabled() {
-  const v = String(process.env.EKOLOJIK_MESSAGING_BOT ?? '1').trim();
+  const v = String(process.env.GREENLEAF_MESSAGING_BOT ?? '1').trim();
   return v !== '0' && v.toLowerCase() !== 'false';
 }
 

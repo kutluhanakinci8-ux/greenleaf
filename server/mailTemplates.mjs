@@ -4,44 +4,44 @@ const TEMPLATES = [
   {
     id: 'tesekkur',
     label: 'Teşekkür',
-    subject: 'Ekolojik Market — teşekkürler',
-    body: 'Merhaba,\n\nBizimle iletişime geçtiğiniz için teşekkür ederiz.\n\nSaygılarımızla,\nEkolojik Market',
+    subject: 'Greenleaf POS — teşekkürler',
+    body: 'Merhaba,\n\nBizimle iletişime geçtiğiniz için teşekkür ederiz.\n\nSaygılarımızla,\nGreenleaf POS',
   },
   {
     id: 'siparis-alindi',
     label: 'Sipariş alındı',
     subject: 'Siparişiniz alındı',
-    body: 'Merhaba,\n\nSiparişiniz kayda alınmıştır. Hazırlık sürecinde sizi bilgilendireceğiz.\n\nEkolojik Market',
+    body: 'Merhaba,\n\nSiparişiniz kayda alınmıştır. Hazırlık sürecinde sizi bilgilendireceğiz.\n\nGreenleaf POS',
   },
   {
     id: 'stok-bilgi',
     label: 'Stok bilgisi',
     subject: 'Stok / ürün bilgisi',
-    body: 'Merhaba,\n\nTalep ettiğiniz ürün hakkında güncel stok bilgisini paylaşmak isteriz:\n\n—\n\nEkolojik Market',
+    body: 'Merhaba,\n\nTalep ettiğiniz ürün hakkında güncel stok bilgisini paylaşmak isteriz:\n\n—\n\nGreenleaf POS',
   },
   {
     id: 'kvkk',
     label: 'KVKK yanıt',
     subject: 'KVKK başvurunuz',
-    body: 'Sayın ilgili,\n\nKişisel verilerin korunması kapsamındaki talebiniz tarafımıza ulaşmıştır. Yasal süre içinde dönüş yapılacaktır.\n\nEkolojik Market',
+    body: 'Sayın ilgili,\n\nKişisel verilerin korunması kapsamındaki talebiniz tarafımıza ulaşmıştır. Yasal süre içinde dönüş yapılacaktır.\n\nGreenleaf POS',
   },
   {
     id: 'iade',
     label: 'İade / değişim',
     subject: 'İade veya değişim talebiniz',
-    body: 'Merhaba,\n\nİade/değişim talebiniz incelenmektedir. Kısa süre içinde dönüş yapacağız.\n\nEkolojik Market',
+    body: 'Merhaba,\n\nİade/değişim talebiniz incelenmektedir. Kısa süre içinde dönüş yapacağız.\n\nGreenleaf POS',
   },
   {
     id: 'gecikme',
     label: 'Gecikme özür',
     subject: 'Gecikme hakkında',
-    body: 'Merhaba,\n\nYaşanan gecikme için özür dileriz. Siparişinizin durumu hakkında sizi bilgilendirmeye devam edeceğiz.\n\nEkolojik Market',
+    body: 'Merhaba,\n\nYaşanan gecikme için özür dileriz. Siparişinizin durumu hakkında sizi bilgilendirmeye devam edeceğiz.\n\nGreenleaf POS',
   },
   {
     id: 'genel-yanit',
     label: 'Genel yanıt',
-    subject: 'Ekolojik Market — mesajınız',
-    body: 'Merhaba,\n\nMesajınız için teşekkürler. Talebinizle ilgileniyoruz.\n\nSaygılarımızla,\nEkolojik Market',
+    subject: 'Greenleaf POS — mesajınız',
+    body: 'Merhaba,\n\nMesajınız için teşekkürler. Talebinizle ilgileniyoruz.\n\nSaygılarımızla,\nGreenleaf POS',
   },
 ];
 
@@ -61,7 +61,7 @@ export function buildMessagingCustomerSummaryEmail({ customerName, subject, body
   const text = [
     `Sayın ${name},`,
     '',
-    'Ekolojik Market ile olan yazışmanızda yeni bir mesaj var.',
+    'Greenleaf POS ile olan yazışmanızda yeni bir mesaj var.',
     '',
     `Konu: ${subj}`,
     '',
@@ -71,7 +71,7 @@ export function buildMessagingCustomerSummaryEmail({ customerName, subject, body
     '',
     `Referans: ${threadId ?? '—'}`,
     '',
-    '— Ekolojik Market',
+    '— Greenleaf POS',
   ].join('\n');
   const html = `<div style="font-family:sans-serif;font-size:14px;line-height:1.5">
 <p>Sayın ${name},</p>
@@ -81,7 +81,7 @@ export function buildMessagingCustomerSummaryEmail({ customerName, subject, body
 <p style="color:#666;font-size:12px">Referans: ${threadId ?? '—'}</p>
 </div>`;
   return {
-    subject: `Ekolojik Market — yazışmanız var: ${subj}`,
+    subject: `Greenleaf POS — yazışmanız var: ${subj}`,
     text,
     html,
   };

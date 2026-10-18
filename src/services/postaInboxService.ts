@@ -88,7 +88,7 @@ export type PostaComposeDraft = {
   updatedAt: string;
 };
 
-const OFFLINE_INBOX_PREFIX = 'ekolojik-posta-inbox-offline-v1';
+const OFFLINE_INBOX_PREFIX = 'greenleaf-posta-inbox-offline-v1';
 
 function inboxOfflineKey(folder: string, params: URLSearchParams) {
   return `${OFFLINE_INBOX_PREFIX}:${folder}:${params.toString()}`;

@@ -40,7 +40,7 @@ function ReceiptPrintDebugBlock({
     const workerHint =
       health?.platform === 'win32'
         ? health.fastPrintWorker !== true || !health.bridgeVersion
-          ? '\n\n⚠ Eski fiş köprüsü — PowerShell ile lima-raw-print-bridge.mjs indirip servisi yeniden başlatın (aşağıdaki onarım .ps1).'
+          ? '\n\n⚠ Eski fiş köprüsü — PowerShell ile receipt-raw-print-bridge.mjs indirip servisi yeniden başlatın (aşağıdaki onarım .ps1).'
           : health.workerReady === true
             ? '\n\nHızlı yazdırma worker: hazır.'
             : '\n\nHızlı yazdırma worker: hazırlanıyor (10 sn sonra tekrar test fiş).'
@@ -145,7 +145,7 @@ export function PosReceiptPrinterSettingsPanel({ store }: PosReceiptPrinterSetti
         />
         <ReceiptBridgeAutostartHelp />
         <p className="module-hint">
-          <a href={`${typeof window !== 'undefined' ? window.location.origin : ''}${WINDOWS_ZYWELL_SETUP_PS1_PATH}`} download="ekolojik-zywell-setup.ps1">
+          <a href={`${typeof window !== 'undefined' ? window.location.origin : ''}${WINDOWS_ZYWELL_SETUP_PS1_PATH}`} download="greenleaf-zywell-setup.ps1">
             Windows — Zywell otomatik kurulum (.ps1)
           </a>
           {' · '}

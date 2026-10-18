@@ -1,8 +1,8 @@
-import { sendEkolojikMail } from './emailOutboxProcessor.mjs';
+import { sendTransactionalMail } from './emailOutboxProcessor.mjs';
 import { sendCrmSms, isCrmSmsConfigured } from './crmSms.mjs';
 import { sendMailViaLertaPlatform } from './lertaPlatformBridge.mjs';
 
-/** CRM e-posta — Lerta (yapılandırılmışsa) veya Ekolojik outbox + SMTP */
+/** CRM e-posta — Lerta (yapılandırılmışsa) veya Outbox + SMTP */
 export async function sendCrmEmail(dataDir, { to, subject, body, fromName, idempotencyKey, tenantId = 'main' }) {
   const lerta = await sendMailViaLertaPlatform({
     to,
@@ -13,7 +13,7 @@ export async function sendCrmEmail(dataDir, { to, subject, body, fromName, idemp
   if (lerta.ok) return { ...lerta, tenantId, route: 'lerta' };
   if (!lerta.skipped) return lerta;
 
-  return sendEkolojikMail(dataDir, {
+  return sendTransactionalMail(dataDir, {
     to,
     subject,
     body,

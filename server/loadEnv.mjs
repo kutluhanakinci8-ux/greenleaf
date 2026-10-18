@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-/** `/var/www/market-pos/.env` — PM2 process.env (Faz 1–5 EKOLOJIK_*) */
+/** `/var/www/market-pos/.env` — PM2 process.env (Faz 1–5 GREENLEAF_*) */
 export function loadMarketPosEnv(appRoot = fileURLToPath(new URL('..', import.meta.url))) {
   const path = join(appRoot, '.env');
   if (!existsSync(path)) return { loaded: false, path };

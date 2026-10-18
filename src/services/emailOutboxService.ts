@@ -88,13 +88,13 @@ export async function retryOutboxMessage(id: string): Promise<{
   return res.json();
 }
 
-export async function fetchEkolojikIsolationReport(): Promise<{
+export async function fetchTenantIsolationReport(): Promise<{
   ok: boolean;
   checks?: Array<{ id: string; label: string; ok: boolean; detail: string }>;
   dataPaths?: string[];
   envHints?: string[];
 }> {
-  const res = await fetch('/api/system/ekolojik-isolation');
+  const res = await fetch('/api/system/tenant-isolation');
   return res.json();
 }
 

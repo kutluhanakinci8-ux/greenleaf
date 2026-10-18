@@ -236,7 +236,7 @@ export function ProductSetPanel({
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-                placeholder="Ekolojik Bakım Seti"
+                placeholder="Greenleaf Bakım Seti"
               />
             </label>
             <label className="product-set-field product-set-field--full">

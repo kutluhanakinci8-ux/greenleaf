@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   fetchEmailHealth,
   fetchRecentOutbox,
-  fetchEkolojikIsolationReport,
+  fetchTenantIsolationReport,
   fetchRetentionPolicy,
   runDataRetention,
   processEmailOutbox,
@@ -94,7 +94,7 @@ function statusLabel(row: OutboxRow) {
 export function EmailOutboxSettingsPanel() {
   const [health, setHealth] = useState<Awaited<ReturnType<typeof fetchEmailHealth>> | null>(null);
   const [outboxRows, setOutboxRows] = useState<OutboxRow[]>([]);
-  const [isolation, setIsolation] = useState<Awaited<ReturnType<typeof fetchEkolojikIsolationReport>> | null>(null);
+  const [isolation, setIsolation] = useState<Awaited<ReturnType<typeof fetchTenantIsolationReport>> | null>(null);
   const [retention, setRetention] = useState<Awaited<ReturnType<typeof fetchRetentionPolicy>>['policy'] | null>(null);
   const [testTo, setTestTo] = useState('');
   const [flash, setFlash] = useState<string | null>(null);
@@ -132,7 +132,7 @@ export function EmailOutboxSettingsPanel() {
       await Promise.all([
       fetchEmailHealth(),
       fetchRecentOutbox(50),
-      fetchEkolojikIsolationReport(),
+      fetchTenantIsolationReport(),
       fetchRetentionPolicy(),
       fetchPostaMailSettings(),
       fetchPostaOutboxAnalytics(14),
@@ -277,7 +277,7 @@ export function EmailOutboxSettingsPanel() {
       <div className="settings-panel-head">
         <div>
           <h2>E-posta (Faz 1–2)</h2>
-          <p>Ekolojik bağımsız outbox + SMTP — iletişim formu bildirimleri dahil</p>
+          <p>Bağımsız outbox + SMTP — iletişim formu bildirimleri dahil</p>
         </div>
       </div>
 
@@ -286,7 +286,7 @@ export function EmailOutboxSettingsPanel() {
       <article className="settings-subpanel" style={{ marginBottom: 16 }}>
         <h3>Mağaza posta kutusu (Faz 6)</h3>
         <p className="settings-hint">
-          Varsayılan: sunucu <code>.env</code> (EKOLOJIK_SMTP_* / EKOLOJIK_IMAP_*). İşaret kaldırılırsa mağaza özel SMTP+IMAP kullanılır.
+          Varsayılan: sunucu <code>.env</code> (GREENLEAF_SMTP_* / GREENLEAF_IMAP_*). İşaret kaldırılırsa mağaza özel SMTP+IMAP kullanılır.
         </p>
         <label className="settings-hint" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <input
@@ -408,8 +408,8 @@ export function EmailOutboxSettingsPanel() {
           </button>
         </div>
         <p className="settings-hint">
-          Rehber: <code>docs/EKOLOJIK-POSTA-ONBOARDING-OPERATOR.md</code> (VPS env:{' '}
-          <code>EKOLOJIK_MAIL_ALIASES</code>, <code>EKOLOJIK_MESSAGING_PUBLIC_KEY</code>)
+          Rehber: <code>docs/GREENLEAF-POSTA-ONBOARDING-OPERATOR.md</code> (VPS env:{' '}
+          <code>GREENLEAF_MAIL_ALIASES</code>, <code>GREENLEAF_MESSAGING_PUBLIC_KEY</code>)
         </p>
       </article>
 
@@ -493,15 +493,15 @@ export function EmailOutboxSettingsPanel() {
             </button>
           </div>
           <p className="settings-hint">
-            Tenant alias: <code>settings.postaAliases</code> · sunucu: <code>EKOLOJIK_MAIL_ALIASES</code> · DNS script:{' '}
-            <code>EKOLOJIK_VERIFY_TENANT={deliverability.tenantId ?? 'main'}</code>
+            Tenant alias: <code>settings.postaAliases</code> · sunucu: <code>GREENLEAF_MAIL_ALIASES</code> · DNS script:{' '}
+            <code>GREENLEAF_VERIFY_TENANT={deliverability.tenantId ?? 'main'}</code>
           </p>
         </>
       )}
 
       <p className="settings-hint">
-        VPS `.env`: <code>EKOLOJIK_SMTP_HOST</code>, <code>EKOLOJIK_MAIL_FROM</code>,{' '}
-        <code>EKOLOJIK_OPS_EMAIL</code>, isteğe bağlı <code>EKOLOJIK_CONTACT_AUTOREPLY=1</code>
+        VPS `.env`: <code>GREENLEAF_SMTP_HOST</code>, <code>GREENLEAF_MAIL_FROM</code>,{' '}
+        <code>GREENLEAF_OPS_EMAIL</code>, isteğe bağlı <code>GREENLEAF_CONTACT_AUTOREPLY=1</code>
       </p>
 
       <div className="settings-form-grid">
@@ -583,7 +583,7 @@ export function EmailOutboxSettingsPanel() {
               onChange={(e) =>
                 setPostaSettings({ ...postaSettings, fromName: e.target.value || null })
               }
-              placeholder="Boş = EKOLOJIK_MAIL_FROM_NAME"
+              placeholder="Boş = GREENLEAF_MAIL_FROM_NAME"
             />
           </label>
           <label className="settings-field">
@@ -605,7 +605,7 @@ export function EmailOutboxSettingsPanel() {
               onChange={(e) =>
                 setPostaSettings({ ...postaSettings, opsEmail: e.target.value || null })
               }
-              placeholder="EKOLOJIK_OPS_EMAIL"
+              placeholder="GREENLEAF_OPS_EMAIL"
             />
           </label>
           <label className="settings-field settings-field--full">
@@ -616,7 +616,7 @@ export function EmailOutboxSettingsPanel() {
               onChange={(e) =>
                 setPostaSettings({ ...postaSettings, signatureHtml: e.target.value })
               }
-              placeholder="<p>Ekolojik Market</p>"
+              placeholder="<p>Greenleaf POS</p>"
             />
           </label>
           <label className="settings-field settings-field--full" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -647,7 +647,7 @@ export function EmailOutboxSettingsPanel() {
             <h4 style={{ margin: '0 0 0.5rem' }}>NB PM-8 — bildirim matrisi (olay × kanal)</h4>
             <p className="settings-hint">
               Operasyon e-posta, hub uyarı günlüğü ve iletişim otomatik yanıtı buradan yönetilir.{' '}
-              <code>EKOLOJIK_CONTACT_AUTOREPLY=1</code> env ile birlikte çalışır.
+              <code>GREENLEAF_CONTACT_AUTOREPLY=1</code> env ile birlikte çalışır.
             </p>
             {notifyMatrixHub?.catalog && postaSettings.notificationMatrix && (
               <table className="settings-table" style={{ width: '100%', marginTop: '0.5rem' }}>
@@ -794,7 +794,7 @@ export function EmailOutboxSettingsPanel() {
           <div className="settings-panel-head" style={{ marginTop: '1.25rem' }}>
             <div>
               <h3>Faz 5 — ayrım kontrolü</h3>
-              <p>Ekolojik VPS / NB karışmıyor mu?</p>
+              <p>VPS / NB karışmıyor mu?</p>
             </div>
           </div>
           <ul className="settings-hint" style={{ listStyle: 'none', padding: 0 }}>
@@ -882,10 +882,10 @@ export function EmailOutboxSettingsPanel() {
         </ul>
       ) : null}
       <p className="settings-hint">
-        İsteğe bağlı: <code>EKOLOJIK_MAIL_TRACK=1</code> (açılma + tıklama),{' '}
-        <code>EKOLOJIK_MAIL_CLICK_TRACK=1</code> (yalnızca tıklama),{' '}
-        <code>EKOLOJIK_POSTA_ENGAGEMENT_WEBHOOK</code> (JSON webhook), <code>EKOLOJIK_PUSH_VAPID_*</code> (PWA
-        push), <code>EKOLOJIK_POSTA_AI=1</code>
+        İsteğe bağlı: <code>GREENLEAF_MAIL_TRACK=1</code> (açılma + tıklama),{' '}
+        <code>GREENLEAF_MAIL_CLICK_TRACK=1</code> (yalnızca tıklama),{' '}
+        <code>GREENLEAF_POSTA_ENGAGEMENT_WEBHOOK</code> (JSON webhook), <code>GREENLEAF_PUSH_VAPID_*</code> (PWA
+        push), <code>GREENLEAF_POSTA_AI=1</code>
       </p>
 
       <div className="settings-panel-head" style={{ marginTop: '1rem' }}>
@@ -990,7 +990,7 @@ export function EmailOutboxSettingsPanel() {
       <p className="settings-hint">
         <strong>iOS (PWA):</strong> Safari → Paylaş → Ana Ekrana Ekle; sonra POS’u ana ekrandan açın. iOS 16.4+ için
         Ayarlar → Bildirimler’den site iznini verin. Sunucuda{' '}
-        <code>EKOLOJIK_PUSH_VAPID_PUBLIC_KEY</code> / <code>PRIVATE_KEY</code> tanımlı olmalı (
+        <code>GREENLEAF_PUSH_VAPID_PUBLIC_KEY</code> / <code>PRIVATE_KEY</code> tanımlı olmalı (
         <code>web-push generate-vapid-keys</code>).
       </p>
 
@@ -1031,8 +1031,8 @@ export function EmailOutboxSettingsPanel() {
         </button>
       </div>
       <p className="settings-hint">
-        Sunucu env: <code>EKOLOJIK_WHATSAPP_ACCESS_TOKEN</code>, <code>EKOLOJIK_WHATSAPP_PHONE_NUMBER_ID</code>,{' '}
-        <code>EKOLOJIK_WHATSAPP_VERIFY_TOKEN</code>. Meta webhook doğrulaması GET ile yapılır.
+        Sunucu env: <code>GREENLEAF_WHATSAPP_ACCESS_TOKEN</code>, <code>GREENLEAF_WHATSAPP_PHONE_NUMBER_ID</code>,{' '}
+        <code>GREENLEAF_WHATSAPP_VERIFY_TOKEN</code>. Meta webhook doğrulaması GET ile yapılır.
       </p>
       <label className="settings-field">
         <span>Görünen işletme hattı (opsiyonel)</span>
@@ -1076,7 +1076,7 @@ export function EmailOutboxSettingsPanel() {
         </button>
       </div>
       <p className="settings-hint">
-        Env: <code>EKOLOJIK_SMS_PROVIDER</code>, <code>EKOLOJIK_SMS_INBOUND_SECRET</code>, CRM SMS ayarları. Gelen
+        Env: <code>GREENLEAF_SMS_PROVIDER</code>, <code>GREENLEAF_SMS_INBOUND_SECRET</code>, CRM SMS ayarları. Gelen
         mesajlar Posta → Müşteri mesajlarında <strong>sms</strong> kanalı olarak görünür.
       </p>
       <p className="settings-hint">
@@ -1113,7 +1113,7 @@ export function EmailOutboxSettingsPanel() {
         </button>
       </div>
       <p className="settings-hint">
-        Header: <code>x-ekolojik-instagram-secret</code> veya <code>EKOLOJIK_INSTAGRAM_INBOUND_SECRET</code>. Meta
+        Header: <code>x-greenleaf-instagram-secret</code> veya <code>GREENLEAF_INSTAGRAM_INBOUND_SECRET</code>. Meta
         webhook doğrulaması GET <code>hub.challenge</code> desteklenir.
       </p>
 

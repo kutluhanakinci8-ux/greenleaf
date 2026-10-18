@@ -6,18 +6,18 @@ import {
 import { loadTenantId } from '../storage/tenantSession';
 import { isPosLiteProfile } from './tenantProductProfile';
 
-export const LIMA_MARKET_TENANT_ID = 'lima-market';
+export const LEGACY_STORE_TENANT_ID = 'main';
 
-export function isLimaMarketTenant(tenantId = loadTenantId()): boolean {
-  return tenantId === LIMA_MARKET_TENANT_ID;
+export function isLegacyStoreTenant(tenantId = loadTenantId()): boolean {
+  return tenantId === LEGACY_STORE_TENANT_ID;
 }
 
-/** Lima / POS Lite — tarayıcıdaki eski «gelişmiş yazıcı» ayarını sıfırla */
+/** POS Lite — tarayıcıdaki eski «gelişmiş yazıcı» ayarını sıfırla */
 export function sanitizeReceiptPrinterSettings(
   settings: AppSettings,
   tenantId = loadTenantId(),
 ): ReceiptPrinterSettings {
-  if (isLimaMarketTenant(tenantId) || isPosLiteProfile(settings)) {
+  if (isLegacyStoreTenant(tenantId) || isPosLiteProfile(settings)) {
     return normalizeReceiptPrinterSettings(settings.receiptPrinter);
   }
   return normalizeReceiptPrinterSettings(settings.receiptPrinter);
@@ -25,7 +25,7 @@ export function sanitizeReceiptPrinterSettings(
 
 /** Yönetici / Greenleaf kasa: sunucu profili kapalı veya POS Lite tenant */
 export function shouldUseGreenleafReceiptPath(settings: AppSettings): boolean {
-  if (isLimaMarketTenant() || isPosLiteProfile(settings)) return true;
+  if (isLegacyStoreTenant() || isPosLiteProfile(settings)) return true;
   const raw = settings.receiptPrinter;
   if (raw == null) return true;
   return !normalizeReceiptPrinterSettings(raw).enabled;

@@ -153,7 +153,7 @@ export async function handlePasswordResetRequest(dataDir, tenantId, { username, 
   tokens.push({ token, userId: user.id, username: user.username, expiresAt, used: false });
   await writeResetTokens(dataDir, tenantId, tokens.slice(-50));
 
-  const baseUrl = process.env.EKOLOJIK_PUBLIC_BASE_URL?.trim() || 'https://www.ekolojikmarket.com.tr';
+  const baseUrl = process.env.GREENLEAF_PUBLIC_BASE_URL?.trim() || 'https://127.0.0.1:5190';
   const link = `${baseUrl}/giris?reset=${encodeURIComponent(token)}`;
 
   const mail = await sendPasswordResetEmail(dataDir, tenantId, {

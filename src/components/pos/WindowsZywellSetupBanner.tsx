@@ -75,7 +75,7 @@ export function WindowsZywellSetupBanner({ onApplyPrinterSettings }: WindowsZywe
         {bridgeMsg && !checking ? <p className="module-hint">{bridgeMsg}</p> : null}
         <ol className="module-hint zywell-setup-steps">
           <li>
-            <a className="btn btn-primary" href={setupUrl} download="ekolojik-zywell-setup.ps1">
+            <a className="btn btn-primary" href={setupUrl} download="greenleaf-zywell-setup.ps1">
               Kurulum dosyasını indir
             </a>
           </li>

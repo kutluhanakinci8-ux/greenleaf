@@ -26,14 +26,14 @@ import { supportInboxStatus } from './server/platformSupportMailConfig.mjs';
 import { applyIrsaliyeStockToStoreSnapshot } from './server/irsaliyeStock.mjs';
 import { sendCrmEmail, sendCrmSmsOutreach, isCrmSmsConfigured } from './server/crmOutreach.mjs';
 import {
-  getEkolojikMailConfig,
-  getEkolojikOpsEmail,
-  getEkolojikSmtpHostHint,
-  getEkolojikImapConfig,
-  isEkolojikSmtpConfigured,
-  isEkolojikImapConfigured,
-} from './server/ekolojikMailConfig.mjs';
-import { verifyEkolojikSmtp } from './server/ekolojikSmtp.mjs';
+  getMailConfig,
+  getOpsEmail,
+  getSmtpHostHint,
+  getImapConfig,
+  isSmtpConfigured,
+  isImapConfigured,
+} from './server/mailConfig.mjs';
+import { verifySmtp } from './server/smtpTransport.mjs';
 import { verifyImapMailbox } from './server/billEmailImap.mjs';
 import {
   getOutboxCounts,
@@ -49,7 +49,7 @@ import { maybeAlertOutboxFailedThreshold } from './server/postaOutboxNotify.mjs'
 import {
   createDeliverMessage,
   processPendingOutbox,
-  sendEkolojikMail,
+  sendTransactionalMail,
 } from './server/emailOutboxProcessor.mjs';
 import {
   getPostaMailSettings,
@@ -178,10 +178,10 @@ import {
   resolvePublicPortalOrigin,
 } from './server/messaging/customerPortal.mjs';
 import { handleChannelWebhook } from './server/integrations/channelWebhook.mjs';
-import { getEkolojikIsolationReport } from './server/ekolojikIsolationCheck.mjs';
+import { getTenantIsolationReport } from './server/tenantIsolationCheck.mjs';
 import { readMessagingAttachment } from './server/messaging/attachments.mjs';
 import {
-  runEkolojikDataRetention,
+  runDataRetention,
   getRetentionPolicySummary,
 } from './server/dataRetention.mjs';
 import {
@@ -276,29 +276,29 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** Ham fiş köprüsü script yolu (kurulum / deploy) */
 function resolveReceiptBridgeRepoRoot() {
-  if (existsSync(join(__dirname, 'scripts', 'lima-raw-print-bridge.mjs'))) {
+  if (existsSync(join(__dirname, 'scripts', 'receipt-raw-print-bridge.mjs'))) {
     return __dirname;
   }
   const fromEnv = process.env.RECEIPT_BRIDGE_REPO_ROOT?.trim();
-  if (fromEnv && existsSync(join(fromEnv, 'scripts', 'lima-raw-print-bridge.mjs'))) {
+  if (fromEnv && existsSync(join(fromEnv, 'scripts', 'receipt-raw-print-bridge.mjs'))) {
     return fromEnv;
   }
-  const sibling = join(__dirname, '..', 'ekolojik-market-pos');
-  if (existsSync(join(sibling, 'scripts', 'lima-raw-print-bridge.mjs'))) {
+  const sibling = join(__dirname, '..', 'greenleaf-pos');
+  if (existsSync(join(sibling, 'scripts', 'receipt-raw-print-bridge.mjs'))) {
     return sibling;
   }
   return __dirname;
 }
 const envBootstrap = loadMarketPosEnv(__dirname);
 if (envBootstrap.loaded) {
-  console.log(`Ekolojik env: ${envBootstrap.count} değişken yüklendi (${envBootstrap.path})`);
+  console.log(`App env: ${envBootstrap.count} değişken yüklendi (${envBootstrap.path})`);
 }
 const DIST = join(__dirname, 'dist');
 const DATA_DIR = process.env.MARKET_POS_DATA_DIR?.trim()
   ? join(process.env.MARKET_POS_DATA_DIR.trim())
   : join(__dirname, 'data');
 const deliverMessage = createDeliverMessage(DATA_DIR);
-const PORT = Number(process.env.PORT || 5180);
+const PORT = Number(process.env.PORT || 5190);
 const HOST = process.env.HOST || '0.0.0.0';
 
 const MIME = {
@@ -499,8 +499,8 @@ function notifyMessagingRealtime(tenantId, signal, extra = {}) {
   postaWsBroadcast(tenantId, 'messaging', { signal, ...extra });
 }
 
-const CANONICAL_WWW_HOST = 'www.ekolojikmarket.com.tr';
-const APEX_HOST = 'ekolojikmarket.com.tr';
+const CANONICAL_WWW_HOST = '127.0.0.1:5190';
+const APEX_HOST = 'example.com';
 
 function maybeRedirectApexToWww(req, res, url) {
   const host = String(req.headers.host || '').split(':')[0].toLowerCase();
@@ -715,9 +715,9 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    if (pathname === '/api/system/ekolojik-isolation' && req.method === 'GET') {
+    if (pathname === '/api/system/tenant-isolation' && req.method === 'GET') {
       try {
-        const report = await getEkolojikIsolationReport(DATA_DIR);
+        const report = await getTenantIsolationReport(DATA_DIR);
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify({ ok: true, ...report }));
       } catch (error) {
@@ -2319,7 +2319,7 @@ const server = createServer(async (req, res) => {
     if (pathname === '/api/email/health' && req.method === 'GET') {
       const tenantId = resolveTenantId(url);
       const smtp = await isTenantSmtpConfigured(DATA_DIR, tenantId);
-      const verify = smtp ? await verifyEkolojikSmtp({ dataDir: DATA_DIR, tenantId }) : { ok: false, error: 'SMTP yapılandırılmadı' };
+      const verify = smtp ? await verifySmtp({ dataDir: DATA_DIR, tenantId }) : { ok: false, error: 'SMTP yapılandırılmadı' };
       const counts = await getOutboxCounts(DATA_DIR);
       const cfg = await getTenantSmtpMailConfig(DATA_DIR, tenantId);
       const effective = await getEffectiveMailPresentation(DATA_DIR);
@@ -2332,7 +2332,7 @@ const server = createServer(async (req, res) => {
           smtpVerified: verify.ok,
           smtpError: verify.error ?? null,
           smtpHost: cfg.smtpHost || null,
-          smtpHostHint: getEkolojikSmtpHostHint(),
+          smtpHostHint: getSmtpHostHint(),
           from: cfg.from || null,
           fromName: effective.fromName || null,
           replyTo: effective.replyTo || null,
@@ -2735,7 +2735,7 @@ const server = createServer(async (req, res) => {
     if (pathname === '/api/posta/push/test' && req.method === 'POST') {
       try {
         const result = await sendPostaWebPush(DATA_DIR, {
-          title: 'Ekolojik Posta test',
+          title: 'Posta test',
           body: 'Web push (NB PM-4) çalışıyor.',
           url: '/',
           tag: 'posta-push-test',
@@ -2776,7 +2776,7 @@ const server = createServer(async (req, res) => {
         }
         res.writeHead(200, {
           'Content-Type': 'text/csv; charset=utf-8',
-          'Content-Disposition': `attachment; filename="ekolojik-engagement-${type}.csv"`,
+          'Content-Disposition': `attachment; filename="greenleaf-engagement-${type}.csv"`,
         });
         res.end(result.csv);
       } catch (error) {
@@ -3549,7 +3549,7 @@ const server = createServer(async (req, res) => {
         const body = contactsToVcard(listed.contacts ?? []);
         res.writeHead(200, {
           'Content-Type': 'text/vcard; charset=utf-8',
-          'Content-Disposition': 'attachment; filename="ekolojik-posta-contacts.vcf"',
+          'Content-Disposition': 'attachment; filename="greenleaf-posta-contacts.vcf"',
         });
         res.end(body);
       } catch (error) {
@@ -3610,7 +3610,7 @@ const server = createServer(async (req, res) => {
         const feed = await buildPostaCalendarIcsFeed(DATA_DIR, tenantId, { limit });
         res.writeHead(200, {
           'Content-Type': 'text/calendar; charset=utf-8',
-          'Content-Disposition': 'attachment; filename="ekolojik-posta-calendar.ics"',
+          'Content-Disposition': 'attachment; filename="greenleaf-posta-calendar.ics"',
         });
         res.end(feed.ics);
       } catch (error) {
@@ -4024,7 +4024,7 @@ const server = createServer(async (req, res) => {
         }
         res.writeHead(200, {
           'Content-Type': 'text/csv; charset=utf-8',
-          'Content-Disposition': 'attachment; filename="ekolojik-outbox.csv"',
+          'Content-Disposition': 'attachment; filename="greenleaf-outbox.csv"',
         });
         res.end(`\ufeff${result.csv}`);
       } catch (error) {
@@ -4046,7 +4046,7 @@ const server = createServer(async (req, res) => {
         }
         res.writeHead(200, {
           'Content-Type': 'text/csv; charset=utf-8',
-          'Content-Disposition': 'attachment; filename="ekolojik-contact.csv"',
+          'Content-Disposition': 'attachment; filename="greenleaf-contact.csv"',
         });
         res.end(`\ufeff${result.csv}`);
       } catch (error) {
@@ -4135,16 +4135,16 @@ const server = createServer(async (req, res) => {
           res.end(JSON.stringify({ ok: false, error: attachCheck.error }));
           return;
         }
-        const bodyRaw = data?.body?.trim() || 'Bu mesaj Ekolojik Market bağımsız posta outbox (Faz 1) testidir.';
+        const bodyRaw = data?.body?.trim() || 'Bu mesaj Greenleaf POS bağımsız posta outbox (Faz 1) testidir.';
         const htmlSanitized = data?.html ? sanitizePostaComposeHtml(data.html) : '';
         const formatted = htmlSanitized
           ? { text: stripHtmlToPlainText(htmlSanitized) || bodyRaw, html: htmlSanitized }
           : formatPostaComposeBody(bodyRaw);
-        const result = await sendEkolojikMail(DATA_DIR, {
+        const result = await sendTransactionalMail(DATA_DIR, {
           to,
           cc: data?.cc?.trim() || undefined,
           bcc: data?.bcc?.trim() || undefined,
-          subject: data?.subject?.trim() || 'Ekolojik Market — SMTP test',
+          subject: data?.subject?.trim() || 'Greenleaf POS — SMTP test',
           body: formatted.text,
           html: formatted.html,
           fromName: data?.fromName,
@@ -4602,7 +4602,7 @@ const server = createServer(async (req, res) => {
     if (pathname === '/api/system/data-retention/run' && req.method === 'POST') {
       try {
         const tenantId = resolveTenantId(url);
-        const result = await runEkolojikDataRetention(DATA_DIR, tenantId);
+        const result = await runDataRetention(DATA_DIR, tenantId);
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify(result));
       } catch (error) {
@@ -4740,7 +4740,7 @@ const server = createServer(async (req, res) => {
     if (pathname === '/api/pos/lima-thermal-print/health' && req.method === 'GET') {
       const tenantId = resolveTenantId(url);
       if (!(await assertPosApiAuth(req, res, DATA_DIR, tenantId))) return;
-      const port = Number(process.env.LIMA_RAW_PRINT_PORT || 18765);
+      const port = Number(process.env.RECEIPT_RAW_PRINT_PORT || 18765);
       try {
         const probe = await fetch(`http://127.0.0.1:${port}/health`, { signal: AbortSignal.timeout(2000) });
         const data = await probe.json().catch(() => ({}));
@@ -4945,7 +4945,7 @@ const server = createServer(async (req, res) => {
 
     await serveFile(join(DIST, 'index.html'), res);
   } catch (error) {
-    if (process.env.EKOLOJIK_DEBUG_REQUEST_ERRORS === '1') {
+    if (process.env.GREENLEAF_DEBUG_REQUEST_ERRORS === '1') {
       console.error('request handler error:', error);
     }
     res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -4955,7 +4955,7 @@ const server = createServer(async (req, res) => {
 
 const OUTBOX_DRAIN_MS = 30_000;
 setInterval(() => {
-  if (!isEkolojikSmtpConfigured()) return;
+  if (!isSmtpConfigured()) return;
   processPendingOutbox(DATA_DIR, deliverMessage, { limit: 15 })
     .then(() => maybeAlertOutboxFailedThreshold(DATA_DIR, 'main'))
     .catch((error) => {
@@ -4969,7 +4969,7 @@ setTimeout(() => {
 
 const RETENTION_MS = 24 * 60 * 60 * 1000;
 const runRetention = () => {
-  runEkolojikDataRetention(DATA_DIR, 'main').then((result) => {
+  runDataRetention(DATA_DIR, 'main').then((result) => {
     const r = result.removed;
     const total = (r.outboxSentFailed ?? 0) + (r.messagingAttachments ?? 0) + (r.contactMessages ?? 0);
     if (total > 0) {
@@ -4989,10 +4989,10 @@ postaWsBroadcast = attachPostaWebSocketGateway(server, {
 
 server.listen(PORT, HOST, () => {
   console.log(`Market POS → http://${HOST}:${PORT}`);
-  if (isEkolojikSmtpConfigured()) {
-    console.log('Ekolojik mail outbox: SMTP aktif, kuyruk drain 30s');
+  if (isSmtpConfigured()) {
+    console.log('Mail outbox: SMTP aktif, kuyruk drain 30s');
   } else {
-    console.log('Ekolojik mail outbox: SMTP yok — EKOLOJIK_SMTP_* tanımlayın');
+    console.log('Mail outbox: SMTP yok — GREENLEAF_SMTP_* tanımlayın');
   }
   if (process.env.RECEIPT_BRIDGE_AUTOSTART !== '0') {
     import('./server/receiptBridgeAutostart.mjs')

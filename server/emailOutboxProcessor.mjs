@@ -1,6 +1,6 @@
-import { sendViaEkolojikSmtp, isEkolojikSmtpConfigured, isTenantSmtpConfigured } from './ekolojikSmtp.mjs';
+import { sendViaSmtp, isSmtpConfigured, isTenantSmtpConfigured } from './smtpTransport.mjs';
 import {
-  enqueueEkolojikMail,
+  enqueueTransactionalMail,
   processPendingOutbox,
   findOutboxByIdempotency,
   idempotencyKeyForTenant,
@@ -35,13 +35,13 @@ export function createDeliverMessage(dataDir) {
     }
     if (isMailTrackEnabled() && message.trackToken) {
       const base =
-        process.env.EKOLOJIK_MAIL_TRACK_BASE_URL?.trim() ||
-        process.env.EKOLOJIK_PUBLIC_URL?.trim() ||
+        process.env.GREENLEAF_MAIL_TRACK_BASE_URL?.trim() ||
+        process.env.GREENLEAF_PUBLIC_URL?.trim() ||
         `http://127.0.0.1:${process.env.PORT || 5180}`;
       html = injectOpenTrackingPixel(html, message.trackToken, base);
       html = wrapHtmlLinksForClickTracking(html, message.trackToken, base);
     }
-    return sendViaEkolojikSmtp({
+    return sendViaSmtp({
       dataDir,
       tenantId: message.tenantId || 'main',
       to: message.to,
@@ -60,10 +60,10 @@ export function createDeliverMessage(dataDir) {
 }
 
 /**
- * CRM / sistem mail — Ekolojik outbox + SMTP (Faz 1).
+ * CRM / sistem mail — Outbox + SMTP (Faz 1).
  * SMTP yoksa kuyruğa yazar; SMTP varsa hemen göndermeyi dener.
  */
-export async function sendEkolojikMail(dataDir, payload) {
+export async function sendTransactionalMail(dataDir, payload) {
   const {
     to,
     cc,
@@ -95,20 +95,20 @@ export async function sendEkolojikMail(dataDir, payload) {
 
   const key = idempotencyKeyForTenant(
     tenantId,
-    idempotencyKey || `ekolojik:${source ?? 'crm'}:${to}:${subject}`,
+    idempotencyKey || `greenleaf:${source ?? 'crm'}:${to}:${subject}`,
   );
   const existing = await findOutboxByIdempotency(dataDir, key);
   if (existing?.status === 'sent') {
     return {
       ok: true,
-      provider: 'ekolojik-outbox',
+      provider: 'greenleaf-outbox',
       duplicate: true,
       outboxId: existing.id,
       messageId: existing.providerMessageId,
     };
   }
 
-  const enqueued = await enqueueEkolojikMail(dataDir, {
+  const enqueued = await enqueueTransactionalMail(dataDir, {
     to,
     cc,
     bcc,
@@ -129,9 +129,9 @@ export async function sendEkolojikMail(dataDir, payload) {
   if (!smtpReady) {
     return {
       ok: true,
-      provider: 'ekolojik-outbox-queued',
+      provider: 'greenleaf-outbox-queued',
       outboxId: enqueued.message.id,
-      message: 'SMTP yapılandırılmadı — outbox kuyruğunda (EKOLOJIK_SMTP_*)',
+      message: 'SMTP yapılandırılmadı — outbox kuyruğunda (GREENLEAF_SMTP_*)',
     };
   }
 
@@ -141,7 +141,7 @@ export async function sendEkolojikMail(dataDir, payload) {
   if (after?.status === 'sent') {
     return {
       ok: true,
-      provider: 'ekolojik-smtp',
+      provider: 'greenleaf-smtp',
       outboxId: after.id,
       messageId: after.providerMessageId,
       processed: run,
@@ -153,11 +153,11 @@ export async function sendEkolojikMail(dataDir, payload) {
 
   return {
     ok: true,
-    provider: 'ekolojik-outbox-pending',
+    provider: 'greenleaf-outbox-pending',
     outboxId: enqueued.message.id,
     message: after?.lastError ? `Retry: ${after.lastError}` : 'Kuyrukta, kısa sürede tekrar denenecek',
     processed: run,
   };
 }
 
-export { processPendingOutbox, isEkolojikSmtpConfigured };
+export { processPendingOutbox, isSmtpConfigured };

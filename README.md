@@ -1,10 +1,13 @@
 # Greenleaf POS
 
-**Windows yerel mağaza programı** — satış, stok, kasa ve raporlar; veri **kurulum yapılan PC’de** tutulur.
+Yerel kurulumlu perakende satış noktası: satış, stok, kasa, raporlar. Veri kurulum yapılan bilgisayarda (`MARKET_POS_DATA_DIR`) tutulur.
 
-Bu depo, [ekolojik-market](https://github.com/kutluhanakinci8-ux/ekolojik-market) bulut POS’undan **bağımsız** bir üründür. Sunucu tarafı geliştirme ve canlı ortam orada devam eder; **bu repoya ekolojik-market için zorunlu commit atılmaz**.
+## Gereksinimler
 
-## Hızlı başlangıç (geliştirme)
+- Node.js 20 LTS
+- Windows 10/11 (önerilen) veya geliştirme için macOS/Linux
+
+## Geliştirme
 
 ```bash
 npm install
@@ -12,19 +15,15 @@ cp .env.greenleaf.example .env
 npm run greenleaf:dev
 ```
 
-Tarayıcı: **http://127.0.0.1:5190/app**
+Uygulama: **http://127.0.0.1:5190/app**
 
-Veri klasörü (varsayılan): `./data/` (git’e girmez).
+## Windows kurulum
 
-## Windows
+[docs/WINDOWS-KURULUM.md](docs/WINDOWS-KURULUM.md)
 
-- Kurulum: [docs/WINDOWS-KURULUM.md](docs/WINDOWS-KURULUM.md) — `scripts/windows/Install-GreenleafPOS.ps1`
-- Fiş: `public/install/windows/ekolojik-zywell-setup.ps1` (Zywell köprüsü)
-- Mimari: [docs/GREENLEAF-DESKTOP.md](docs/GREENLEAF-DESKTOP.md)
+## Mimari
 
-## Repo’yu GitHub’a bağlama
-
-İlk kez: [docs/GITHUB-ILK-KURULUM.md](docs/GITHUB-ILK-KURULUM.md)
+[docs/GREENLEAF-DESKTOP.md](docs/GREENLEAF-DESKTOP.md)
 
 ## Sürüm
 

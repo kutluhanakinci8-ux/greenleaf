@@ -12,9 +12,9 @@ async function loadAllowlistFromConfig() {
     const raw = await readFile(join(REPO_ROOT, 'config', 'known-tenants.json'), 'utf8');
     const parsed = JSON.parse(raw);
     const fromFile = Array.isArray(parsed.allowlist) ? parsed.allowlist.map((s) => String(s).trim()) : [];
-    cachedAllowlist = fromFile.length ? fromFile : ['main', 'lima-market'];
+    cachedAllowlist = fromFile.length ? fromFile : ['main', 'main'];
   } catch {
-    cachedAllowlist = ['main', 'lima-market'];
+    cachedAllowlist = ['main', 'main'];
   }
   return cachedAllowlist;
 }
@@ -26,13 +26,13 @@ export function normalizeTenantId(raw) {
 }
 
 export function isStrictTenantAllowlistEnabled() {
-  if (process.env.EKOLOJIK_TENANT_STRICT === '0') return false;
-  if (process.env.EKOLOJIK_TENANT_STRICT === '1') return true;
+  if (process.env.GREENLEAF_TENANT_STRICT === '0') return false;
+  if (process.env.GREENLEAF_TENANT_STRICT === '1') return true;
   return process.env.NODE_ENV === 'production';
 }
 
 export async function getTenantAllowlist() {
-  const envList = process.env.EKOLOJIK_TENANT_ALLOWLIST?.trim();
+  const envList = process.env.GREENLEAF_TENANT_ALLOWLIST?.trim();
   if (envList) {
     return envList.split(',').map((s) => normalizeTenantId(s)).filter(Boolean);
   }
@@ -72,12 +72,12 @@ export async function assertTenantResolvable(dataDir, tenantId) {
   return {
     ok: false,
     status: 404,
-    error: 'Geçersiz mağaza kodu. Greenleaf için boş; Lima için lima-market kullanın.',
+    error: 'Geçersiz mağaza kodu. Greenleaf için boş; Lima için main kullanın.',
   };
 }
 
 export function isPublicTenantRegistrationEnabled() {
-  if (process.env.EKOLOJIK_PUBLIC_REGISTER === '1') return true;
-  if (process.env.EKOLOJIK_PUBLIC_REGISTER === '0') return false;
+  if (process.env.GREENLEAF_PUBLIC_REGISTER === '1') return true;
+  if (process.env.GREENLEAF_PUBLIC_REGISTER === '0') return false;
   return process.env.NODE_ENV !== 'production';
 }

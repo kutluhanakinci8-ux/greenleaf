@@ -4,9 +4,9 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { buildPlatformSupportSlaLive } from './platformSupportSlaLive.mjs';
 import { readPlatformCases } from './platformCaseStore.mjs';
-import { getEkolojikOpsEmail } from './ekolojikMailConfig.mjs';
+import { getOpsEmail } from './mailConfig.mjs';
 import { getPlatformSupportMailPresentation } from './platformSupportMailConfig.mjs';
-import { sendViaEkolojikSmtp } from './ekolojikSmtp.mjs';
+import { sendViaSmtp } from './smtpTransport.mjs';
 import { PLATFORM_TENANT_ID } from './platformOperators.mjs';
 import { publicSiteUrl } from './platformSupportMailBrand.mjs';
 import { isSupportOpsNotifyEnabled } from './platformSupportOpsNotify.mjs';
@@ -15,7 +15,7 @@ const STATE_PATH = (dataDir) => join(dataDir, 'platform', 'support-ops-sla-alert
 const MIN_INTERVAL_MS = 4 * 60 * 60 * 1000;
 
 export function isSupportOpsSlaNotifyEnabled() {
-  const flag = process.env.EKOLOJIK_SUPPORT_OPS_SLA_NOTIFY?.trim();
+  const flag = process.env.GREENLEAF_SUPPORT_OPS_SLA_NOTIFY?.trim();
   if (flag === '0' || flag === 'false') return false;
   return isSupportOpsNotifyEnabled();
 }
@@ -80,7 +80,7 @@ export async function evaluateAndNotifyOpsSupportSla(dataDir) {
     return { ok: true, sent: false, reason: hasUrgent ? 'rate_limited' : 'nothing_urgent' };
   }
 
-  const to = getEkolojikOpsEmail();
+  const to = getOpsEmail();
   if (!to?.includes('@')) return { skipped: true, reason: 'no_ops_email' };
 
   const cases = await readPlatformCases(dataDir);
@@ -144,7 +144,7 @@ ${casesHtml ? `<h3>Geciken kayıtlar</h3>${casesHtml}` : ''}
 <p><a href="${platformConsoleUrl()}">Platform konsolu</a></p>
 </body></html>`;
 
-  const result = await sendViaEkolojikSmtp({
+  const result = await sendViaSmtp({
     dataDir,
     tenantId: PLATFORM_TENANT_ID,
     to,
@@ -152,7 +152,7 @@ ${casesHtml ? `<h3>Geciken kayıtlar</h3>${casesHtml}` : ''}
     text: lines.join('\n'),
     html,
     fromEmail: pres.from,
-    fromName: pres.fromName || 'Ekolojik Destek',
+    fromName: pres.fromName || 'Greenleaf Destek',
     replyTo: pres.replyTo,
   });
 

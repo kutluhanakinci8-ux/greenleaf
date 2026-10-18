@@ -16,7 +16,7 @@ GREENLEAF_DESKTOP=1
 }
 
 # Fiş köprüsü (Zywell) — arka planda
-$bridge = Join-Path $Root 'scripts\lima-raw-print-bridge.mjs'
+$bridge = Join-Path $Root 'scripts\receipt-raw-print-bridge.mjs'
 if (Test-Path $bridge) {
   Start-Process -FilePath 'node' -ArgumentList $bridge -WindowStyle Hidden -ErrorAction SilentlyContinue
 }

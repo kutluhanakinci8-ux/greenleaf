@@ -439,7 +439,7 @@ export function PlatformSecurityTab({ onNavigateUsers }: Props) {
                 checked={policyDraft.emailOps}
                 onChange={(e) => setPolicyDraft({ ...policyDraft, emailOps: e.target.checked })}
               />
-              Ops e-postası (EKOLOJIK_OPS_EMAIL)
+              Ops e-postası (GREENLEAF_OPS_EMAIL)
             </label>
             <label className="platform-security-policy-field">
               <span>Webhook URL (HTTPS)</span>

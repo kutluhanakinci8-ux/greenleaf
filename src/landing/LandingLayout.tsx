@@ -57,7 +57,7 @@ export function LandingLayout() {
           <div>
             <h4>{SITE_NAME}</h4>
             <p>
-              Ekolojik ve doğal ürün mağazaları için bulut tabanlı satış noktası sistemi.
+              Perakende ve doğal ürün mağazaları için bulut tabanlı satış noktası sistemi.
               Stok, kasa, müşteri ve muhasebe tek platformda.
             </p>
           </div>
@@ -74,7 +74,7 @@ export function LandingLayout() {
             <p><Link to="/giris">Giriş Yap</Link></p>
             <p><Link to="/kayit">Kayıt Ol</Link></p>
             <p><Link to="/fiyatlar">Fiyatlandırma</Link></p>
-            <p><a href="mailto:info@ekolojikmarket.com.tr">info@ekolojikmarket.com.tr</a></p>
+            <p><a href="mailto:info@example.com">info@example.com</a></p>
           </div>
         </div>
         <div className="landing-footer-bottom">

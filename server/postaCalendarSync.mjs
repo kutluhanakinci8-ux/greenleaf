@@ -21,19 +21,19 @@ function formatIcsUtc(dateIso) {
   return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
 }
 
-export function buildPostaCalendarIcs(events, { calendarName = 'Ekolojik Posta' } = {}) {
+export function buildPostaCalendarIcs(events, { calendarName = 'Posta' } = {}) {
   const now = formatIcsUtc(new Date().toISOString());
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Ekolojik Market//Posta Calendar//TR',
+    'PRODID:-//Greenleaf POS//Posta Calendar//TR',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     `X-WR-CALNAME:${escapeIcsText(calendarName)}`,
   ];
 
   for (const ev of events) {
-    const uid = `${String(ev.id).replace(/[^a-zA-Z0-9_-]/g, '_')}@ekolojik-posta`;
+    const uid = `${String(ev.id).replace(/[^a-zA-Z0-9_-]/g, '_')}@greenleaf-posta`;
     const stamp = now ?? formatIcsUtc(ev.at) ?? '19700101T000000Z';
     const dateOnly = String(ev.date ?? ev.at ?? '').slice(0, 10);
     lines.push('BEGIN:VEVENT');
@@ -48,7 +48,7 @@ export function buildPostaCalendarIcs(events, { calendarName = 'Ekolojik Posta' 
     lines.push(`SUMMARY:${escapeIcsText(ev.title)}`);
     if (ev.notes) lines.push(`DESCRIPTION:${escapeIcsText(ev.notes)}`);
     if (ev.kind) lines.push(`CATEGORIES:${escapeIcsText(ev.kind)}`);
-    if (ev.amount != null) lines.push(`X-EKOLOJIK-AMOUNT:${ev.amount}`);
+    if (ev.amount != null) lines.push(`X-GREENLEAF-AMOUNT:${ev.amount}`);
     lines.push('END:VEVENT');
   }
 
@@ -95,8 +95,8 @@ export async function validatePostaCalendarFeedToken(dataDir, tenantId, token) {
 
 export function resolvePostaPublicBaseUrl(req) {
   const env =
-    process.env.EKOLOJIK_PUBLIC_URL?.trim() ||
-    process.env.EKOLOJIK_MAIL_TRACK_BASE_URL?.trim() ||
+    process.env.GREENLEAF_PUBLIC_URL?.trim() ||
+    process.env.GREENLEAF_MAIL_TRACK_BASE_URL?.trim() ||
     '';
   if (env) return env.replace(/\/$/, '');
   const host = req.headers.host;

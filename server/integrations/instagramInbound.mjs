@@ -3,8 +3,8 @@
 import { ingestInboundChannelMessage } from '../messaging/omnichannel.mjs';
 
 function resolveSecret(req) {
-  const header = req?.headers?.['x-ekolojik-instagram-secret'] ?? req?.headers?.['x-hub-signature-256'];
-  const expected = process.env.EKOLOJIK_INSTAGRAM_INBOUND_SECRET?.trim();
+  const header = req?.headers?.['x-greenleaf-instagram-secret'] ?? req?.headers?.['x-hub-signature-256'];
+  const expected = process.env.GREENLEAF_INSTAGRAM_INBOUND_SECRET?.trim();
   if (!expected) return true;
   const got = String(header ?? '').trim();
   return got === expected || got.endsWith(expected);

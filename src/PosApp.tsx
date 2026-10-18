@@ -11,7 +11,7 @@ import { ReportsScreen } from './components/ReportsScreen';
 import { SalesScreen } from './components/SalesScreen';
 import { SettingsScreen } from './components/SettingsScreen';
 import { StockScreen } from './components/StockScreen';
-import { EkolojikPostaHubScreen } from './components/posta/EkolojikPostaHubScreen';
+import { PostaHubScreen } from './components/posta/PostaHubScreen';
 import { PostaWebmailLiteScreen } from './components/posta/PostaWebmailLiteScreen';
 import { useIdleLogout } from './hooks/useIdleLogout';
 import { useStore } from './store/StoreProvider';
@@ -76,7 +76,7 @@ function renderPage(
         return <PostaWebmailLiteScreen key="posta-webmail" store={store} />;
       }
       return (
-        <EkolojikPostaHubScreen
+        <PostaHubScreen
           key={`${page}-${postaDeepLink?.customerId ?? ''}-${postaDeepLink?.threadId ?? ''}`}
           store={store}
           deepLinkCustomerId={postaDeepLink?.customerId ?? null}

@@ -28,7 +28,7 @@ export function RecoveryEmailModal({ store }: RecoveryEmailModalProps) {
         <h2 id="recovery-email-title">Şifre sıfırlama e-postası gerekli</h2>
         <p className="security-modal-hint">
           POS hesabınızda şifre sıfırlama ve güvenlik bildirimleri için kayıtlı bir e-posta adresi zorunludur.
-          Bağlantılar <strong>bildirim@ekolojikmarket.com.tr</strong> adresinden gönderilir.
+          Bağlantılar <strong>bildirim@example.com</strong> adresinden gönderilir.
         </p>
 
         <form className="security-modal-form" onSubmit={handleSubmit}>

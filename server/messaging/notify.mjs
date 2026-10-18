@@ -1,4 +1,4 @@
-import { sendEkolojikMail } from '../emailOutboxProcessor.mjs';
+import { sendTransactionalMail } from '../emailOutboxProcessor.mjs';
 import { appendCustomerTrackingNotice } from '../postaCustomerEmailCompliance.mjs';
 import { getEffectiveMailPresentation, shouldSendPostaNotification } from '../postaSettings.mjs';
 import { recordPostaHubAlert } from '../postaHubAlerts.mjs';
@@ -6,7 +6,7 @@ import { buildMessagingCustomerSummaryEmail } from '../mailTemplates.mjs';
 import { buildPortalUrlForThread, enrichCustomerMailWithPortalUrl } from './customerPortal.mjs';
 
 export function isMessagingCustomerEmailEnabled() {
-  return process.env.EKOLOJIK_MESSAGING_CUSTOMER_EMAIL === '1';
+  return process.env.GREENLEAF_MESSAGING_CUSTOMER_EMAIL === '1';
 }
 
 export async function notifyOnMessagingMessage(dataDir, { thread, message, tenantId = 'main' }) {
@@ -16,12 +16,12 @@ export async function notifyOnMessagingMessage(dataDir, { thread, message, tenan
     const pres = await getEffectiveMailPresentation(dataDir, tenantId);
     const opsEmail = pres.opsEmail;
     if (opsEmail?.includes('@') && (await shouldSendPostaNotification(dataDir, 'messaging', 'opsEmail', tenantId))) {
-      summary.ops = await sendEkolojikMail(dataDir, {
+      summary.ops = await sendTransactionalMail(dataDir, {
         to: opsEmail,
         subject: `[Mesaj] ${thread.customerName} — ${thread.subject}`,
         tenantId,
         body: [
-          'Yeni müşteri yönünde mesaj (Ekolojik mesajlaşma Faz 3)',
+          'Yeni müşteri yönünde mesaj (Mesajlaşma Faz 3)',
           '',
           `Thread: ${thread.id}`,
           `Müşteri: ${thread.customerName} (${thread.customerId})`,
@@ -29,7 +29,7 @@ export async function notifyOnMessagingMessage(dataDir, { thread, message, tenan
           '',
           message.bodyText,
           '',
-          '— POS / Ekolojik messaging',
+          '— POS mesajlaşma',
         ].join('\n'),
         idempotencyKey: `messaging:ops:${message.id}`,
         source: 'messaging-ops',
@@ -59,7 +59,7 @@ export async function notifyOnMessagingMessage(dataDir, { thread, message, tenan
         bodyText: message.bodyText,
         threadId: thread.id,
       });
-      const origin = String(process.env.EKOLOJIK_PUBLIC_ORIGIN ?? '').trim();
+      const origin = String(process.env.GREENLEAF_PUBLIC_ORIGIN ?? '').trim();
       if (origin) {
         const portalUrl = await buildPortalUrlForThread(dataDir, tenantId, thread, origin);
         tpl = enrichCustomerMailWithPortalUrl(tpl, portalUrl);
@@ -68,7 +68,7 @@ export async function notifyOnMessagingMessage(dataDir, { thread, message, tenan
         text: tpl.text,
         html: tpl.html,
       });
-      summary.customer = await sendEkolojikMail(dataDir, {
+      summary.customer = await sendTransactionalMail(dataDir, {
         to,
         subject: tpl.subject,
         body: withNotice.text,

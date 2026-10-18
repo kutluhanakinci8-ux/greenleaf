@@ -1,6 +1,6 @@
 /** Destek iç notları — @operatör bildirimi (Front tarzı) */
 
-import { enqueueEkolojikMail } from './emailOutbox.mjs';
+import { enqueueTransactionalMail } from './emailOutbox.mjs';
 import { readPlatformOperatorsMeta } from './platformAuth.mjs';
 
 const MENTION_RE = /@([a-zA-Z0-9][a-zA-Z0-9_.-]{1,31})/g;
@@ -43,7 +43,7 @@ export async function notifyCaseNoteMentions(dataDir, { caseRow, noteBody, autho
       '',
       noteBody.slice(0, 2000),
     ].join('\n');
-    await enqueueEkolojikMail(dataDir, {
+    await enqueueTransactionalMail(dataDir, {
       to: op.recoveryEmail,
       subject,
       text,

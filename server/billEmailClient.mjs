@@ -1,5 +1,5 @@
 /**
- * Ekolojik fatura e-posta altyapısı — IMAP (Faz 4, NB inbound yok).
+ * Fatura e-posta altyapısı — IMAP (Faz 4, NB inbound yok).
  */
 
 import { verifyImapMailbox, fetchRecentInboxMessages } from './billEmailImap.mjs';
@@ -12,20 +12,20 @@ import {
 
 function mergeEnvImap(config) {
   const base = { ...(config ?? {}) };
-  if (!base.imapHost?.trim() && process.env.EKOLOJIK_IMAP_HOST?.trim()) {
-    base.imapHost = process.env.EKOLOJIK_IMAP_HOST.trim();
+  if (!base.imapHost?.trim() && process.env.GREENLEAF_IMAP_HOST?.trim()) {
+    base.imapHost = process.env.GREENLEAF_IMAP_HOST.trim();
   }
-  if (!base.imapUser?.trim() && process.env.EKOLOJIK_IMAP_USER?.trim()) {
-    base.imapUser = process.env.EKOLOJIK_IMAP_USER.trim();
+  if (!base.imapUser?.trim() && process.env.GREENLEAF_IMAP_USER?.trim()) {
+    base.imapUser = process.env.GREENLEAF_IMAP_USER.trim();
   }
-  if (!base.imapPassword && process.env.EKOLOJIK_IMAP_PASS) {
-    base.imapPassword = process.env.EKOLOJIK_IMAP_PASS;
+  if (!base.imapPassword && process.env.GREENLEAF_IMAP_PASS) {
+    base.imapPassword = process.env.GREENLEAF_IMAP_PASS;
   }
-  if (!base.inboxAddress?.trim() && process.env.EKOLOJIK_IMAP_INBOX?.trim()) {
-    base.inboxAddress = process.env.EKOLOJIK_IMAP_INBOX.trim();
+  if (!base.inboxAddress?.trim() && process.env.GREENLEAF_IMAP_INBOX?.trim()) {
+    base.inboxAddress = process.env.GREENLEAF_IMAP_INBOX.trim();
   }
-  if (!Number(base.imapPort) && process.env.EKOLOJIK_IMAP_PORT) {
-    base.imapPort = Number(process.env.EKOLOJIK_IMAP_PORT);
+  if (!Number(base.imapPort) && process.env.GREENLEAF_IMAP_PORT) {
+    base.imapPort = Number(process.env.GREENLEAF_IMAP_PORT);
   }
   return base;
 }
@@ -100,7 +100,7 @@ export async function testBillEmailConnection(config) {
       message: result.message,
       mailboxCount: result.mailboxCount,
       unseenCount: result.unseenCount,
-      provider: 'ekolojik-imap',
+      provider: 'greenleaf-imap',
     };
   } catch (error) {
     return {
@@ -184,7 +184,7 @@ export async function pollBillEmails(dataDir, config, tenantId = 'main') {
     matched: items.length,
     scanned: fetched.length,
     items,
-    provider: 'ekolojik-imap',
+    provider: 'greenleaf-imap',
   };
 }
 

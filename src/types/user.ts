@@ -31,7 +31,7 @@ export interface AuthSession {
   loggedInAt: string;
   mustChangePassword?: boolean;
   mustSetRecoveryEmail?: boolean;
-  /** Ekolojik platform konsolu — kiracı store kullanıcısı değil */
+  /** Greenleaf platform konsolu — kiracı store kullanıcısı değil */
   isPlatformOperator?: boolean;
 }
 

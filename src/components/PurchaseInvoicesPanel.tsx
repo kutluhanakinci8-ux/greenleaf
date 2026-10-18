@@ -141,7 +141,7 @@ export function PurchaseInvoicesPanel({ store }: PurchaseInvoicesPanelProps) {
                   setSeedMessage(null);
                   const result = store.seedDemoSupplierData();
                   if (result.ok) {
-                    setSeedMessage('Örnek tedarikçi (Ekolojik Tedarik Ltd.) ve 2 stoklu alış faturası eklendi.');
+                    setSeedMessage('Örnek tedarikçi (Greenleaf Tedarik Ltd.) ve 2 stoklu alış faturası eklendi.');
                   } else if (result.reason === 'already_seeded') {
                     setSeedMessage('Örnek tedarikçi faturaları zaten kayıtlı.');
                   } else {

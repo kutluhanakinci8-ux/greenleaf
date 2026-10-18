@@ -16,7 +16,7 @@ export async function getMessagingPublicCapabilities(dataDir, tenantId = 'main')
     ok: true,
     version: 1,
     apiPrefix: '/api/public/messaging/v1',
-    auth: 'x-ekolojik-messaging-key or Authorization Bearer',
+    auth: 'x-greenleaf-messaging-key or Authorization Bearer',
     tenantId,
     configured,
     keySource: resolved.source,
@@ -30,11 +30,11 @@ export async function assertMessagingPublicAuth(req, dataDir, tenantId = 'main')
     return {
       ok: false,
       status: 503,
-      error: 'Public messaging API kapalı (tenant anahtarı veya EKOLOJIK_MESSAGING_PUBLIC_KEY)',
+      error: 'Public messaging API kapalı (tenant anahtarı veya GREENLEAF_MESSAGING_PUBLIC_KEY)',
     };
   }
   const header =
-    req.headers['x-ekolojik-messaging-key'] ||
+    req.headers['x-greenleaf-messaging-key'] ||
     req.headers.authorization?.replace(/^Bearer\s+/i, '').trim();
   if (!header || header !== expected) {
     return { ok: false, status: 401, error: 'Geçersiz messaging API anahtarı' };

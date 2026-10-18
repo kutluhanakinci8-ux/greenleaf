@@ -124,7 +124,7 @@ export function MessagingPanel({ customer, authorName = 'Mağaza' }: MessagingPa
     <div className="crm-messaging-panel">
       <div className="crm-messaging-head">
         <h3>Mesajlar</h3>
-        <p>Ekolojik içi yazışma — Nakliye Borsası thread’lerinden bağımsız</p>
+        <p>Greenleaf içi yazışma — Nakliye Borsası thread’lerinden bağımsız</p>
       </div>
 
       <div className="crm-messaging-layout">

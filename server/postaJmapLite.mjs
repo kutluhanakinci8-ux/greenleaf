@@ -59,7 +59,7 @@ export function getPostaJmapLiteSession() {
     capabilities: {
       'urn:ietf:params:jmap:core': {},
       'urn:ietf:params:jmap:mail': { maxSizeUpload: 10_485_760, readOnly: false },
-      'ekolojik:posta:lite': {
+      'greenleaf:posta:lite': {
         version: 3,
         note: 'IMAP hub REST köprüsü + Email/set (okundu/taşıma)',
         methods: ['Mailbox/query', 'Email/query', 'Email/get', 'Email/set'],

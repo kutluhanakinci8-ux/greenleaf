@@ -1,6 +1,6 @@
 const bridgeEnv = {
   POS80_QUEUE_NAME: process.env.POS80_QUEUE_NAME || 'Printer_POS_80C',
-  LIMA_RAW_PRINT_PORT: process.env.LIMA_RAW_PRINT_PORT || '18765',
+  RECEIPT_RAW_PRINT_PORT: process.env.RECEIPT_RAW_PRINT_PORT || '18765',
 };
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
     {
       name: 'lima-receipt-bridge',
       cwd: __dirname,
-      script: 'scripts/lima-raw-print-bridge.mjs',
+      script: 'scripts/receipt-raw-print-bridge.mjs',
       interpreter: 'node',
       env: {
         NODE_ENV: 'production',

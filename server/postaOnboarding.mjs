@@ -1,5 +1,5 @@
 import { isTenantImapConfigured, getTenantSmtpMailConfig, getTenantImapConfig } from './tenantMailConfig.mjs';
-import { verifyEkolojikSmtp } from './ekolojikSmtp.mjs';
+import { verifySmtp } from './smtpTransport.mjs';
 import { verifyImapMailbox } from './billEmailImap.mjs';
 import { isMessagingPublicApiConfigured } from './messaging/publicConfig.mjs';
 
@@ -79,7 +79,7 @@ async function buildMailHealthSummary(dataDir, tenantId) {
   const mailCfg = await getTenantSmtpMailConfig(dataDir, tenantId);
   const smtpConfigured = Boolean(mailCfg.smtpHost && mailCfg.from?.includes('@'));
   const verify = smtpConfigured
-    ? await verifyEkolojikSmtp({ dataDir, tenantId })
+    ? await verifySmtp({ dataDir, tenantId })
     : { ok: false, error: 'SMTP yapılandırılmadı' };
   const imapConfigured = await isTenantImapConfigured(dataDir, tenantId);
   return {

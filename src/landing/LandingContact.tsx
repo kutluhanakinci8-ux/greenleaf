@@ -44,11 +44,11 @@ export function LandingContact() {
         <div className="landing-contact-info">
           <div className="landing-contact-item">
             <strong>E-posta</strong>
-            <span>info@ekolojikmarket.com.tr</span>
+            <span>info@example.com</span>
           </div>
           <div className="landing-contact-item">
             <strong>Destek</strong>
-            <span>destek@ekolojikmarket.com.tr</span>
+            <span>destek@example.com</span>
           </div>
           <div className="landing-contact-item">
             <strong>Çalışma Saatleri</strong>

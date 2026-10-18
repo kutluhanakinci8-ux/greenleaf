@@ -1,7 +1,7 @@
 import { buildImapClient, moveImapMessage } from './billEmailImap.mjs';
 import { findPostaImapMessage, updatePostaImapMessage } from './postaInboxStore.mjs';
 import {
-  isEkolojikImapWriteEnabled,
+  isImapWriteEnabled,
   resolvePostaImapMailboxes,
 } from './postaImapMailboxes.mjs';
 import { getTenantImapConfig, isTenantImapConfigured } from './tenantMailConfig.mjs';
@@ -32,7 +32,7 @@ export function resolveImapMoveTarget(flagsPatch, row, mailboxes) {
 }
 
 export async function applyImapMoveForFlags(dataDir, tenantId, inboxId, flagsPatch) {
-  if (!(await isTenantImapConfigured(dataDir, tenantId)) || !isEkolojikImapWriteEnabled()) {
+  if (!(await isTenantImapConfigured(dataDir, tenantId)) || !isImapWriteEnabled()) {
     return { ok: true, skipped: 'imap_write_disabled' };
   }
   const row = await findPostaImapMessage(dataDir, tenantId, inboxId);
